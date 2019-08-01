@@ -17,5 +17,5 @@ const DEFAULT_CONFIG = {
 // - cacheServices
 
 export const MedicalModule = (cfg) => {
-  return { ...DEFAULT_CONFIG, ...(cfg && cfg['fe-medical'] || {}) };
+  return { ...DEFAULT_CONFIG, ...cfg };
 }
