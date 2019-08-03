@@ -1,6 +1,6 @@
 {
   "name": "@openimis/fe-medical",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "AGPL-3.0-only",
   "description": "openIMIS Frontend Medical reference module",
   "repository": "openimis/openimis-fe-medical_js",
@@ -23,7 +23,7 @@
   "peerDependencies": {
     "@material-ui/core": "^4.1.2",
     "@material-ui/icons": "^4.2.1",
-    "@openimis/fe-core": "^0.0.11",
+    "@openimis/fe-core": "^0.0.12",
     "history": "^4.9.0",
     "prop-types": "^15.5.4",
     "react": "^16.8.6",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@material-ui/core": "^4.1.2",
     "@material-ui/icons": "^4.2.1",
-    "@openimis/fe-core": "^0.0.11",
+    "@openimis/fe-core": "^0.0.12",
     "@svgr/rollup": "^2.4.1",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",

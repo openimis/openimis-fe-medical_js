@@ -9,18 +9,16 @@ class ServiceSimpleSearcher extends Component {
 
     constructor(props) {
         super(props);
-        this.cacheServices=props.modulesManager.getConfiguration("fe-medical", "cacheServices", true);
+        this.cacheServices = props.modulesManager.getConfiguration("fe-medical", "cacheServices", true);
     }
 
     componentDidMount() {
-        if (this.cacheServices) {
+        if (this.cacheServices && !this.props.services) {
             this.props.fetchServices();
         }
     }
 
-    getSuggestions = value => {
-        this.props.fetchServices(value);
-    }
+    getSuggestions = s => this.props.fetchServices(s);
 
     debouncedGetSuggestion = _debounce(
         this.getSuggestions,
@@ -31,11 +29,11 @@ class ServiceSimpleSearcher extends Component {
         this.props.onServiceSelected(v);
     }
 
-    render() {      
+    render() {
         const { services } = this.props;
-        return <AutoSuggestion 
+        return <AutoSuggestion
             items={services}
-            lookup={i => i.code+i.name}
+            lookup={i => i.code + i.name}
             getSuggestions={this.cacheServices ? null : this.debouncedGetSuggestion}
             renderSuggestion={i => <span>{i.code} {i.name}</span>}
             getSuggestionValue={i => `${i.code} ${i.name}`}
