@@ -1,4 +1,4 @@
-import { formatServerError, formatGraphQLError } from '@openimis/fe-core';
+import { parseData, formatServerError, formatGraphQLError } from '@openimis/fe-core';
 
 function reducer(
     state = {
@@ -27,7 +27,7 @@ function reducer(
                 ...state,
                 fetchingItems: false,
                 fetchedItems: true,
-                items: action.payload.data.medicalItems,
+                items: parseData(action.payload.data.medicalItems),
                 errorItems: formatGraphQLError(action.payload)
             };
         case 'MEDICAL_ITEMS_ERR':
@@ -49,7 +49,7 @@ function reducer(
                 ...state,
                 fetchingServices: false,
                 fetchedServices: true,
-                services: action.payload.data.medicalServices,
+                services: parseData(action.payload.data.medicalServices),
                 errorServices: formatGraphQLError(action.payload)
             };
         case 'MEDICAL_SERVICES_ERR':

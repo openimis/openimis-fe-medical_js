@@ -1,14 +1,14 @@
 import messages_en from "./translations/en.json";
 import reducer from "./reducer";
-import ItemSimpleSearcher from "./components/ItemSimpleSearcher";
-import ServiceSimpleSearcher from "./components/ServiceSimpleSearcher";
+import ItemSelect from "./components/ItemSelect";
+import ServiceSelect from "./components/ServiceSelect";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: 'en', messages: messages_en }],
-  "reducers": [{ key: 'medical', reducer: reducer }],
+  "reducers": [{ key: 'medical', reducer }],
   "components": [
-    {key: "medical.ItemSimpleSearcher", component: ItemSimpleSearcher },
-    {key: "medical.ServiceSimpleSearcher", component: ServiceSimpleSearcher },
+    {key: "medical.ItemSelect", component: ItemSelect },
+    {key: "medical.ServiceSelect", component: ServiceSelect },
   ],    
 }
 

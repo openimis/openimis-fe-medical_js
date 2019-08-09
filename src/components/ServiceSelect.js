@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { AutoSuggestion, withModulesManager } from "@openimis/fe-core";
+import { injectIntl } from 'react-intl';
+import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
 import { fetchServices } from "../actions";
 import _debounce from "lodash/debounce";
 
-class ServiceSimpleSearcher extends Component {
+class ServiceSelect extends Component {
 
     constructor(props) {
         super(props);
@@ -30,9 +31,10 @@ class ServiceSimpleSearcher extends Component {
     }
 
     render() {
-        const { services } = this.props;
+        const { intl, services } = this.props;
         return <AutoSuggestion
             items={services}
+            placeholder={formatMessage(intl, "medical", "ServiceSelect.placehoder")}
             lookup={i => i.code + i.name}
             getSuggestions={this.cacheServices ? null : this.debouncedGetSuggestion}
             renderSuggestion={i => <span>{i.code} {i.name}</span>}
@@ -53,6 +55,5 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({ fetchServices }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    withModulesManager(ServiceSimpleSearcher)
-);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(
+    withModulesManager(ServiceSelect)));

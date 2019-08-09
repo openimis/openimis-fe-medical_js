@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { AutoSuggestion, withModulesManager } from "@openimis/fe-core";
+import { injectIntl } from 'react-intl';
+import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
 import { fetchItems } from "../actions";
 import _debounce from "lodash/debounce";
 
-class ItemSimpleSearcher extends Component {
+class ItemSelect extends Component {
 
     constructor(props) {
         super(props);
@@ -28,9 +29,10 @@ class ItemSimpleSearcher extends Component {
     onSuggestionSelected = v => this.props.onItemSelected(v);
 
     render() {
-        const { items } = this.props;
+        const { intl, items } = this.props;
         return <AutoSuggestion
             items={items}
+            placeholder={formatMessage(intl, "medical", "ItemSelect.placehoder")}
             lookup={i => i.code + i.name}
             getSuggestions={this.cacheItems ? null : this.debouncedGetSuggestion}
             renderSuggestion={i => <span>{i.code} {i.name}</span>}
@@ -51,6 +53,5 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({ fetchItems }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    withModulesManager(ItemSimpleSearcher)
-);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(
+    withModulesManager(ItemSelect)));
