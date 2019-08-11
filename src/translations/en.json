@@ -1,4 +1,14 @@
 {
+    "medical.Diagnosis": "Diagnosis",
+    "medical.DiagnosisSelect.placehoder": "Search Diagnosis...",
+    "medical.Item": "Medical Item",
     "medical.ItemSelect.placehoder": "Search Item...",
-    "medical.ServiceSelect.placehoder": "Search Service..."
+    "medical.Service": "Medical Service",
+    "medical.ServiceSelect.placehoder": "Search Service...",
+    "medical.visitType": "Visit Type",
+    "medical.visitType.null": "any",
+    "medical.visitType.E": "Emergency",
+    "medical.visitType.R": "Referral",
+    "medical.visitType.O": "Other"
+
 }

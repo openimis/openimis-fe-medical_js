@@ -10,35 +10,36 @@ class ServiceSelect extends Component {
 
     constructor(props) {
         super(props);
-        this.cacheServices = props.modulesManager.getConfiguration("fe-medical", "cacheServices", true);
+        this.cache = props.modulesManager.getConf("fe-medical", "cacheServices", true);
     }
 
     componentDidMount() {
-        if (this.cacheServices && !this.props.services) {
+        if (this.cache && !this.props.services) {
             this.props.fetchServices();
         }
     }
 
-    getSuggestions = s => this.props.fetchServices(s);
+    getSuggestions = str => !!str &&
+        str.length >= this.props.modulesManager.getConf("fe-medical", "servicesMinCharLookup", 2) &&
+        this.props.fetchServices(str);
 
     debouncedGetSuggestion = _debounce(
         this.getSuggestions,
-        this.props.modulesManager.getConfiguration("fe-medical", "debounceTime", 500)
+        this.props.modulesManager.getConf("fe-medical", "debounceTime", 800)
     )
 
-    onSuggestionSelected = v => {
-        this.props.onServiceSelected(v);
-    }
+    formatSuggestion = i => `${i.code} ${i.name}`
+
+    onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, services } = this.props;
+        const { intl, services, withLabel=true, label, withPlaceholder=false, placeholder } = this.props;
         return <AutoSuggestion
             items={services}
-            placeholder={formatMessage(intl, "medical", "ServiceSelect.placehoder")}
-            lookup={i => i.code + i.name}
-            getSuggestions={this.cacheServices ? null : this.debouncedGetSuggestion}
-            renderSuggestion={i => <span>{i.code} {i.name}</span>}
-            getSuggestionValue={i => `${i.code} ${i.name}`}
+            label={!!withLabel && (label || formatMessage(intl, "medical", "Services"))}
+            placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ServiceSelect.placehoder")) : null}
+            getSuggestions={this.cache ? null : this.debouncedGetSuggestion}
+            getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
         />
     }
@@ -46,9 +47,6 @@ class ServiceSelect extends Component {
 
 const mapStateToProps = state => ({
     services: state.medical.services,
-    fetchingServices: state.medical.fetchingServices,
-    fetchedServices: state.medical.fetchedServices,
-    errorServices: state.medical.errorServices,
 });
 
 const mapDispatchToProps = dispatch => {
