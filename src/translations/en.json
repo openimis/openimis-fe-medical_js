@@ -6,7 +6,7 @@
     "medical.Service": "Medical Service",
     "medical.ServiceSelect.placehoder": "Search Service...",
     "medical.visitType": "Visit Type",
-    "medical.visitType.null": "any",
+    "medical.visitType.null": "Any",
     "medical.visitType.E": "Emergency",
     "medical.visitType.R": "Referral",
     "medical.visitType.O": "Other"
