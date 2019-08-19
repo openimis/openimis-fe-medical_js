@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { InputSelect } from "@openimis/fe-core";
+import { SelectInput } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { formatMessage } from "@openimis/fe-core";
 
 import { VISIT_TYPES } from "./constants";
 
-class VisitTypeSelect extends Component {
+class VisitTypePicker extends Component {
 
     _onChange = v => this.props.onChange(
         v,
@@ -13,9 +13,9 @@ class VisitTypeSelect extends Component {
     )
 
     render() {
-        const { intl, name, value } = this.props;
+        const { intl, name, value, readOnly = false } = this.props;
         return (
-            <InputSelect
+            <SelectInput
                 module="medical"
                 label="visitType"
                 options={[{
@@ -26,11 +26,12 @@ class VisitTypeSelect extends Component {
                     label: formatMessage(intl, "medical", "visitType." + v)
                 }))]}
                 name={name}
-                value={value || null}
+                value={value}
                 onChange={this._onChange}
+                readOnly={readOnly}
             />
         );
     }
 }
 
-export default injectIntl(VisitTypeSelect);
+export default injectIntl(VisitTypePicker);

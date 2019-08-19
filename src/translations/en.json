@@ -1,10 +1,10 @@
 {
     "medical.Diagnosis": "Diagnosis",
-    "medical.DiagnosisSelect.placehoder": "Search Diagnosis...",
+    "medical.DiagnosisPicker.placehoder": "Search Diagnosis...",
     "medical.Item": "Medical Item",
-    "medical.ItemSelect.placehoder": "Search Item...",
+    "medical.ItemPicker.placehoder": "Search Item...",
     "medical.Service": "Medical Service",
-    "medical.ServiceSelect.placehoder": "Search Service...",
+    "medical.ServicePicker.placehoder": "Search Service...",
     "medical.visitType": "Visit Type",
     "medical.visitType.null": "Any",
     "medical.visitType.E": "Emergency",

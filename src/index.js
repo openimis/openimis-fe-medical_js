@@ -1,22 +1,23 @@
 import messages_en from "./translations/en.json";
 import reducer from "./reducer";
-import DiagnosisSelect from "./components/DiagnosisSelect";
-import ItemSelect from "./components/ItemSelect";
-import ServiceSelect from "./components/ServiceSelect";
-import VisitTypeSelect from "./components/VisitTypeSelect";
+import DiagnosisPicker from "./components/DiagnosisPicker";
+import ItemPicker from "./components/ItemPicker";
+import ServicePicker from "./components/ServicePicker";
+import VisitTypePicker from "./components/VisitTypePicker";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: 'en', messages: messages_en }],
   "reducers": [{ key: 'medical', reducer }],
   "refs": [
-    {key: "medical.DiagnosisSelect", ref: DiagnosisSelect },
-    {key: "medical.ItemSelect", ref: ItemSelect },
-    {key: "medical.ServiceSelect", ref: ServiceSelect },
-    {key: "medical.VisitTypeSelect", ref: VisitTypeSelect },
-  ],    
-  "DIAGNOSIS_ID_TYPE": "DiagnosisGQLType",
-  "ITEM_ID_TYPE": "ItemGQLType",
-  "SERVICE_ID_TYPE": "ServiceGQLType",
+    { key: "medical.DiagnosisPicker", ref: DiagnosisPicker },
+    { key: "medical.DiagnosisPicker.projection", ref: ["id", "code", "name"] },
+    { key: "medical.ItemPicker", ref: ItemPicker },
+    { key: "medical.ItemPicker.projection", ref: ["id", "code", "name"] },
+    { key: "medical.ServicePicker", ref: ServicePicker },
+    { key: "medical.ServicePicker.projection", ref: ["id", "code", "name"] },
+    { key: "medical.VisitTypePicker", ref: VisitTypePicker },
+    { key: "medical.VisitTypePicker.projection", ref: null },
+  ],
   // OTHER MODULE PARAMETERS:
   // cacheItems
   // cacheServices  

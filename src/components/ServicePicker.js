@@ -6,7 +6,7 @@ import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-
 import { fetchServices } from "../actions";
 import _debounce from "lodash/debounce";
 
-class ServiceSelect extends Component {
+class ServicePicker extends Component {
 
     constructor(props) {
         super(props);
@@ -15,32 +15,34 @@ class ServiceSelect extends Component {
 
     componentDidMount() {
         if (this.cache && !this.props.services) {
-            this.props.fetchServices();
+            this.props.fetchServices(this.props.modulesManager);
         }
     }
 
     getSuggestions = str => !!str &&
         str.length >= this.props.modulesManager.getConf("fe-medical", "servicesMinCharLookup", 2) &&
-        this.props.fetchServices(str);
+        this.props.fetchServices(this.props.modulesManager, str);
 
     debouncedGetSuggestion = _debounce(
         this.getSuggestions,
         this.props.modulesManager.getConf("fe-medical", "debounceTime", 800)
     )
 
-    formatSuggestion = i => `${i.code} ${i.name}`
+    formatSuggestion = i => !!i ? `${i.code} ${i.name}` : ''
 
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, services, withLabel=true, label, withPlaceholder=false, placeholder } = this.props;
+        const { intl, services, withLabel=true, label, withPlaceholder=false, placeholder, value, readOnly = false } = this.props;
         return <AutoSuggestion
             items={services}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Services"))}
-            placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ServiceSelect.placehoder")) : null}
+            placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ServicePicker.placehoder")) : null}
             getSuggestions={this.cache ? null : this.debouncedGetSuggestion}
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
+            value={value}
+            readOnly={readOnly}
         />
     }
 }
@@ -54,4 +56,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(
-    withModulesManager(ServiceSelect)));
+    withModulesManager(ServicePicker)));
