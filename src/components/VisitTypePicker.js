@@ -13,18 +13,20 @@ class VisitTypePicker extends Component {
     )
 
     render() {
-        const { intl, name, value, readOnly = false } = this.props;
+        const { intl, name, value, withNull = true, readOnly = false } = this.props;
+        const options = withNull ? [{
+            value: null,
+            label: formatMessage(intl, "medical", "visitType.null")
+        }] : [];
+        options.push(...VISIT_TYPES.map(v => ({
+            value: v,
+            label: formatMessage(intl, "medical", "visitType." + v)
+        })));
         return (
             <SelectInput
                 module="medical"
                 label="visitType"
-                options={[{
-                    value: null,
-                    label: formatMessage(intl, "medical", "visitType.null")
-                }, ...VISIT_TYPES.map(v => ({
-                    value: v,
-                    label: formatMessage(intl, "medical", "visitType." + v)
-                }))]}
+                options={options}
                 name={name}
                 value={value}
                 onChange={this._onChange}
