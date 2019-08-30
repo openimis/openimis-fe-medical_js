@@ -3,41 +3,41 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from 'react-intl';
 import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
-import { fetchItems } from "../actions";
+import { fetchDiagnosisPicker } from "../actions";
 import _debounce from "lodash/debounce";
 
-class ItemPicker extends Component {
+class DiagnosisPicker extends Component {
 
     constructor(props) {
         super(props);
-        this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", true);
+        this.cache = props.modulesManager.getConf("fe-medical", "cacheDiagnoses", true);
     }
 
     componentDidMount() {
-        if (this.cache && !this.props.items) {
-            this.props.fetchItems(this.props.modulesManager);
+        if (this.cache && !this.props.diagnoses) {
+            this.props.fetchDiagnosisPicker(this.props.modulesManager);
         }
     }
 
+    formatSuggestion = s => !!s ? `${s.code} ${s.name}` : '';
+
     getSuggestions = str => !!str &&
-        str.length >= this.props.modulesManager.getConf("fe-medical", "itemsMinCharLookup", 2) &&
-        this.props.fetchItems(this.props.modulesManager, str);
+        str.length >= this.props.modulesManager.getConf("fe-medical", "diagnosesMinCharLookup", 2) &&
+        this.props.fetchDiagnosisPicker(this.props.modulesManager, str);
 
     debouncedGetSuggestion = _debounce(
         this.getSuggestions,
         this.props.modulesManager.getConf("fe-medical", "debounceTime", 800)
     )
 
-    formatSuggestion = i => !!i ? `${i.code} ${i.name}` : ''
-
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, items, withLabel=true, label, withPlaceholder=false, placeholder, value = null, readOnly = false } = this.props;
+        const { intl, diagnoses, withLabel=true, label, withPlaceholder=false, placeholder, value, readOnly = false } = this.props;
         return <AutoSuggestion
-            items={items}
-            label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
-            placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ItemPicker.placehoder")) : null}
+            items={diagnoses}
+            label={!!withLabel && (label || formatMessage(intl, "medical", "Diagnosis"))}
+            placeholder={!!withPlaceholder ? placeholder || formatMessage(intl, "medical", "DiagnosisPicker.placehoder") : null}
             getSuggestions={this.cache ? null : this.debouncedGetSuggestion}
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
@@ -48,12 +48,12 @@ class ItemPicker extends Component {
 }
 
 const mapStateToProps = state => ({
-    items: state.medical.items,
+    diagnoses: state.medical.diagnosisPicker,
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchItems }, dispatch);
+    return bindActionCreators({ fetchDiagnosisPicker }, dispatch);
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(
-    withModulesManager(ItemPicker)));
+    withModulesManager(DiagnosisPicker)));
