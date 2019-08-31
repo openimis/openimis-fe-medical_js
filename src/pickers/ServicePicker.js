@@ -15,7 +15,14 @@ class ServicePicker extends Component {
 
     componentDidMount() {
         if (this.cache && !this.props.services) {
-            this.props.fetchServicePicker(this.props.modulesManager);
+            // prevent loading multiple times the cache when component is
+            // several times on tha page
+            setTimeout(
+                () => {
+                    !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
+                },
+                Math.floor(Math.random() * 300)
+            );
         }
     }
 
@@ -33,7 +40,7 @@ class ServicePicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, services, withLabel=true, label, withPlaceholder=false, placeholder, value, readOnly = false } = this.props;
+        const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, readOnly = false } = this.props;
         return <AutoSuggestion
             items={services}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Services"))}
@@ -48,7 +55,8 @@ class ServicePicker extends Component {
 }
 
 const mapStateToProps = state => ({
-    services: state.medical.servicePicker,
+    services: state.medical.services,
+    fetching: state.medical.fetchingServices,
 });
 
 const mapDispatchToProps = dispatch => {

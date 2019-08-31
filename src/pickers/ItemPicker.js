@@ -15,7 +15,14 @@ class ItemPicker extends Component {
 
     componentDidMount() {
         if (this.cache && !this.props.items) {
-            this.props.fetchItemPicker(this.props.modulesManager);
+            // prevent loading multiple times the cache when component is
+            // several times on tha page
+            setTimeout(
+                () => {
+                    !this.props.fetching && this.props.fetchItemPicker(this.props.modulesManager)
+                },
+                Math.floor(Math.random() * 300)
+            );
         }
     }
 
@@ -33,7 +40,7 @@ class ItemPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, items, withLabel=true, label, withPlaceholder=false, placeholder, value = null, readOnly = false } = this.props;
+        const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, readOnly = false } = this.props;
         return <AutoSuggestion
             items={items}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
@@ -48,7 +55,8 @@ class ItemPicker extends Component {
 }
 
 const mapStateToProps = state => ({
-    items: state.medical.itemPicker,
+    items: state.medical.items,
+    fetching: state.medical.fetchingItems,
 });
 
 const mapDispatchToProps = dispatch => {

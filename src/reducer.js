@@ -2,9 +2,9 @@ import { parseData, formatServerError, formatGraphQLError } from '@openimis/fe-c
 
 function reducer(
     state = {
-        fetchingDiagnosisPicker: false,
-        fetchedDiagnosisPicker: false,
-        errorDiagnosisPicker: null,
+        fetchingDiagnosis: false,
+        fetchedDiagnosis: false,
+        errorDiagnosis: null,
         diagnoses: null,        
         fetchingItems: false,
         fetchedItems: false,
@@ -21,24 +21,24 @@ function reducer(
         case 'MEDICAL_DIAGNOSIS_PICKER_REQ':
             return {
                 ...state,
-                fetchingDiagnosisPicker: true,
-                fetchedDiagnosisPicker: false,
+                fetchingDiagnosis: true,
+                fetchedDiagnosis: false,
                 diagnoses: null,
-                errorDiagnosisPicker: null,
+                errorDiagnosis: null,
             };
         case 'MEDICAL_DIAGNOSIS_PICKER_RESP':
             return {
                 ...state,
-                fetchingDiagnosisPicker: false,
-                fetchedDiagnosisPicker: true,
+                fetchingDiagnosis: false,
+                fetchedDiagnosis: true,
                 diagnoses: parseData(action.payload.data.diagnosesStr),
-                errorDiagnosisPicker: formatGraphQLError(action.payload)
+                errorDiagnosis: formatGraphQLError(action.payload)
             };
         case 'MEDICAL_DIAGNOSIS_PICKER_ERR':
             return {
                 ...state,
-                fetchingDiagnosisPicker: false,
-                errorDiagnosisPicker: formatServerError(action.payload)
+                fetchingDiagnosis: false,
+                errorDiagnosis: formatServerError(action.payload)
             };        
         case 'MEDICAL_ITEM_PICKER_REQ':
             return {

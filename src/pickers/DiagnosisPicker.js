@@ -15,7 +15,14 @@ class DiagnosisPicker extends Component {
 
     componentDidMount() {
         if (this.cache && !this.props.diagnoses) {
-            this.props.fetchDiagnosisPicker(this.props.modulesManager);
+            // prevent loading multiple times the cache when component is
+            // several times on tha page
+            setTimeout(
+                () => {
+                    !this.props.fetching && this.props.fetchDiagnosisPicker(this.props.modulesManager)
+                },
+                Math.floor(Math.random() * 300)
+            );
         }
     }
 
@@ -33,7 +40,7 @@ class DiagnosisPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, diagnoses, withLabel=true, label, withPlaceholder=false, placeholder, value, readOnly = false } = this.props;
+        const { intl, diagnoses, withLabel = true, label, withPlaceholder = false, placeholder, value, readOnly = false } = this.props;
         return <AutoSuggestion
             items={diagnoses}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Diagnosis"))}
@@ -48,7 +55,8 @@ class DiagnosisPicker extends Component {
 }
 
 const mapStateToProps = state => ({
-    diagnoses: state.medical.diagnosisPicker,
+    diagnoses: state.medical.diagnoses,
+    fetching: state.medical.fetchingDiagnosis
 });
 
 const mapDispatchToProps = dispatch => {
