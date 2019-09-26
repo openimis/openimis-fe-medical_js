@@ -40,7 +40,7 @@ class ItemPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, readOnly = false } = this.props;
+        const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset, readOnly = false } = this.props;
         return <AutoSuggestion
             items={items}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
@@ -49,6 +49,7 @@ class ItemPicker extends Component {
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
             value={value}
+            reset={reset}
             readOnly={readOnly}
         />
     }

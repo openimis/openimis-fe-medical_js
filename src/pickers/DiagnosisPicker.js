@@ -40,7 +40,7 @@ class DiagnosisPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, diagnoses, withLabel = true, label, withPlaceholder = false, placeholder, value, readOnly = false } = this.props;
+        const { intl, diagnoses, withLabel = true, label, withPlaceholder = false, placeholder, value, reset, readOnly = false } = this.props;
         return <AutoSuggestion
             items={diagnoses}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Diagnosis"))}
@@ -49,6 +49,7 @@ class DiagnosisPicker extends Component {
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
             value={value}
+            reset={reset}
             readOnly={readOnly}
         />
     }
