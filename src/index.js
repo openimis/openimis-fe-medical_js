@@ -4,6 +4,7 @@ import DiagnosisPicker from "./pickers/DiagnosisPicker";
 import ItemPicker from "./pickers/ItemPicker";
 import ServicePicker from "./pickers/ServicePicker";
 import VisitTypePicker from "./pickers/VisitTypePicker";
+import CareTypePicker from "./pickers/CareTypePicker";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: 'en', messages: messages_en }],
@@ -17,7 +18,7 @@ const DEFAULT_CONFIG = {
     { key: "medical.ServicePicker.projection", ref: ["id", "code", "name", "price"] },
     { key: "medical.VisitTypePicker", ref: VisitTypePicker },
     { key: "medical.VisitTypePicker.projection", ref: null },
-    { key: "medical.CareTypePicker", ref: VisitTypePicker },
+    { key: "medical.CareTypePicker", ref: CareTypePicker },
     { key: "medical.CareTypePicker.projection", ref: null },
   ],
   // OTHER MODULE PARAMETERS:
