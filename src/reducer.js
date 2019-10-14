@@ -1,7 +1,11 @@
-import { formatServerError, formatGraphQLError } from '@openimis/fe-core';
+import { parseData, formatServerError, formatGraphQLError } from '@openimis/fe-core';
 
 function reducer(
     state = {
+        fetchingDiagnosis: false,
+        fetchedDiagnosis: false,
+        errorDiagnosis: null,
+        diagnoses: null,        
         fetchingItems: false,
         fetchedItems: false,
         errorItems: null,
@@ -14,7 +18,29 @@ function reducer(
     action,
 ) {
     switch (action.type) {
-        case 'MEDICAL_ITEMS_REQ':
+        case 'MEDICAL_DIAGNOSIS_PICKER_REQ':
+            return {
+                ...state,
+                fetchingDiagnosis: true,
+                fetchedDiagnosis: false,
+                diagnoses: null,
+                errorDiagnosis: null,
+            };
+        case 'MEDICAL_DIAGNOSIS_PICKER_RESP':
+            return {
+                ...state,
+                fetchingDiagnosis: false,
+                fetchedDiagnosis: true,
+                diagnoses: parseData(action.payload.data.diagnosesStr),
+                errorDiagnosis: formatGraphQLError(action.payload)
+            };
+        case 'MEDICAL_DIAGNOSIS_PICKER_ERR':
+            return {
+                ...state,
+                fetchingDiagnosis: false,
+                errorDiagnosis: formatServerError(action.payload)
+            };        
+        case 'MEDICAL_ITEM_PICKER_REQ':
             return {
                 ...state,
                 fetchingItems: true,
@@ -22,21 +48,21 @@ function reducer(
                 items: null,
                 errorItems: null,
             };
-        case 'MEDICAL_ITEMS_RESP':
+        case 'MEDICAL_ITEM_PICKER_RESP':
             return {
                 ...state,
                 fetchingItems: false,
                 fetchedItems: true,
-                items: action.payload.data.medicalItems,
+                items: parseData(action.payload.data.medicalItemsStr),
                 errorItems: formatGraphQLError(action.payload)
             };
-        case 'MEDICAL_ITEMS_ERR':
+        case 'MEDICAL_ITEM_PICKER_ERR':
             return {
                 ...state,
                 fetchingItems: false,
                 errorItems: formatServerError(action.payload)
             };
-        case 'MEDICAL_SERVICES_REQ':
+        case 'MEDICAL_SERVICE_PICKER_REQ':
             return {
                 ...state,
                 fetchingServices: true,
@@ -44,15 +70,15 @@ function reducer(
                 services: null,
                 errorServices: null,
             };
-        case 'MEDICAL_SERVICES_RESP':
+        case 'MEDICAL_SERVICE_PICKER_RESP':
             return {
                 ...state,
                 fetchingServices: false,
                 fetchedServices: true,
-                services: action.payload.data.medicalServices,
+                services: parseData(action.payload.data.medicalServicesStr),
                 errorServices: formatGraphQLError(action.payload)
             };
-        case 'MEDICAL_SERVICES_ERR':
+        case 'MEDICAL_SERVICE_PICKER_ERR':
             return {
                 ...state,
                 fetchingServices: false,
