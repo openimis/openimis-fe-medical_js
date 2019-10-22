@@ -21,9 +21,6 @@ const DEFAULT_CONFIG = {
     { key: "medical.CareTypePicker", ref: CareTypePicker },
     { key: "medical.CareTypePicker.projection", ref: null },
   ],
-  // OTHER MODULE PARAMETERS:
-  // cacheItems
-  // cacheServices  
 }
 
 
