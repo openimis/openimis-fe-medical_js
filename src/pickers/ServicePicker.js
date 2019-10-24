@@ -40,7 +40,8 @@ class ServicePicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, reset, readOnly = false } = this.props;
+        const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
+            readOnly = false, required = false } = this.props;
         return <AutoSuggestion
             items={services}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Services"))}
@@ -51,6 +52,7 @@ class ServicePicker extends Component {
             value={value}
             reset={reset}
             readOnly={readOnly}
+            required={required}
         />
     }
 }
