@@ -33,7 +33,7 @@ None
 * `debounceTime`: for pickers without cache, debounce time (ms) before triggering the search. Default: `800`
 * `cacheDiagnoses`: wherever diagnoses picker caches the diagnoses or not
 * `diagnosesMinCharLookup`: if diagnoses picker is not configured to cache diagnoses, minimum number of characters before trigring the search. Default: 2
-* `cacheItems`: wherever items picker caches the diagnoses or not
+* `cacheItems`: wherever items picker caches the diagnoses or not (default false, WARNING: when caching, the list is filtered with validity date = today)
 * `itemsMinCharLookup`: if items picker is not configured to cache items, minimum number of characters before trigring the search. Default: 2
-* `cacheServices`: wherever services picker caches the diagnoses or not
+* `cacheServices`: wherever services picker caches the diagnoses or not (default false, WARNING: when caching, the list is filtered with validity date = today)
 * `servicesMinCharLookup`: if services picker is not configured to cache services, minimum number of characters before trigring the search. Default: 2
