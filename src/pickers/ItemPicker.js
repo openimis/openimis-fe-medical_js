@@ -10,7 +10,7 @@ class ItemPicker extends Component {
 
     constructor(props) {
         super(props);
-        this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", true);
+        this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", false);
     }
 
     componentDidMount() {
@@ -28,7 +28,7 @@ class ItemPicker extends Component {
 
     getSuggestions = str => !!str &&
         str.length >= this.props.modulesManager.getConf("fe-medical", "itemsMinCharLookup", 2) &&
-        this.props.fetchItemPicker(this.props.modulesManager, str);
+        this.props.fetchItemPicker(this.props.modulesManager, str, this.props.refDate);
 
     debouncedGetSuggestion = _debounce(
         this.getSuggestions,
@@ -40,7 +40,8 @@ class ItemPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset, readOnly = false } = this.props;
+        const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset,
+            readOnly = false, required = false } = this.props;
         return <AutoSuggestion
             items={items}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
@@ -51,6 +52,7 @@ class ItemPicker extends Component {
             value={value}
             reset={reset}
             readOnly={readOnly}
+            required={required}
         />
     }
 }
