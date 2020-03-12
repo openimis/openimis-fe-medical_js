@@ -60,7 +60,7 @@ class DiagnosisPicker extends Component {
             required={required}
             selectThreshold={this.selectThreshold}
             withNull={withNull}
-            nullLabel={nullLabel || formatMessage(intl, "medical", "location.DiagnosisPicker.null")}
+            nullLabel={nullLabel || formatMessage(intl, "medical", "medical.DiagnosisPicker.null")}
             selectLabel={this.formatSuggestion}
         />
     }
