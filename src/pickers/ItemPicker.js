@@ -11,6 +11,7 @@ class ItemPicker extends Component {
     constructor(props) {
         super(props);
         this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", false);
+        this.selectThreshold = props.modulesManager.getConf("fe-medical", "ItemPicker.selectThreshold", 10);
     }
 
     componentDidMount() {
@@ -41,8 +42,11 @@ class ItemPicker extends Component {
 
     render() {
         const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset,
-            readOnly = false, required = false } = this.props;
+            readOnly = false, required = false,
+            withNull = false, nullLabel = null
+        } = this.props;
         return <AutoSuggestion
+            module="medical"
             items={items}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
             placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ItemPicker.placehoder")) : null}
@@ -53,6 +57,10 @@ class ItemPicker extends Component {
             reset={reset}
             readOnly={readOnly}
             required={required}
+            selectThreshold={this.selectThreshold}
+            withNull={withNull}
+            nullLabel={nullLabel || formatMessage(intl, "medical", "medical.ItemPicker.null")}
+            selectLabel={this.formatSuggestion}            
         />
     }
 }

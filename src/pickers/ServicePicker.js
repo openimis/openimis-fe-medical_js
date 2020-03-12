@@ -11,6 +11,7 @@ class ServicePicker extends Component {
     constructor(props) {
         super(props);
         this.cache = props.modulesManager.getConf("fe-medical", "cacheServices", false);
+        this.selectThreshold = props.modulesManager.getConf("fe-medical", "ServicePicker.selectThreshold", 10);
     }
 
     componentDidMount() {
@@ -43,6 +44,7 @@ class ServicePicker extends Component {
         const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
             readOnly = false, required = false } = this.props;
         return <AutoSuggestion
+            module="medical"
             items={services}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Services"))}
             placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ServicePicker.placehoder")) : null}
@@ -53,6 +55,10 @@ class ServicePicker extends Component {
             reset={reset}
             readOnly={readOnly}
             required={required}
+            selectThreshold={this.selectThreshold}
+            withNull={withNull}
+            nullLabel={nullLabel || formatMessage(intl, "medical", "medical.ServicePicker.null")}
+            selectLabel={this.formatSuggestion}              
         />
     }
 }
