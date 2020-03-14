@@ -8,6 +8,10 @@ import _debounce from "lodash/debounce";
 
 class DiagnosisPicker extends Component {
 
+    state = {
+        diagnoses: [],
+    }
+
     constructor(props) {
         super(props);
         this.cache = props.modulesManager.getConf("fe-medical", "cacheDiagnoses", true);
@@ -15,15 +19,25 @@ class DiagnosisPicker extends Component {
     }
 
     componentDidMount() {
-        if (this.cache && !this.props.diagnoses) {
-            // prevent loading multiple times the cache when component is
-            // several times on tha page
-            setTimeout(
-                () => {
-                    !this.props.fetching && this.props.fetchDiagnosisPicker(this.props.modulesManager)
-                },
-                Math.floor(Math.random() * 300)
-            );
+        if (this.cache) {
+            if (!this.props.diagnoses) {
+                // prevent loading multiple times the cache when component is
+                // several times on tha page
+                setTimeout(
+                    () => {
+                        !this.props.fetching && this.props.fetchDiagnosisPicker(this.props.modulesManager)
+                    },
+                    Math.floor(Math.random() * 300)
+                );
+            } else {
+                this.setState({ diagnoses: this.props.diagnoses })
+            }
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!_.isEqual(prevProps.diagnoses, this.props.diagnoses)) {
+            this.setState({ diagnoses: this.props.diagnoses })
         }
     }
 
@@ -61,7 +75,6 @@ class DiagnosisPicker extends Component {
             selectThreshold={this.selectThreshold}
             withNull={withNull}
             nullLabel={nullLabel || formatMessage(intl, "medical", "medical.DiagnosisPicker.null")}
-            selectLabel={this.formatSuggestion}
         />
     }
 }

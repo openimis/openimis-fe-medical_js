@@ -5,25 +5,41 @@ import { injectIntl } from 'react-intl';
 import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
 import { fetchServicePicker } from "../actions";
 import _debounce from "lodash/debounce";
+import _ from "lodash";
 
 class ServicePicker extends Component {
 
+    state = {
+        services: [],
+    }
+
     constructor(props) {
         super(props);
-        this.cache = props.modulesManager.getConf("fe-medical", "cacheServices", false);
+        this.cache = props.modulesManager.getConf("fe-medical", "cacheServices", true);
         this.selectThreshold = props.modulesManager.getConf("fe-medical", "ServicePicker.selectThreshold", 10);
     }
 
     componentDidMount() {
-        if (this.cache && !this.props.services) {
-            // prevent loading multiple times the cache when component is
-            // several times on tha page
-            setTimeout(
-                () => {
-                    !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
-                },
-                Math.floor(Math.random() * 300)
-            );
+        if (this.cache) {
+            if (!this.props.services) {
+                // prevent loading multiple times the cache when component is
+                // several times on tha page
+                setTimeout(
+                    () => {
+                        !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
+                    },
+                    Math.floor(Math.random() * 300)
+                );
+            }
+            else {
+                this.setState({ services: this.props.services })
+            }
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!_.isEqual(prevProps.services, this.props.services)) {
+            this.setState({ services: this.props.services })
         }
     }
 
@@ -41,10 +57,11 @@ class ServicePicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
+        const { intl, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
             readOnly = false, required = false,
             withNull = false, nullLabel = null
         } = this.props;
+        const { services } = this.state;
         return <AutoSuggestion
             module="medical"
             items={services}
@@ -60,7 +77,6 @@ class ServicePicker extends Component {
             selectThreshold={this.selectThreshold}
             withNull={withNull}
             nullLabel={nullLabel || formatMessage(intl, "medical", "medical.ServicePicker.null")}
-            selectLabel={this.formatSuggestion}              
         />
     }
 }
