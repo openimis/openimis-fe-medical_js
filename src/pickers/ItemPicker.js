@@ -8,21 +8,36 @@ import _debounce from "lodash/debounce";
 
 class ItemPicker extends Component {
 
+    state = {
+        items: [],
+    }
+
     constructor(props) {
         super(props);
-        this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", false);
+        this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", true);
+        this.selectThreshold = props.modulesManager.getConf("fe-medical", "ItemPicker.selectThreshold", 10);
     }
 
     componentDidMount() {
-        if (this.cache && !this.props.items) {
-            // prevent loading multiple times the cache when component is
-            // several times on tha page
-            setTimeout(
-                () => {
-                    !this.props.fetching && this.props.fetchItemPicker(this.props.modulesManager)
-                },
-                Math.floor(Math.random() * 300)
-            );
+        if (this.cache) {
+            if (!this.props.items) {
+                // prevent loading multiple times the cache when component is
+                // several times on tha page
+                setTimeout(
+                    () => {
+                        !this.props.fetching && this.props.fetchItemPicker(this.props.modulesManager)
+                    },
+                    Math.floor(Math.random() * 300)
+                );
+            } else {
+                this.setState({ items: this.props.items })
+            }
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!_.isEqual(prevProps.items, this.props.items)) {
+            this.setState({ items: this.props.items })
         }
     }
 
@@ -41,8 +56,11 @@ class ItemPicker extends Component {
 
     render() {
         const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset,
-            readOnly = false, required = false } = this.props;
+            readOnly = false, required = false,
+            withNull = false, nullLabel = null
+        } = this.props;
         return <AutoSuggestion
+            module="medical"
             items={items}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
             placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ItemPicker.placehoder")) : null}
@@ -53,6 +71,9 @@ class ItemPicker extends Component {
             reset={reset}
             readOnly={readOnly}
             required={required}
+            selectThreshold={this.selectThreshold}
+            withNull={withNull}
+            nullLabel={nullLabel || formatMessage(intl, "medical", "medical.ItemPicker.null")}
         />
     }
 }

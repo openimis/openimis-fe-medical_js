@@ -8,21 +8,36 @@ import _debounce from "lodash/debounce";
 
 class DiagnosisPicker extends Component {
 
+    state = {
+        diagnoses: [],
+    }
+
     constructor(props) {
         super(props);
         this.cache = props.modulesManager.getConf("fe-medical", "cacheDiagnoses", true);
+        this.selectThreshold = props.modulesManager.getConf("fe-medical", "DiagnosisPicker.selectThreshold", 10);
     }
 
     componentDidMount() {
-        if (this.cache && !this.props.diagnoses) {
-            // prevent loading multiple times the cache when component is
-            // several times on tha page
-            setTimeout(
-                () => {
-                    !this.props.fetching && this.props.fetchDiagnosisPicker(this.props.modulesManager)
-                },
-                Math.floor(Math.random() * 300)
-            );
+        if (this.cache) {
+            if (!this.props.diagnoses) {
+                // prevent loading multiple times the cache when component is
+                // several times on tha page
+                setTimeout(
+                    () => {
+                        !this.props.fetching && this.props.fetchDiagnosisPicker(this.props.modulesManager)
+                    },
+                    Math.floor(Math.random() * 300)
+                );
+            } else {
+                this.setState({ diagnoses: this.props.diagnoses })
+            }
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!_.isEqual(prevProps.diagnoses, this.props.diagnoses)) {
+            this.setState({ diagnoses: this.props.diagnoses })
         }
     }
 
@@ -40,10 +55,13 @@ class DiagnosisPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, diagnoses, withLabel = true, label, 
+        const { intl, diagnoses, withLabel = true, label,
             withPlaceholder = false, placeholder, value, reset,
-            readOnly = false, required = false } = this.props;
+            readOnly = false, required = false,
+            withNull = false, nullLabel = null
+        } = this.props;
         return <AutoSuggestion
+            module="medical"
             items={diagnoses}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Diagnosis"))}
             placeholder={!!withPlaceholder ? placeholder || formatMessage(intl, "medical", "DiagnosisPicker.placehoder") : null}
@@ -54,6 +72,9 @@ class DiagnosisPicker extends Component {
             reset={reset}
             readOnly={readOnly}
             required={required}
+            selectThreshold={this.selectThreshold}
+            withNull={withNull}
+            nullLabel={nullLabel || formatMessage(intl, "medical", "medical.DiagnosisPicker.null")}
         />
     }
 }
