@@ -9,10 +9,6 @@ import _ from "lodash";
 
 class ServicePicker extends Component {
 
-    state = {
-        services: [],
-    }
-
     constructor(props) {
         super(props);
         this.cache = props.modulesManager.getConf("fe-medical", "cacheServices", true);
@@ -20,26 +16,15 @@ class ServicePicker extends Component {
     }
 
     componentDidMount() {
-        if (this.cache) {
-            if (!this.props.services) {
-                // prevent loading multiple times the cache when component is
-                // several times on tha page
-                setTimeout(
-                    () => {
-                        !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
-                    },
-                    Math.floor(Math.random() * 300)
-                );
-            }
-            else {
-                this.setState({ services: this.props.services })
-            }
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!_.isEqual(prevProps.services, this.props.services)) {
-            this.setState({ services: this.props.services })
+        if (this.cache && !this.props.services) {
+            // prevent loading multiple times the cache when component is
+            // several times on tha page
+            setTimeout(
+                () => {
+                    !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
+                },
+                Math.floor(Math.random() * 300)
+            );
         }
     }
 

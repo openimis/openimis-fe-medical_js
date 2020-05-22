@@ -8,10 +8,6 @@ import _debounce from "lodash/debounce";
 
 class ItemPicker extends Component {
 
-    state = {
-        items: [],
-    }
-
     constructor(props) {
         super(props);
         this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", true);
@@ -19,8 +15,7 @@ class ItemPicker extends Component {
     }
 
     componentDidMount() {
-        if (this.cache) {
-            if (!this.props.items) {
+        if (this.cache && !this.props.items) {
                 // prevent loading multiple times the cache when component is
                 // several times on tha page
                 setTimeout(
@@ -29,15 +24,6 @@ class ItemPicker extends Component {
                     },
                     Math.floor(Math.random() * 300)
                 );
-            } else {
-                this.setState({ items: this.props.items })
-            }
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!_.isEqual(prevProps.items, this.props.items)) {
-            this.setState({ items: this.props.items })
         }
     }
 
