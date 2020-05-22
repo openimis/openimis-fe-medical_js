@@ -42,11 +42,10 @@ class ServicePicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
+        const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
             readOnly = false, required = false,
             withNull = false, nullLabel = null
         } = this.props;
-        const { services } = this.state;
         return <AutoSuggestion
             module="medical"
             items={services}
