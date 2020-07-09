@@ -21,7 +21,7 @@ class ServicePicker extends Component {
             // several times on tha page
             setTimeout(
                 () => {
-                    !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
+                    !this.props.fetching && !this.props.fetched && this.props.fetchServicePicker(this.props.modulesManager)
                 },
                 Math.floor(Math.random() * 300)
             );
@@ -68,6 +68,7 @@ class ServicePicker extends Component {
 const mapStateToProps = state => ({
     services: state.medical.services,
     fetching: state.medical.fetchingServices,
+    fetched: state.medical.fetchedServices,
 });
 
 const mapDispatchToProps = dispatch => {
