@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from 'react-intl';
-import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
+import { formatMessage, AutoSuggestion, withModulesManager, decodeId } from "@openimis/fe-core";
 import { fetchItemPicker } from "../actions";
 import _debounce from "lodash/debounce";
 
@@ -10,20 +10,19 @@ class ItemPicker extends Component {
 
     constructor(props) {
         super(props);
-        this.cache = props.modulesManager.getConf("fe-medical", "cacheItems", true);
         this.selectThreshold = props.modulesManager.getConf("fe-medical", "ItemPicker.selectThreshold", 10);
     }
 
     componentDidMount() {
-        if (this.cache && !this.props.items) {
-                // prevent loading multiple times the cache when component is
-                // several times on tha page
-                setTimeout(
-                    () => {
-                        !this.props.fetching && !this.props.fetched && this.props.fetchItemPicker(this.props.modulesManager)
-                    },
-                    Math.floor(Math.random() * 300)
-                );
+        if (!this.props.items) {
+            // prevent loading multiple times the cache when component is
+            // several times on tha page
+            setTimeout(
+                () => {
+                    !this.props.fetching && this.props.fetchItemPicker(this.props.modulesManager)
+                },
+                Math.floor(Math.random() * 300)
+            );
         }
     }
 
@@ -41,16 +40,21 @@ class ItemPicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, items, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset,
+        const { intl, withLabel = true, label, withPlaceholder = false, placeholder, value = null, reset,
             readOnly = false, required = false,
-            withNull = false, nullLabel = null
+            withNull = false, nullLabel = null,
+            filteredOnPriceList = null, itemsPricelists
         } = this.props;
+        if (!this.props.items) return null;
+        let items = [...this.props.items]
+        if (!!filteredOnPriceList) {
+            items = items.filter(i => itemsPricelists[filteredOnPriceList][decodeId(i.id)] !== undefined)
+        }
         return <AutoSuggestion
             module="medical"
             items={items}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Item"))}
             placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ItemPicker.placehoder")) : null}
-            getSuggestions={this.cache ? null : this.debouncedGetSuggestion}
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
             value={value}
@@ -66,6 +70,7 @@ class ItemPicker extends Component {
 
 const mapStateToProps = state => ({
     items: state.medical.items,
+    itemsPricelists: !!state.medical_pricelist ? state.medical_pricelist.itemsPricelists : {},
     fetching: state.medical.fetchingItems,
     fetched: state.medical.fetchedItems,
 });
