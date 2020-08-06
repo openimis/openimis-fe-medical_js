@@ -2,38 +2,28 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from 'react-intl';
-import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
+import { formatMessage, AutoSuggestion, withModulesManager, decodeId } from "@openimis/fe-core";
 import { fetchServicePicker } from "../actions";
 import _debounce from "lodash/debounce";
 import _ from "lodash";
 
 class ServicePicker extends Component {
 
-    state = {
-        services: [],
-    }
-
     constructor(props) {
         super(props);
-        this.cache = props.modulesManager.getConf("fe-medical", "cacheServices", true);
         this.selectThreshold = props.modulesManager.getConf("fe-medical", "ServicePicker.selectThreshold", 10);
     }
 
     componentDidMount() {
-        if (this.cache) {
-            if (!this.props.services) {
-                // prevent loading multiple times the cache when component is
-                // several times on tha page
-                setTimeout(
-                    () => {
-                        !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
-                    },
-                    Math.floor(Math.random() * 300)
-                );
-            }
-            else {
-                this.setState({ services: this.props.services })
-            }
+        if (!this.props.services) {
+            // prevent loading multiple times the cache when component is
+            // several times on tha page
+            setTimeout(
+                () => {
+                    !this.props.fetching && this.props.fetchServicePicker(this.props.modulesManager)
+                },
+                Math.floor(Math.random() * 300)
+            );
         }
     }
 
@@ -59,15 +49,19 @@ class ServicePicker extends Component {
     render() {
         const { intl, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
             readOnly = false, required = false,
-            withNull = false, nullLabel = null
+            withNull = false, nullLabel = null,
+            filteredOnPriceList = null, servicesPricelists
         } = this.props;
-        const { services } = this.state;
+        if (!this.props.services) return null;
+        let services = [...this.props.services]
+        if (!!filteredOnPriceList) {
+            services = services.filter(i => servicesPricelists[filteredOnPriceList][decodeId(i.id)] !== undefined)
+        }
         return <AutoSuggestion
             module="medical"
             items={services}
             label={!!withLabel && (label || formatMessage(intl, "medical", "Services"))}
             placeholder={!!withPlaceholder ? (placeholder || formatMessage(intl, "medical", "ServicePicker.placehoder")) : null}
-            getSuggestions={this.cache ? null : this.debouncedGetSuggestion}
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
             value={value}
@@ -83,6 +77,7 @@ class ServicePicker extends Component {
 
 const mapStateToProps = state => ({
     services: state.medical.services,
+    servicesPricelists: !!state.medical_pricelist ? state.medical_pricelist.servicesPricelists : {},
     fetching: state.medical.fetchingServices,
 });
 
