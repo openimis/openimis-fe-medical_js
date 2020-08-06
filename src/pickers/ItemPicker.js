@@ -26,12 +26,6 @@ class ItemPicker extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!_.isEqual(prevProps.items, this.props.items)) {
-            this.setState({ items: this.props.items })
-        }
-    }
-
     getSuggestions = str => !!str &&
         str.length >= this.props.modulesManager.getConf("fe-medical", "itemsMinCharLookup", 2) &&
         this.props.fetchItemPicker(this.props.modulesManager, str, this.props.refDate);
