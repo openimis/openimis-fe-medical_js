@@ -41,7 +41,7 @@ class ServicePicker extends Component {
     onSuggestionSelected = v => this.props.onChange(v, this.formatSuggestion(v));
 
     render() {
-        const { intl, services, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
+        const { intl, withLabel = true, label, withPlaceholder = false, placeholder, value, reset,
             readOnly = false, required = false,
             withNull = false, nullLabel = null,
             filteredOnPriceList = null, servicesPricelists
