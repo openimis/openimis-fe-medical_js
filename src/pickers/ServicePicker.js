@@ -27,12 +27,6 @@ class ServicePicker extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!_.isEqual(prevProps.services, this.props.services)) {
-            this.setState({ services: this.props.services })
-        }
-    }
-
     getSuggestions = str => !!str &&
         str.length >= this.props.modulesManager.getConf("fe-medical", "servicesMinCharLookup", 2) &&
         this.props.fetchServicePicker(this.props.modulesManager, str, this.props.refDate);
