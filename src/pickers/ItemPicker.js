@@ -72,6 +72,7 @@ const mapStateToProps = state => ({
     items: state.medical.items,
     itemsPricelists: !!state.medical_pricelist ? state.medical_pricelist.itemsPricelists : {},
     fetching: state.medical.fetchingItems,
+    fetched: state.medical.fetchedItems,
 });
 
 const mapDispatchToProps = dispatch => {
