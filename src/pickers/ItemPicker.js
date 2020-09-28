@@ -47,7 +47,7 @@ class ItemPicker extends Component {
         } = this.props;
         if (!this.props.items) return null;
         let items = [...this.props.items]
-        if (!!filteredOnPriceList) {
+        if (!!filteredOnPriceList && !!itemsPricelists) {
             items = items.filter(i => itemsPricelists[filteredOnPriceList][decodeId(i.id)] !== undefined)
         }
         return <AutoSuggestion
