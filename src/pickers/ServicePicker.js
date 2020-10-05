@@ -48,7 +48,7 @@ class ServicePicker extends Component {
         } = this.props;
         if (!this.props.services) return null;
         let services = [...this.props.services]
-        if (!!filteredOnPriceList) {
+        if (!!filteredOnPriceList && !!servicesPricelists) {
             services = services.filter(i => servicesPricelists[filteredOnPriceList][decodeId(i.id)] !== undefined)
         }
         return <AutoSuggestion
