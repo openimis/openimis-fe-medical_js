@@ -47,7 +47,7 @@ class ItemPicker extends Component {
         } = this.props;
         if (!this.props.items) return null;
         let items = [...this.props.items]
-        if (!!filteredOnPriceList) {
+        if (!!filteredOnPriceList && !!itemsPricelists && (filteredOnPriceList in itemsPricelists)) {
             items = items.filter(i => itemsPricelists[filteredOnPriceList][decodeId(i.id)] !== undefined)
         }
         return <AutoSuggestion
@@ -72,6 +72,7 @@ const mapStateToProps = state => ({
     items: state.medical.items,
     itemsPricelists: !!state.medical_pricelist ? state.medical_pricelist.itemsPricelists : {},
     fetching: state.medical.fetchingItems,
+    fetched: state.medical.fetchedItems,
 });
 
 const mapDispatchToProps = dispatch => {
