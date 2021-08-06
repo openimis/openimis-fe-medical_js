@@ -3,15 +3,13 @@ import { ConstantBasedPicker } from "@openimis/fe-core";
 
 import { SERVICE_TYPES } from "../constants";
 
-class ServiceTypePicker extends Component {
-    render() {
-        return <ConstantBasedPicker
-            module="admin"
-            label="medical.serviceType"
-            constants={SERVICE_TYPES}
-            {...this.props}
-        />
-    }
-}
+const ServiceTypePicker = (props) => {
+    return <ConstantBasedPicker
+        module="admin"
+        label="medical.serviceType"
+        constants={SERVICE_TYPES}
+        {...props}
+    />
+};
 
 export default ServiceTypePicker;

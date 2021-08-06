@@ -51,7 +51,7 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
                 pubRef="medical.ServiceTypePicker"
-                withNull={true}
+                withNull={false}
                 required
                 readOnly={Boolean(edited.id) || readOnly}
                 value={edited ? edited.type : ""}
@@ -72,7 +72,7 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
                 pubRef="medical.ServiceLevelPicker"
-                withNull={true}
+                withNull={false}
                 required
                 readOnly={Boolean(edited.id) || readOnly}
                 value={edited ? edited.level : ""}

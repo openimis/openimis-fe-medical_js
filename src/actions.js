@@ -106,21 +106,6 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
   return req;
 }
 
-export function fetchMedicalServices(mm, hf, str, prev) {
-  const filters = [];
-  if (str) {
-    filters.push(`str: "${str}"`);
-  }
-  if (_.isEqual(filters, prev)) {
-    return (dispatch) => {};
-  }
-  const payload = formatPageQuery(
-    "medicalServices",
-    filters,
-    mm.getRef("medical.MedicalServicesPicker.projection"),
-  );
-  return graphql(payload, "MEDICAL_SERVICES", filters);
-}
 
 export function fetchMedicalItems(mm, hf, str, prev) {
   const filters = [];
