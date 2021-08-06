@@ -22,7 +22,7 @@ const MEDICAL_ITEM_SEARCHER_CONTRIBUTION_KEY = "medical.MedicalItemSearcher";
 
 class MedicalItemSearcher extends Component {
   state = {
-    deleteUser: null,
+    deleteItem: null,
     reset: 0,
   };
 
@@ -82,8 +82,8 @@ class MedicalItemSearcher extends Component {
       ["type", true],
       ["package", true],
       ["price", true],
-      ["validFrom", false],
-      ["validTo", false],
+      ["validityFrom", false],
+      ["validityTo", false],
     ];
 
   deleteItem = () => {
@@ -124,8 +124,8 @@ class MedicalItemSearcher extends Component {
       (ms) => formatMessage(this.props.intl, 'medical.itemType', ms.type),
       (ms) => ms.package,
       (ms) => ms.price,
-      (ms) => ms.validityFrom,
-      (ms) => ms.validityTo,
+      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
+      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),
       (ms) => (
         <Tooltip
           title={formatMessage(this.props.intl, "medical.item", "openNewTab")}

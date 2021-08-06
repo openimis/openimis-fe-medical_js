@@ -28,8 +28,6 @@ const styles = (theme) => ({
 class MedicalItemFilter extends Component {
   state = {
     showHistory: false,
-    currentUserType: undefined,
-    currentUserRoles: undefined,
     locationFilters: {},
   };
 
@@ -67,18 +65,6 @@ class MedicalItemFilter extends Component {
     this.setState((state) => ({
       showHistory: !state.showHistory,
     }));
-  };
-
-  onChangeUserTypes = (currentUserType) => {
-    const { onChangeFilters } = this.props;
-    this.setState({ currentUserType });
-    onChangeFilters([
-      {
-        id: "userTypes",
-        value: currentUserType,
-        filter: currentUserType ? `userTypes: [${currentUserType}]` : null,
-      },
-    ]);
   };
 
   render() {
@@ -183,7 +169,7 @@ class MedicalItemFilter extends Component {
           <Grid container justify="flex-end">
             <ControlledField
               module="admin"
-              id="UserFilter.showHistory"
+              id="MedicalItemFilter.showHistory"
               field={
                 <Grid item xs={2} className={classes.item}>
                   <FormControlLabel

@@ -5,7 +5,6 @@ import { injectIntl } from "react-intl";
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import {
   withModulesManager,
-  decodeId,
   PublishedComponent,
   ControlledField,
   TextInput,
@@ -82,8 +81,7 @@ class MedicalServiceFilter extends Component {
   };
 
   render() {
-    const { classes, onChangeFilters, intl } = this.props;
-    const { locationFilters, currentMedicalServiceType, currentMedicalServiceRoles } = this.state;
+    const { classes, intl } = this.props;
     return (
       <section className={classes.form}>
         <Grid container>

@@ -22,7 +22,7 @@ const MEDICAL_SERVICE_SEARCHER_CONTRIBUTION_KEY = "medical.MedicalServiceSearche
 
 class MedicalServiceSearcher extends Component {
   state = {
-    deleteUser: null,
+    deleteService: null,
     reset: 0,
   };
 
@@ -82,8 +82,8 @@ class MedicalServiceSearcher extends Component {
       ["type", true],
       ["level", true],
       ["price", true],
-      ["validFrom", false],
-      ["validTo", false],
+      ["validityFrom", false],
+      ["validityTo", false],
     ];
 
   deleteService = () => {
@@ -124,8 +124,8 @@ class MedicalServiceSearcher extends Component {
       (ms) => ms.type,
       (ms) => ms.level,
       (ms) => ms.price,
-      (ms) => ms.validityFrom,
-      (ms) => ms.validityTo,
+      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
+      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),
       (ms) => (
         <Tooltip
           title={formatMessage(this.props.intl, "medical.service", "openNewTab")}

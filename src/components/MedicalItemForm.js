@@ -29,11 +29,10 @@ const MEDICAL_ITEM_OVERVIEW_MUTATIONS_KEY = "medicalItem.MedicalItemOverview.mut
 
 class MedicalItemForm extends Component {
   state = {
-    lockNew: false,
     reset: 0,
     medicalItem: this.newMedicalItem(),
     newMedicalItem: true,
-    consirmedAction: null,
+    confirmedActions: null,
   };
 
   newMedicalItem() {
@@ -55,12 +54,12 @@ class MedicalItemForm extends Component {
       );
     }
     if (this.props.id) {
-      this.setState({
+      this.setState((state, props) => ({
         medicalItem: {
           ...this.newMedicalItem(),
-          id: this.props.id,
+          id: props.id,
         },
-      });
+      }));
     }
   }
 
@@ -113,7 +112,6 @@ class MedicalItemForm extends Component {
   };
 
   reload = () => {
-    const { family } = this.state;
     const { clientMutationId, medicalItemId } = this.props.mutation;
     if (clientMutationId && !medicalItemId) {
       this.props
@@ -143,7 +141,7 @@ class MedicalItemForm extends Component {
       this.props.fetchMedicalItem(
         this.props.modulesManager,
         medicalItemId,
-        family.clientMutationId,
+        clientMutationId,
       );
     }
   };

@@ -33,7 +33,7 @@ class MedicalServiceForm extends Component {
     reset: 0,
     medicalService: this.newMedicalService(),
     newMedicalService: true,
-    consirmedAction: null,
+    confirmedAction: null,
   };
 
   newMedicalService() {
