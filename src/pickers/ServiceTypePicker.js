@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React  from "react";
 import { ConstantBasedPicker } from "@openimis/fe-core";
 
 import { SERVICE_TYPES } from "../constants";

@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { injectIntl } from "react-intl";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import React, {Component} from "react";
+import {injectIntl} from "react-intl";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {withStyles, withTheme} from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
 import {
-  formatMessageWithValues,
-  withModulesManager,
-  withHistory,
-  historyPush,
-  Form,
-  ProgressOrError,
-  journalize,
   coreConfirm,
-  parseData,
   ErrorBoundary,
+  Form,
+  formatMessageWithValues,
+  historyPush,
+  journalize,
+  parseData,
+  ProgressOrError,
+  withHistory,
+  withModulesManager,
 } from "@openimis/fe-core";
 import {RIGHT_MEDICALSERVICES} from "../constants";
 
-import { fetchMedicalService, newMedicalService, createMedicalService, fetchMedicalServiceMutation } from "../actions";
+import {createMedicalService, fetchMedicalService, fetchMedicalServiceMutation, newMedicalService} from "../actions";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 
 const styles = (theme) => ({
@@ -37,7 +37,7 @@ class MedicalServiceForm extends Component {
   };
 
   newMedicalService() {
-    return {};
+    return {patientCategory: 15};
   }
 
   componentDidMount() {
@@ -55,12 +55,12 @@ class MedicalServiceForm extends Component {
       );
     }
     if (this.props.id) {
-      this.setState({
+      this.setState((state, props) => ({
         medicalService: {
           ...this.newMedicalService(),
-          id: this.props.id,
+          id: props.id,
         },
-      });
+      }));
     }
   }
 
@@ -113,7 +113,6 @@ class MedicalServiceForm extends Component {
   };
 
   reload = () => {
-    const { family } = this.state;
     const { clientMutationId, medicalServiceId } = this.props.mutation;
     if (clientMutationId && !medicalServiceId) {
       this.props
@@ -143,7 +142,7 @@ class MedicalServiceForm extends Component {
       this.props.fetchMedicalService(
         this.props.modulesManager,
         medicalServiceId,
-        family.clientMutationId,
+        clientMutationId,
       );
     }
   };
@@ -189,28 +188,20 @@ class MedicalServiceForm extends Component {
       save,
       back,
     } = this.props;
-    const { medicalService, reset } = this.state;
+    const { medicalService, reset, lockNew } = this.state;
     if (!rights.includes(RIGHT_MEDICALSERVICES)) return null;
-    let runningMutation = !!medicalService && !!medicalService.clientMutationId;
     const contributedMutations = modulesManager.getContribs(
       MEDICAL_SERVICE_OVERVIEW_MUTATIONS_KEY,
     );
-    for (
-      let i = 0;
-      i < contributedMutations.length && !runningMutation;
-      i += 1
-    ) {
-      runningMutation = contributedMutations[i](state);
-    }
     const actions = [
       {
         doIt: this.reload,
         icon: <ReplayIcon />,
-        onlyIfDirty: !readOnly && !runningMutation,
+        onlyIfDirty: !readOnly,
       },
     ];
     return (
-      <div className={runningMutation ? classes.lockedPage : null}>
+      <div className={lockNew ? classes.lockedPage : null}>
         <ProgressOrError progress={fetchingMedicalService} error={errorMedicalService} />
         <ErrorBoundary>
         {((!!fetchedMedicalService && !!medicalService && medicalService.uuid === medicalServiceId) || !medicalServiceId) && (
@@ -227,7 +218,7 @@ class MedicalServiceForm extends Component {
             back={back}
             add={!!add && !this.state.newMedicalService ? this.add : null}
             readOnly={
-              readOnly || runningMutation || (!!medicalService && !!medicalService.validityTo)
+              readOnly || lockNew || (!!medicalService && !!medicalService.validityTo)
             }
             actions={actions}
             overview={overview}

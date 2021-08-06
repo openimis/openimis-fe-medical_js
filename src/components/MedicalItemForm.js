@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { injectIntl } from "react-intl";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import React, {Component} from "react";
+import {injectIntl} from "react-intl";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {withStyles, withTheme} from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
 import {
-  formatMessageWithValues,
-  withModulesManager,
-  withHistory,
-  historyPush,
-  Form,
-  ProgressOrError,
-  journalize,
   coreConfirm,
-  parseData,
   ErrorBoundary,
+  Form,
+  formatMessageWithValues,
+  historyPush,
+  journalize,
+  parseData,
+  ProgressOrError,
+  withHistory,
+  withModulesManager,
 } from "@openimis/fe-core";
 import {RIGHT_MEDICALITEMS} from "../constants";
 
-import { fetchMedicalItem, newMedicalItem, createMedicalItem, fetchMedicalItemMutation } from "../actions";
+import {createMedicalItem, fetchMedicalItem, fetchMedicalItemMutation, newMedicalItem} from "../actions";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 
 const styles = (theme) => ({
@@ -32,11 +32,11 @@ class MedicalItemForm extends Component {
     reset: 0,
     medicalItem: this.newMedicalItem(),
     newMedicalItem: true,
-    confirmedActions: null,
+    confirmedAction: null,
   };
 
   newMedicalItem() {
-    return {};
+    return {patientCategory: 15};
   }
 
   componentDidMount() {
@@ -186,7 +186,7 @@ class MedicalItemForm extends Component {
       save,
       back,
     } = this.props;
-    const { medicalItem, reset } = this.state;
+    const { medicalItem, reset, lockNew } = this.state;
     if (!rights.includes(RIGHT_MEDICALITEMS)) return null;
     let runningMutation = !!medicalItem && !!medicalItem.clientMutationId;
     const contributedMutations = modulesManager.getContribs(
@@ -224,7 +224,7 @@ class MedicalItemForm extends Component {
             back={back}
             add={!!add && !this.state.newMedicalItem ? this.add : null}
             readOnly={
-              readOnly || runningMutation || (!!medicalItem && !!medicalItem.validityTo)
+              readOnly || lockNew || runningMutation || (!!medicalItem && !!medicalItem.validityTo)
             }
             actions={actions}
             overview={overview}

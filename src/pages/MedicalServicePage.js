@@ -40,8 +40,8 @@ class MedicalServicePage extends Component {
         medicalService,
         formatMessageWithValues(
           this.props.intl,
-          "medical.medicalService",
-          "updateMedicalService.mutationLabel",
+          "medical.service",
+          "update.mutationLabel",
         ),
       );
     }

@@ -28,7 +28,6 @@ const styles = (theme) => ({
 class MedicalItemFilter extends Component {
   state = {
     showHistory: false,
-    locationFilters: {},
   };
 
   componentDidUpdate(prevProps) {
@@ -129,6 +128,8 @@ class MedicalItemFilter extends Component {
                       module="medical"
                       //label="ItemType"
                       value={this.filterValue("type")}
+                      withNull={true}
+                      nullLabel="medical.itemType.any"
                       onChange={(v) =>
                       this.debouncedOnChangeFilter([
                         {
