@@ -25,8 +25,6 @@ const styles = (theme) => ({
   lockedPage: theme.page.locked,
 });
 
-const MEDICAL_SERVICE_OVERVIEW_MUTATIONS_KEY = "medicalService.MedicalServiceOverview.mutations";
-
 class MedicalServiceForm extends Component {
   state = {
     lockNew: false,
@@ -174,9 +172,7 @@ class MedicalServiceForm extends Component {
 
   render() {
     const {
-      modulesManager,
       classes,
-      state,
       rights,
       medicalServiceId,
       fetchingMedicalService,
@@ -190,9 +186,6 @@ class MedicalServiceForm extends Component {
     } = this.props;
     const { medicalService, reset, lockNew } = this.state;
     if (!rights.includes(RIGHT_MEDICALSERVICES)) return null;
-    const contributedMutations = modulesManager.getContribs(
-      MEDICAL_SERVICE_OVERVIEW_MUTATIONS_KEY,
-    );
     const actions = [
       {
         doIt: this.reload,
