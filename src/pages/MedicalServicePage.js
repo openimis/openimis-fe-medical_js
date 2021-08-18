@@ -54,13 +54,13 @@ class MedicalServicePage extends Component {
     return (
       <div className={classes.page}>
         <ErrorBoundary>
-        <MedicalServiceForm
-          overview={overview}
-          medicalServiceId={medicalServiceId}
-          back={(e) => historyPush(modulesManager, history, "medical.medicalServices")}
-          add={rights.includes(RIGHT_MEDICALSERVICES_ADD) ? this.add : null}
-          save={rights.includes(RIGHT_MEDICALSERVICES_EDIT) ? this.save : null}
-        />
+          <MedicalServiceForm
+            overview={overview}
+            medicalServiceId={medicalServiceId}
+            back={(e) => historyPush(modulesManager, history, "medical.medicalServices")}
+            add={rights.includes(RIGHT_MEDICALSERVICES_ADD) ? this.add : null}
+            save={this.save}
+          />
         </ErrorBoundary>
       </div>
     );

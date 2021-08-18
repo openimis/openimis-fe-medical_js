@@ -13,12 +13,10 @@ import {
   formatDateFromISO,
 } from "@openimis/fe-core";
 
-import {fetchMedicalServicesSummaries, deleteMedicalService} from "../actions";
-import {RIGHT_MEDICALSERVICES_DELETE} from "../constants";
+import { fetchMedicalServicesSummaries, deleteMedicalService } from "../actions";
+import { RIGHT_MEDICALSERVICES_DELETE } from "../constants";
 import DeleteMedicalItemOrServiceDialog from "./DeleteMedicalItemOrServiceDialog";
 import MedicalServiceFilter from "./MedicalServiceFilter";
-
-const MEDICAL_SERVICE_SEARCHER_CONTRIBUTION_KEY = "medical.MedicalServiceSearcher";
 
 class MedicalServiceSearcher extends Component {
   state = {
@@ -28,8 +26,6 @@ class MedicalServiceSearcher extends Component {
 
   constructor(props) {
     super(props);
-    this.rowsPerPageOptions = [10, 20, 50, 100];
-    this.defaultPageSize = 10;
     this.locationLevels = 4;
   }
 
@@ -155,7 +151,6 @@ class MedicalServiceSearcher extends Component {
       fetchingMedicalServices,
       fetchedMedicalServices,
       errorMedicalServices,
-      filterPaneMedicalServicesKey,
       cacheFiltersKey,
       onDoubleClick,
     } = this.props;
@@ -171,23 +166,14 @@ class MedicalServiceSearcher extends Component {
           module="medicalService"
           cacheFiltersKey={cacheFiltersKey}
           FilterPane={MedicalServiceFilter}
-          filterPaneMedicalServicesKey={filterPaneMedicalServicesKey}
           items={medicalServices}
           itemsPageInfo={medicalServicesPageInfo}
           fetchingItems={fetchingMedicalServices}
           fetchedItems={fetchedMedicalServices}
           errorItems={errorMedicalServices}
-          medicalServiceKey={MEDICAL_SERVICE_SEARCHER_CONTRIBUTION_KEY}
-          tableTitle={formatMessageWithValues(
-            intl,
-            "medical.service",
-            "medicalServiceSummaries",
-            {
-              count,
-            },
-          )}
-          rowsPerPageOptions={this.rowsPerPageOptions}
-          defaultPageSize={this.defaultPageSize}
+          tableTitle={formatMessageWithValues(intl, "medical.service", "medicalServiceSummaries", {
+            count,
+          })}
           fetch={this.fetch}
           rowIdentifier={this.rowIdentifier}
           filtersToQueryParams={this.filtersToQueryParams}
@@ -198,7 +184,6 @@ class MedicalServiceSearcher extends Component {
           rowDisabled={this.rowDisabled}
           rowLocked={this.rowLocked}
           onDoubleClick={(c) => !c.clientMutationId && onDoubleClick(c)}
-          reset={this.state.reset}
         />
       </>
     );
@@ -206,10 +191,7 @@ class MedicalServiceSearcher extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights:
-    !!state.core && !!state.core.user && !!state.core.user.i_user
-      ? state.core.user.i_user.rights
-      : [],
+  rights: state.core?.user?.i_user?.rights ?? [],
   medicalServices: state.medical.medicalServicesSummaries,
   medicalServicesPageInfo: state.medical.medicalServicesPageInfo,
   fetchingMedicalServices: state.medical.fetchingMedicalServicesSummaries,
