@@ -1,6 +1,6 @@
 {
   "medical.Diagnosis": "Diagnosis",
-  "medical.DiagnosisPicker.placehoder": "Search Diagnosis…",
+  "medical.DiagnosisPicker.placeholder": "Search Diagnosis…",
   "medical.DiagnosisPicker.null": "Any",
   "medical.Item": "Medical Item",
   "medical.ItemPicker.placeholder": "Search Item…",
