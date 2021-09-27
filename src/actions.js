@@ -1,11 +1,4 @@
-import {
-  formatGQLString,
-  formatMutation,
-  formatPageQuery,
-  formatPageQueryWithCount,
-  graphql,
-  toISODate,
-} from "@openimis/fe-core";
+import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql } from "@openimis/fe-core";
 import _ from "lodash";
 
 export function fetchDiagnosisPicker(mm, str) {
@@ -15,30 +8,6 @@ export function fetchDiagnosisPicker(mm, str) {
     mm.getRef("medical.DiagnosisPicker.projection"),
   );
   return graphql(payload, "MEDICAL_DIAGNOSIS_PICKER");
-}
-
-export function fetchItemPicker(mm, str, refDate) {
-  let filter = [];
-  if (!!str && str.length) {
-    filter.push(`str:"${str}"`);
-  }
-  if (!!refDate) {
-    filter.push(`date: "${toISODate(refDate)}"`);
-  }
-  let payload = formatPageQuery("medicalItemsStr", filter, mm.getRef("medical.ItemPicker.projection"));
-  return graphql(payload, "MEDICAL_ITEM_PICKER");
-}
-
-export function fetchServicePicker(mm, str, refDate) {
-  let filter = [];
-  if (!!str && str.length) {
-    filter.push(`str:"${str}"`);
-  }
-  if (!!refDate) {
-    filter.push(`date: "${toISODate(refDate)}"`);
-  }
-  let payload = formatPageQuery("medicalServicesStr", filter, mm.getRef("medical.ServicePicker.projection"));
-  return graphql(payload, "MEDICAL_SERVICE_PICKER");
 }
 
 const MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION = [
