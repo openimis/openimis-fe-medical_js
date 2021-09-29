@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Edit as EditIcon } from "@material-ui/icons";
 import {
@@ -6,10 +7,15 @@ import {
   withModulesManager,
   withHistory,
   ErrorBoundary,
+  formatMessage,
 } from "@openimis/fe-core";
 import MedicalItemPage from "./MedicalItemPage";
 
 class MedicalItemOverviewPage extends Component {
+  componentDidMount() {
+    document.title = formatMessage(this.props.intl, "medical.item", "overviewTitle");
+  }
+
   render() {
     const { history, modulesManager, medicalItemId } = this.props;
     const actions = [
@@ -40,5 +46,5 @@ const mapStateToProps = (state, props) => {
 }
 
 export default withHistory(
-  withModulesManager(connect(mapStateToProps)(MedicalItemOverviewPage)),
+  withModulesManager(connect(mapStateToProps)(injectIntl(MedicalItemOverviewPage))),
 );

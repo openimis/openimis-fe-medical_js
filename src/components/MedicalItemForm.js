@@ -43,7 +43,7 @@ class MedicalItemForm extends Component {
     document.title = formatMessageWithValues(
       this.props.intl,
       "medical.item",
-      "MedicalItemOverview.title",
+      "overviewTitle",
       { label: "" },
     );
     if (this.props.medicalItemId) {
