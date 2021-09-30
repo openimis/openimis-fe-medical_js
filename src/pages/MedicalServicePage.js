@@ -9,6 +9,7 @@ import {
   withHistory,
   historyPush,
   ErrorBoundary,
+  formatMessage,
 } from "@openimis/fe-core";
 import MedicalServiceForm from "../components/MedicalServiceForm";
 import { createMedicalService, updateMedicalService } from "../actions";
@@ -19,6 +20,10 @@ const styles = (theme) => ({
 });
 
 class MedicalServicePage extends Component {
+  componentDidMount() {
+    document.title = formatMessage(this.props.intl, "medical.service", "serviceTitle");
+  }
+
   add = () => {
     historyPush(this.props.modulesManager, this.props.history, "medical.medicalServiceNew");
   };

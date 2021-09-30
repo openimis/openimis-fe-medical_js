@@ -20,6 +20,10 @@ const styles = (theme) => ({
 });
 
 class MedicalServicesPage extends Component {
+  componentDidMount() {
+    document.title = formatMessage(this.props.intl, "medical.service", "servicesTitle");
+  }
+
   onDoubleClick = (ms, newTab = false) => {
     historyPush(
       this.props.modulesManager,
