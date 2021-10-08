@@ -6,6 +6,7 @@ import { withStyles, withTheme } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
 import {
   coreConfirm,
+  Helmet,
   ErrorBoundary,
   Form,
   formatMessageWithValues,
@@ -39,9 +40,6 @@ class MedicalServiceForm extends Component {
   }
 
   componentDidMount() {
-    document.title = formatMessageWithValues(this.props.intl, "medical.service", "MedicalServiceOverview.title", {
-      label: "",
-    });
     if (this.props.medicalServiceId) {
       this.setState(
         (state, props) => ({ medicalServiceId: props.medicalServiceId }),
@@ -174,6 +172,7 @@ class MedicalServiceForm extends Component {
     ];
     return (
       <div className={lockNew ? classes.lockedPage : null}>
+        <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "MedicalServiceOverview.title")} />
         <ProgressOrError progress={fetchingMedicalService} error={errorMedicalService} />
         <ErrorBoundary>
           {((!!fetchedMedicalService && !!medicalService && medicalService.uuid === medicalServiceId) ||
