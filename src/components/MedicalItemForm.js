@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import {injectIntl} from "react-intl";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
-import {withStyles, withTheme} from "@material-ui/core/styles";
+import React, { Component } from "react";
+import { injectIntl } from "react-intl";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { withStyles, withTheme } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
 import {
   coreConfirm,
@@ -16,9 +16,9 @@ import {
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
-import {RIGHT_MEDICALITEMS} from "../constants";
+import { RIGHT_MEDICALITEMS } from "../constants";
 
-import {createMedicalItem, fetchMedicalItem, fetchMedicalItemMutation, newMedicalItem} from "../actions";
+import { createMedicalItem, fetchMedicalItem, fetchMedicalItemMutation, newMedicalItem } from "../actions";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 
 const styles = (theme) => ({
@@ -36,21 +36,15 @@ class MedicalItemForm extends Component {
   };
 
   newMedicalItem() {
-    return {patientCategory: 15};
+    return { patientCategory: 15 };
   }
 
   componentDidMount() {
-    document.title = formatMessageWithValues(
-      this.props.intl,
-      "medical.item",
-      "overviewTitle",
-      { label: "" },
-    );
+    document.title = formatMessageWithValues(this.props.intl, "medical.item", "overviewTitle", { label: "" });
     if (this.props.medicalItemId) {
       this.setState(
         (state, props) => ({ medicalItemId: props.medicalItemId }),
-        (e) =>
-          this.props.fetchMedicalItem(this.props.modulesManager, this.props.medicalItemId),
+        (e) => this.props.fetchMedicalItem(this.props.modulesManager, this.props.medicalItemId),
       );
     }
     if (this.props.id) {
@@ -87,11 +81,7 @@ class MedicalItemForm extends Component {
           clientMutationId: props.mutation.clientMutationId,
         },
       }));
-    } else if (
-      prevProps.confirmed !== this.props.confirmed &&
-      !!this.props.confirmed &&
-      !!this.state.confirmedAction
-    ) {
+    } else if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
   }
@@ -114,46 +104,33 @@ class MedicalItemForm extends Component {
   reload = () => {
     const { clientMutationId, medicalItemId } = this.props.mutation;
     if (clientMutationId && !medicalItemId) {
-      this.props
-        .fetchMedicalItemMutation(this.props.modulesManager, clientMutationId)
-        .then((res) => {
-          const mutationLogs = parseData(res.payload.data.mutationLogs);
-          if (
-            mutationLogs &&
-            mutationLogs[0] &&
-            mutationLogs[0].medicalItems &&
-            mutationLogs[0].medicalItems[0] &&
-            mutationLogs[0].medicalItems[0].coreUser
-          ) {
-            const { id } = parseData(res.payload.data.mutationLogs)[0].users[0]
-              .coreUser;
-            if (id) {
-              historyPush(
-                this.props.modulesManager,
-                this.props.history,
-                "medical.medicalItemOverview",
-                [id],
-              );
-            }
+      this.props.fetchMedicalItemMutation(this.props.modulesManager, clientMutationId).then((res) => {
+        const mutationLogs = parseData(res.payload.data.mutationLogs);
+        if (
+          mutationLogs &&
+          mutationLogs[0] &&
+          mutationLogs[0].medicalItems &&
+          mutationLogs[0].medicalItems[0] &&
+          mutationLogs[0].medicalItems[0].coreUser
+        ) {
+          const { id } = parseData(res.payload.data.mutationLogs)[0].users[0].coreUser;
+          if (id) {
+            historyPush(this.props.modulesManager, this.props.history, "medical.medicalItemOverview", [id]);
           }
-        });
+        }
+      });
     } else {
-      this.props.fetchMedicalItem(
-        this.props.modulesManager,
-        medicalItemId,
-        clientMutationId,
-      );
+      this.props.fetchMedicalItem(this.props.modulesManager, medicalItemId, clientMutationId);
     }
   };
 
-  canSave = () => (
-      this.state.medicalItem &&
-      this.state.medicalItem.code &&
-      this.state.medicalItem.name &&
-      this.state.medicalItem.type &&
-      this.state.medicalItem.price &&
-      this.state.medicalItem.careType
-  );
+  canSave = () =>
+    this.state.medicalItem &&
+    this.state.medicalItem.code &&
+    this.state.medicalItem.name &&
+    this.state.medicalItem.type &&
+    this.state.medicalItem.price &&
+    this.state.medicalItem.careType;
 
   save = (medicalItem) => {
     this.setState(
@@ -189,14 +166,8 @@ class MedicalItemForm extends Component {
     const { medicalItem, reset, lockNew } = this.state;
     if (!rights.includes(RIGHT_MEDICALITEMS)) return null;
     let runningMutation = !!medicalItem && !!medicalItem.clientMutationId;
-    const contributedMutations = modulesManager.getContribs(
-      MEDICAL_ITEM_OVERVIEW_MUTATIONS_KEY,
-    );
-    for (
-      let i = 0;
-      i < contributedMutations.length && !runningMutation;
-      i += 1
-    ) {
+    const contributedMutations = modulesManager.getContribs(MEDICAL_ITEM_OVERVIEW_MUTATIONS_KEY);
+    for (let i = 0; i < contributedMutations.length && !runningMutation; i += 1) {
       runningMutation = contributedMutations[i](state);
     }
     const actions = [
@@ -210,43 +181,38 @@ class MedicalItemForm extends Component {
       <div className={runningMutation ? classes.lockedPage : null}>
         <ProgressOrError progress={fetchingMedicalItem} error={errorMedicalItem} />
         <ErrorBoundary>
-        {((!!fetchedMedicalItem && !!medicalItem && medicalItem.uuid === medicalItemId) || !medicalItemId) && (
-          <Form
-            module="medicalItem"
-            title={
-              this.state.newMedicalItem
-                ? "medical.item.MedicalItemOverview.newTitle"
-                : "medical.item.MedicalItemOverview.title"
-            }
-            edited_id={medicalItemId}
-            edited={medicalItem}
-            reset={reset}
-            back={back}
-            add={!!add && !this.state.newMedicalItem ? this.add : null}
-            readOnly={
-              readOnly || lockNew || runningMutation || (!!medicalItem && !!medicalItem.validityTo)
-            }
-            actions={actions}
-            overview={overview}
-            HeadPanel={MedicalItemMasterPanel}
-            medicalItem={medicalItem}
-            onEditedChanged={this.onEditedChanged}
-            canSave={this.canSave}
-            save={save ? this.save : null}
-            onActionToConfirm={this.onActionToConfirm}
-          />
-        )}
-          </ErrorBoundary>
+          {((!!fetchedMedicalItem && !!medicalItem && medicalItem.uuid === medicalItemId) || !medicalItemId) && (
+            <Form
+              module="medicalItem"
+              title={
+                this.state.newMedicalItem
+                  ? "medical.item.MedicalItemOverview.newTitle"
+                  : "medical.item.MedicalItemOverview.title"
+              }
+              edited_id={medicalItemId}
+              edited={medicalItem}
+              reset={reset}
+              back={back}
+              add={!!add && !this.state.newMedicalItem ? this.add : null}
+              readOnly={readOnly || lockNew || runningMutation || (!!medicalItem && !!medicalItem.validityTo)}
+              actions={actions}
+              overview={overview}
+              HeadPanel={MedicalItemMasterPanel}
+              medicalItem={medicalItem}
+              onEditedChanged={this.onEditedChanged}
+              canSave={this.canSave}
+              save={save ? this.save : null}
+              onActionToConfirm={this.onActionToConfirm}
+            />
+          )}
+        </ErrorBoundary>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  rights:
-    !!state.core && !!state.core.user && !!state.core.user.i_user
-      ? state.core.user.i_user.rights
-      : [],
+  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   fetchingMedicalItem: state.medical.fetchingMedicalItem,
   errorMedicalItem: state.medical.errorMedicalItem,
   fetchedMedicalItem: state.medical.fetchedMedicalItem,
@@ -272,9 +238,6 @@ const mapDispatchToProps = (dispatch) =>
 
 export default withHistory(
   withModulesManager(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps,
-    )(injectIntl(withTheme(withStyles(styles)(MedicalItemForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(MedicalItemForm)))),
   ),
 );

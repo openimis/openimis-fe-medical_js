@@ -13,8 +13,8 @@ import {
   formatDateFromISO,
 } from "@openimis/fe-core";
 
-import {fetchMedicalItemsSummaries, deleteMedicalItem} from "../actions";
-import {RIGHT_MEDICALITEMS_DELETE} from "../constants";
+import { fetchMedicalItemsSummaries, deleteMedicalItem } from "../actions";
+import { RIGHT_MEDICALITEMS_DELETE } from "../constants";
 import MedicalItemFilter from "./MedicalItemFilter";
 import DeleteMedicalItemOrServiceDialog from "./DeleteMedicalItemOrServiceDialog";
 
@@ -77,14 +77,14 @@ class MedicalItemSearcher extends Component {
   };
 
   sorts = () => [
-      ["code", true],
-      ["name", true],
-      ["type", true],
-      ["package", true],
-      ["price", true],
-      ["validityFrom", false],
-      ["validityTo", false],
-    ];
+    ["code", true],
+    ["name", true],
+    ["type", true],
+    ["package", true],
+    ["price", true],
+    ["validityFrom", false],
+    ["validityTo", false],
+  ];
 
   deleteItem = () => {
     const item = this.state.deleteItem;
@@ -103,33 +103,25 @@ class MedicalItemSearcher extends Component {
 
   deleteAction = (i) => {
     return !!i.validityTo || !!i.clientMutationId ? null : (
-      <Tooltip
-        title={formatMessage(
-          this.props.intl,
-          "medical.item",
-          "deleteItem.tooltip",
-        )}
-      >
+      <Tooltip title={formatMessage(this.props.intl, "medical.item", "deleteItem.tooltip")}>
         <IconButton onClick={() => this.confirmDelete(i)}>
-          <DeleteIcon/>
+          <DeleteIcon />
         </IconButton>
       </Tooltip>
     );
-  }
+  };
 
   itemFormatters = () => {
     const formatters = [
       (ms) => ms.code,
       (ms) => ms.name,
-      (ms) => formatMessage(this.props.intl, 'medical.itemType', ms.type),
+      (ms) => formatMessage(this.props.intl, "medical.itemType", ms.type),
       (ms) => ms.package,
       (ms) => ms.price,
       (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
       (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),
       (ms) => (
-        <Tooltip
-          title={formatMessage(this.props.intl, "medical.item", "openNewTab")}
-        >
+        <Tooltip title={formatMessage(this.props.intl, "medical.item", "openNewTab")}>
           <IconButton onClick={(e) => this.props.onDoubleClick(ms, true)}>
             <TabIcon />
           </IconButton>
@@ -178,14 +170,9 @@ class MedicalItemSearcher extends Component {
           fetchedItems={fetchedMedicalItems}
           errorItems={errorMedicalItems}
           medicalItemKey={MEDICAL_ITEM_SEARCHER_CONTRIBUTION_KEY}
-          tableTitle={formatMessageWithValues(
-            intl,
-            "medical.item",
-            "medicalItemSummaries",
-            {
-              count,
-            },
-          )}
+          tableTitle={formatMessageWithValues(intl, "medical.item", "medicalItemSummaries", {
+            count,
+          })}
           rowsPerPageOptions={this.rowsPerPageOptions}
           defaultPageSize={this.defaultPageSize}
           fetch={this.fetch}
@@ -206,10 +193,7 @@ class MedicalItemSearcher extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights:
-    !!state.core && !!state.core.user && !!state.core.user.i_user
-      ? state.core.user.i_user.rights
-      : [],
+  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   medicalItems: state.medical.medicalItemsSummaries,
   medicalItemsPageInfo: state.medical.medicalItemsPageInfo,
   fetchingMedicalItems: state.medical.fetchingMedicalItemsSummaries,
@@ -222,6 +206,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ fetchMedicalItemsSummaries, deleteMedicalItem, journalize }, dispatch);
 
-export default withModulesManager(
-  connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemSearcher)),
-);
+export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemSearcher)));

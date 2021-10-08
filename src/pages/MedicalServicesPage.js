@@ -4,14 +4,8 @@ import { injectIntl } from "react-intl";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import {
-  historyPush,
-  withModulesManager,
-  withHistory,
-  withTooltip,
-  formatMessage,
-} from "@openimis/fe-core";
-import {RIGHT_MEDICALSERVICES_ADD} from "../constants";
+import { historyPush, withModulesManager, withHistory, withTooltip, formatMessage } from "@openimis/fe-core";
+import { RIGHT_MEDICALSERVICES_ADD } from "../constants";
 import MedicalServiceSearcher from "../components/MedicalServiceSearcher";
 
 const styles = (theme) => ({
@@ -25,13 +19,7 @@ class MedicalServicesPage extends Component {
   }
 
   onDoubleClick = (ms, newTab = false) => {
-    historyPush(
-      this.props.modulesManager,
-      this.props.history,
-      "medical.medicalServiceOverview",
-      [ms.uuid],
-      newTab,
-    );
+    historyPush(this.props.modulesManager, this.props.history, "medical.medicalServiceOverview", [ms.uuid], newTab);
   };
 
   onAdd = () => {
@@ -42,10 +30,7 @@ class MedicalServicesPage extends Component {
     const { classes, rights, intl } = this.props;
     return (
       <div className={classes.page}>
-        <MedicalServiceSearcher
-          cacheFiltersKey="medicalServicesPageFiltersCache"
-          onDoubleClick={this.onDoubleClick}
-        />
+        <MedicalServiceSearcher cacheFiltersKey="medicalServicesPageFiltersCache" onDoubleClick={this.onDoubleClick} />
         {rights.includes(RIGHT_MEDICALSERVICES_ADD) &&
           withTooltip(
             <div className={classes.fab}>
@@ -61,16 +46,9 @@ class MedicalServicesPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights:
-    !!state.core && !!state.core.user && !!state.core.user.i_user
-      ? state.core.user.i_user.rights
-      : [],
+  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
 });
 
 export default injectIntl(
-  withModulesManager(
-    withHistory(
-      connect(mapStateToProps)(withTheme(withStyles(styles)(MedicalServicesPage))),
-    ),
-  ),
+  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(MedicalServicesPage))))),
 );

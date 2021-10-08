@@ -25,8 +25,8 @@ const ROUTE_ADMIN_MEDICAL_ITEMS_OVERVIEW = "medical/medicalItems/overview";
 const ROUTE_ADMIN_MEDICAL_ITEMS_NEW = "medical/medicalItems/new";
 
 const DEFAULT_CONFIG = {
-  "translations": [{ key: 'en', messages: messages_en }],
-  "reducers": [{ key: 'medical', reducer }],
+  "translations": [{ key: "en", messages: messages_en }],
+  "reducers": [{ key: "medical", reducer }],
   "core.Router": [
     { path: ROUTE_ADMIN_MEDICAL_SERVICES, component: MedicalServicesPage },
     { path: ROUTE_ADMIN_MEDICAL_SERVICES_NEW, component: MedicalServicePage },
@@ -40,7 +40,7 @@ const DEFAULT_CONFIG = {
       path: `${ROUTE_ADMIN_MEDICAL_ITEMS_OVERVIEW}/:medical_item_id`,
       component: MedicalItemOverviewPage,
     },
-//    { path: "medical/medicalItems", component: MedicalItemsPage },
+    //    { path: "medical/medicalItems", component: MedicalItemsPage },
   ],
   "refs": [
     { key: "medical.DiagnosisPicker", ref: DiagnosisPicker },
@@ -70,9 +70,8 @@ const DEFAULT_CONFIG = {
     { key: "medical.medicalItemOverview", ref: ROUTE_ADMIN_MEDICAL_ITEMS_OVERVIEW },
     { key: "medical.medicalItemNew", ref: ROUTE_ADMIN_MEDICAL_ITEMS_NEW },
   ],
-}
-
+};
 
 export const MedicalModule = (cfg) => {
   return { ...DEFAULT_CONFIG, ...cfg };
-}
+};

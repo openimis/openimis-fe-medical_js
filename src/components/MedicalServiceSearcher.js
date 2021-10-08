@@ -73,14 +73,14 @@ class MedicalServiceSearcher extends Component {
   };
 
   sorts = () => [
-      ["code", true],
-      ["name", true],
-      ["type", true],
-      ["level", true],
-      ["price", true],
-      ["validityFrom", false],
-      ["validityTo", false],
-    ];
+    ["code", true],
+    ["name", true],
+    ["type", true],
+    ["level", true],
+    ["price", true],
+    ["validityFrom", false],
+    ["validityTo", false],
+  ];
 
   deleteService = () => {
     const service = this.state.deleteService;
@@ -99,19 +99,13 @@ class MedicalServiceSearcher extends Component {
 
   deleteAction = (i) => {
     return !!i.validityTo || !!i.clientMutationId ? null : (
-      <Tooltip
-        title={formatMessage(
-          this.props.intl,
-          "medical.service",
-          "deleteService.tooltip",
-        )}
-      >
+      <Tooltip title={formatMessage(this.props.intl, "medical.service", "deleteService.tooltip")}>
         <IconButton onClick={() => this.confirmDelete(i)}>
-          <DeleteIcon/>
+          <DeleteIcon />
         </IconButton>
       </Tooltip>
     );
-  }
+  };
 
   itemFormatters = () => {
     const formatters = [
@@ -123,9 +117,7 @@ class MedicalServiceSearcher extends Component {
       (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
       (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),
       (ms) => (
-        <Tooltip
-          title={formatMessage(this.props.intl, "medical.service", "openNewTab")}
-        >
+        <Tooltip title={formatMessage(this.props.intl, "medical.service", "openNewTab")}>
           <IconButton onClick={(e) => this.props.onDoubleClick(ms, true)}>
             <TabIcon />
           </IconButton>
@@ -204,6 +196,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ fetchMedicalServicesSummaries, deleteMedicalService, journalize }, dispatch);
 
-export default withModulesManager(
-  connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServiceSearcher)),
-);
+export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServiceSearcher)));
