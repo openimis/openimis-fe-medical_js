@@ -13,7 +13,7 @@ import {
 } from "@openimis/fe-core";
 import MedicalServiceForm from "../components/MedicalServiceForm";
 import { createMedicalService, updateMedicalService } from "../actions";
-import {RIGHT_MEDICALSERVICES_ADD, RIGHT_MEDICALSERVICES_EDIT} from "../constants";
+import { RIGHT_MEDICALSERVICES_ADD, RIGHT_MEDICALSERVICES_EDIT } from "../constants";
 
 const styles = (theme) => ({
   page: theme.page,
@@ -33,28 +33,19 @@ class MedicalServicePage extends Component {
       this.props.createMedicalService(
         this.props.modulesManager,
         medicalService,
-        formatMessageWithValues(
-          this.props.intl,
-          "medical.medicalService",
-          "createMedicalService.mutationLabel",
-        ),
+        formatMessageWithValues(this.props.intl, "medical.medicalService", "createMedicalService.mutationLabel"),
       );
     } else {
       this.props.updateMedicalService(
         this.props.modulesManager,
         medicalService,
-        formatMessageWithValues(
-          this.props.intl,
-          "medical.service",
-          "update.mutationLabel",
-        ),
+        formatMessageWithValues(this.props.intl, "medical.service", "update.mutationLabel"),
       );
     }
   };
 
   render() {
-    const { classes, rights, medicalServiceId, overview, modulesManager, history } =
-      this.props;
+    const { classes, rights, medicalServiceId, overview, modulesManager, history } = this.props;
     if (!rights.includes(RIGHT_MEDICALSERVICES_EDIT)) return null;
     return (
       <div className={classes.page}>
@@ -73,21 +64,14 @@ class MedicalServicePage extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  rights:
-    !!state.core && !!state.core.user && !!state.core.user.i_user
-      ? state.core.user.i_user.rights
-      : [],
+  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   userId: props.match.params.user_id,
 });
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ createMedicalService, updateMedicalService }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ createMedicalService, updateMedicalService }, dispatch);
 
 export default withHistory(
   withModulesManager(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps,
-    )(injectIntl(withTheme(withStyles(styles)(MedicalServicePage)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(MedicalServicePage)))),
   ),
 );

@@ -3,13 +3,7 @@ import _debounce from "lodash/debounce";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
-import {
-  withModulesManager,
-  PublishedComponent,
-  ControlledField,
-  TextInput,
-  formatMessage,
-} from "@openimis/fe-core";
+import { withModulesManager, PublishedComponent, ControlledField, TextInput, formatMessage } from "@openimis/fe-core";
 
 const styles = (theme) => ({
   dialogTitle: theme.dialog.title,
@@ -122,19 +116,20 @@ class MedicalServiceFilter extends Component {
             field={
               <Grid item xs={3} className={classes.item}>
                 <PublishedComponent
-                    pubRef="medical.ServiceTypePicker"
-                    module="medical"
-                    withNull="true"
-                    nullLabel="medical.serviceType.any"
-                    value={this.filterValue("type")}
-                    onChange={(v) =>
+                  pubRef="medical.ServiceTypePicker"
+                  module="medical"
+                  withNull="true"
+                  nullLabel="medical.serviceType.any"
+                  value={this.filterValue("type")}
+                  onChange={(v) =>
                     this.debouncedOnChangeFilter([
                       {
                         id: "type",
                         value: v,
                         filter: `type: "${v}"`,
                       },
-                    ])}
+                    ])
+                  }
                 />
               </Grid>
             }
@@ -165,6 +160,4 @@ class MedicalServiceFilter extends Component {
   }
 }
 
-export default withModulesManager(
-  injectIntl(withTheme(withStyles(styles)(MedicalServiceFilter))),
-);
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(MedicalServiceFilter))));

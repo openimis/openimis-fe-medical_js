@@ -4,46 +4,41 @@ import {
   formatPageQuery,
   formatPageQueryWithCount,
   graphql,
-  toISODate
+  toISODate,
 } from "@openimis/fe-core";
 import _ from "lodash";
 
 export function fetchDiagnosisPicker(mm, str) {
-  let payload = formatPageQuery("diagnosesStr",
+  let payload = formatPageQuery(
+    "diagnosesStr",
     !!str && str.length && [`str:"${str}"`],
-    mm.getRef("medical.DiagnosisPicker.projection")
+    mm.getRef("medical.DiagnosisPicker.projection"),
   );
-  return graphql(payload, 'MEDICAL_DIAGNOSIS_PICKER');
+  return graphql(payload, "MEDICAL_DIAGNOSIS_PICKER");
 }
 
 export function fetchItemPicker(mm, str, refDate) {
-  let filter = []
+  let filter = [];
   if (!!str && str.length) {
     filter.push(`str:"${str}"`);
   }
   if (!!refDate) {
-    filter.push(`date: "${toISODate(refDate)}"`)
+    filter.push(`date: "${toISODate(refDate)}"`);
   }
-  let payload = formatPageQuery("medicalItemsStr",
-    filter,
-    mm.getRef("medical.ItemPicker.projection")
-  );
-  return graphql(payload, 'MEDICAL_ITEM_PICKER');
+  let payload = formatPageQuery("medicalItemsStr", filter, mm.getRef("medical.ItemPicker.projection"));
+  return graphql(payload, "MEDICAL_ITEM_PICKER");
 }
 
 export function fetchServicePicker(mm, str, refDate) {
-  let filter = []
+  let filter = [];
   if (!!str && str.length) {
     filter.push(`str:"${str}"`);
   }
   if (!!refDate) {
-    filter.push(`date: "${toISODate(refDate)}"`)
+    filter.push(`date: "${toISODate(refDate)}"`);
   }
-  let payload = formatPageQuery("medicalServicesStr",
-    filter,
-    mm.getRef("medical.ServicePicker.projection")
-  );
-  return graphql(payload, 'MEDICAL_SERVICE_PICKER');
+  let payload = formatPageQuery("medicalServicesStr", filter, mm.getRef("medical.ServicePicker.projection"));
+  return graphql(payload, "MEDICAL_SERVICE_PICKER");
 }
 
 const MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION = [
@@ -54,15 +49,9 @@ const MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION = [
   "price",
   "validityFrom",
   "validityTo",
-]
-const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
-    ...MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION,
-    "level",
-  ]
-const MEDICAL_ITEMS_SUMMARY_PROJECTION = [
-    ...MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION,
-    "package",
-  ]
+];
+const MEDICAL_SERVICES_SUMMARY_PROJECTION = [...MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION, "level"];
+const MEDICAL_ITEMS_SUMMARY_PROJECTION = [...MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION, "package"];
 
 const MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION = [
   "uuid",
@@ -76,18 +65,11 @@ const MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION = [
   "patientCategory",
   "validityFrom",
   "validityTo",
-]
-
-const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
-  ...MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION,
-  "level",
-  "category",
 ];
 
-const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
-  ...MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION,
-  "package",
-];
+const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [...MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION, "level", "category"];
+
+const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [...MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION, "package"];
 
 export function formatMedicalItemOrServiceGQL(mm, ms) {
   const req = `
@@ -106,7 +88,6 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
   return req;
 }
 
-
 export function fetchMedicalItems(mm, hf, str, prev) {
   const filters = [];
   if (str) {
@@ -115,29 +96,17 @@ export function fetchMedicalItems(mm, hf, str, prev) {
   if (_.isEqual(filters, prev)) {
     return (dispatch) => {};
   }
-  const payload = formatPageQuery(
-    "medicalItems",
-    filters,
-    mm.getRef("medical.MedicalItemsPicker.projection"),
-  );
+  const payload = formatPageQuery("medicalItems", filters, mm.getRef("medical.MedicalItemsPicker.projection"));
   return graphql(payload, "MEDICAL_ITEMS", filters);
 }
 
 export function fetchMedicalServicesSummaries(mm, filters) {
-  const payload = formatPageQueryWithCount(
-    "medicalServices",
-    filters,
-    MEDICAL_SERVICES_SUMMARY_PROJECTION,
-  );
+  const payload = formatPageQueryWithCount("medicalServices", filters, MEDICAL_SERVICES_SUMMARY_PROJECTION);
   return graphql(payload, "MEDICAL_SERVICES_SUMMARIES");
 }
 
 export function fetchMedicalItemsSummaries(mm, filters) {
-  const payload = formatPageQueryWithCount(
-    "medicalItems",
-    filters,
-    MEDICAL_ITEMS_SUMMARY_PROJECTION,
-  );
+  const payload = formatPageQueryWithCount("medicalItems", filters, MEDICAL_ITEMS_SUMMARY_PROJECTION);
   return graphql(payload, "MEDICAL_ITEMS_SUMMARIES");
 }
 
@@ -150,11 +119,7 @@ export function createMedicalService(mm, medicalService, clientMutationLabel) {
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
-    [
-      "MEDICAL_SERVICE_MUTATION_REQ",
-      "MEDICAL_SERVICE_CREATE_RESP",
-      "MEDICAL_SERVICE_MUTATION_ERR",
-    ],
+    ["MEDICAL_SERVICE_MUTATION_REQ", "MEDICAL_SERVICE_CREATE_RESP", "MEDICAL_SERVICE_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
@@ -164,19 +129,11 @@ export function createMedicalService(mm, medicalService, clientMutationLabel) {
 }
 
 export function createMedicalItem(mm, medicalItem, clientMutationLabel) {
-  const mutation = formatMutation(
-    "createItem",
-    formatMedicalItemOrServiceGQL(mm, medicalItem),
-    clientMutationLabel,
-  );
+  const mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
-    [
-      "MEDICAL_ITEM_MUTATION_REQ",
-      "MEDICAL_ITEM_CREATE_RESP",
-      "MEDICAL_ITEM_MUTATION_ERR",
-    ],
+    ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
@@ -194,11 +151,7 @@ export function updateMedicalService(mm, medicalService, clientMutationLabel) {
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
-    [
-      "MEDICAL_SERVICE_MUTATION_REQ",
-      "MEDICAL_SERVICE_UPDATE_RESP",
-      "MEDICAL_SERVICE_MUTATION_ERR",
-    ],
+    ["MEDICAL_SERVICE_MUTATION_REQ", "MEDICAL_SERVICE_UPDATE_RESP", "MEDICAL_SERVICE_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
@@ -208,19 +161,11 @@ export function updateMedicalService(mm, medicalService, clientMutationLabel) {
 }
 
 export function updateMedicalItem(mm, medicalItem, clientMutationLabel) {
-  const mutation = formatMutation(
-    "updateItem",
-    formatMedicalItemOrServiceGQL(mm, medicalItem),
-    clientMutationLabel,
-  );
+  const mutation = formatMutation("updateItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
-    [
-      "MEDICAL_SERVICE_MUTATION_REQ",
-      "MEDICAL_SERVICE_UPDATE_RESP",
-      "MEDICAL_SERVICE_MUTATION_ERR",
-    ],
+    ["MEDICAL_SERVICE_MUTATION_REQ", "MEDICAL_SERVICE_UPDATE_RESP", "MEDICAL_SERVICE_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
@@ -230,21 +175,13 @@ export function updateMedicalItem(mm, medicalItem, clientMutationLabel) {
 }
 
 export function deleteMedicalService(mm, medicalService, clientMutationLabel) {
-  const mutation = formatMutation(
-    "deleteService",
-    `uuids: ["${medicalService.uuid}"]`,
-    clientMutationLabel,
-  );
+  const mutation = formatMutation("deleteService", `uuids: ["${medicalService.uuid}"]`, clientMutationLabel);
   // eslint-disable-next-line no-param-reassign
   medicalService.clientMutationId = mutation.clientMutationId;
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
-    [
-      "MEDICAL_SERVICE_MUTATION_REQ",
-      "MEDICAL_SERVICE_DELETE_RESP",
-      "MEDICAL_SERVICE_MUTATION_ERR",
-    ],
+    ["MEDICAL_SERVICE_MUTATION_REQ", "MEDICAL_SERVICE_DELETE_RESP", "MEDICAL_SERVICE_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
@@ -254,21 +191,13 @@ export function deleteMedicalService(mm, medicalService, clientMutationLabel) {
 }
 
 export function deleteMedicalItem(mm, medicalItem, clientMutationLabel) {
-  const mutation = formatMutation(
-    "deleteItem",
-    `uuids: ["${medicalItem.uuid}"]`,
-    clientMutationLabel,
-  );
+  const mutation = formatMutation("deleteItem", `uuids: ["${medicalItem.uuid}"]`, clientMutationLabel);
   // eslint-disable-next-line no-param-reassign
   medicalItem.clientMutationId = mutation.clientMutationId;
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
-    [
-      "MEDICAL_ITEM_MUTATION_REQ",
-      "MEDICAL_ITEM_DELETE_RESP",
-      "MEDICAL_ITEM_MUTATION_ERR",
-    ],
+    ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_DELETE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,

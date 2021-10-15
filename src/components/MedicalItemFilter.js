@@ -124,20 +124,21 @@ class MedicalItemFilter extends Component {
               field={
                 <Grid item xs={3} className={classes.item}>
                   <PublishedComponent
-                      pubRef="medical.ItemTypePicker"
-                      module="medical"
-                      //label="ItemType"
-                      value={this.filterValue("type")}
-                      withNull={true}
-                      nullLabel="medical.itemType.any"
-                      onChange={(v) =>
+                    pubRef="medical.ItemTypePicker"
+                    module="medical"
+                    //label="ItemType"
+                    value={this.filterValue("type")}
+                    withNull={true}
+                    nullLabel="medical.itemType.any"
+                    onChange={(v) =>
                       this.debouncedOnChangeFilter([
                         {
                           id: "type",
                           value: v,
                           filter: `type: "${v}"`,
                         },
-                      ])}
+                      ])
+                    }
                   />
                 </Grid>
               }
@@ -193,6 +194,4 @@ class MedicalItemFilter extends Component {
   }
 }
 
-export default withModulesManager(
-  injectIntl(withTheme(withStyles(styles)(MedicalItemFilter))),
-);
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(MedicalItemFilter))));
