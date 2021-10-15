@@ -58,7 +58,7 @@ class DiagnosisPicker extends Component {
         items={diagnoses}
         label={!!withLabel && (label || formatMessage(intl, "medical", "Diagnosis"))}
         placeholder={
-          !!withPlaceholder ? placeholder || formatMessage(intl, "medical", "DiagnosisPicker.placehoder") : null
+          !!withPlaceholder ? placeholder || formatMessage(intl, "medical", "DiagnosisPicker.placeholder") : null
         }
         getSuggestions={this.cache ? null : this.debouncedGetSuggestion}
         getSuggestionValue={this.formatSuggestion}
