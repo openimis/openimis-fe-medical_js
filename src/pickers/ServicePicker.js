@@ -22,8 +22,8 @@ const ServicePicker = (props) => {
   const { formatMessage } = useTranslations("medical");
 
   const { isLoading, data, error } = useGraphqlQuery(
-    `query ($searchString: String, $first: Int, $pricelistUuid: UUID, $date: Date) {
-      medicalServicesStr(str: $searchString, first: $first, pricelistUuid: $pricelistUuid, date: $date) {
+    `query ($searchString: String, $pricelistUuid: UUID, $date: Date) {
+      medicalServicesStr(str: $searchString, first: 20, pricelistUuid: $pricelistUuid, date: $date) {
         edges {
           node {
             id name code price
@@ -32,7 +32,8 @@ const ServicePicker = (props) => {
         }
       }
     }`,
-    { pricelistUuid, searchString, first: searchString ? undefined : 10, date: toISODate(date) },
+    { pricelistUuid, searchString, date: toISODate(date) },
+    { skip: true },
   );
 
   return (
