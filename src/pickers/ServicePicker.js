@@ -33,6 +33,7 @@ const ServicePicker = (props) => {
       }
     }`,
     { pricelistUuid, searchString, first: searchString ? undefined : 10, date: toISODate(date) },
+    { skip: true },
   );
 
   return (
