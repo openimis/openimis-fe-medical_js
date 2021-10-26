@@ -1,15 +1,6 @@
 import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql } from "@openimis/fe-core";
 import _ from "lodash";
 
-export function fetchDiagnosisPicker(mm, str) {
-  let payload = formatPageQuery(
-    "diagnosesStr",
-    !!str && str.length && [`str:"${str}"`],
-    mm.getRef("medical.DiagnosisPicker.projection"),
-  );
-  return graphql(payload, "MEDICAL_DIAGNOSIS_PICKER");
-}
-
 const MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION = [
   "uuid",
   "code",

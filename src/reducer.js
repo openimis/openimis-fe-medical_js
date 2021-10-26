@@ -2,11 +2,6 @@ import { parseData, formatServerError, formatGraphQLError, pageInfo } from "@ope
 
 function reducer(
   state = {
-    fetchingDiagnosis: false,
-    fetchedDiagnosis: false,
-    errorDiagnosis: null,
-    diagnoses: null,
-
     fetchingMedicalServices: false,
     fetchingMedicalServicesSummaries: false,
     fetchingMedicalService: false,
@@ -38,28 +33,6 @@ function reducer(
   action,
 ) {
   switch (action.type) {
-    case "MEDICAL_DIAGNOSIS_PICKER_REQ":
-      return {
-        ...state,
-        fetchingDiagnosis: true,
-        fetchedDiagnosis: false,
-        diagnoses: null,
-        errorDiagnosis: null,
-      };
-    case "MEDICAL_DIAGNOSIS_PICKER_RESP":
-      return {
-        ...state,
-        fetchingDiagnosis: false,
-        fetchedDiagnosis: true,
-        diagnoses: parseData(action.payload.data.diagnosesStr),
-        errorDiagnosis: formatGraphQLError(action.payload),
-      };
-    case "MEDICAL_DIAGNOSIS_PICKER_ERR":
-      return {
-        ...state,
-        fetchingDiagnosis: false,
-        errorDiagnosis: formatServerError(action.payload),
-      };
     case "MEDICAL_SERVICES_REQ":
       return {
         ...state,
