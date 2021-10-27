@@ -6,6 +6,15 @@ import AddIcon from "@material-ui/icons/Add";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { historyPush, withModulesManager, withHistory, withTooltip, formatMessage } from "@openimis/fe-core";
 import { RIGHT_MEDICALSERVICES_ADD } from "../constants";
+import {
+  formatMessage,
+  formatMessageWithValues,
+  Helmet,
+  historyPush,
+  withHistory,
+  withModulesManager,
+  withTooltip
+} from "@openimis/fe-core";
 import MedicalServiceSearcher from "../components/MedicalServiceSearcher";
 
 const styles = (theme) => ({
@@ -14,10 +23,6 @@ const styles = (theme) => ({
 });
 
 class MedicalServicesPage extends Component {
-  componentDidMount() {
-    document.title = formatMessage(this.props.intl, "medical.service", "servicesTitle");
-  }
-
   onDoubleClick = (ms, newTab = false) => {
     historyPush(this.props.modulesManager, this.props.history, "medical.medicalServiceOverview", [ms.uuid], newTab);
   };
@@ -30,6 +35,7 @@ class MedicalServicesPage extends Component {
     const { classes, rights, intl } = this.props;
     return (
       <div className={classes.page}>
+        <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "servicesTitle")} />
         <MedicalServiceSearcher cacheFiltersKey="medicalServicesPageFiltersCache" onDoubleClick={this.onDoubleClick} />
         {rights.includes(RIGHT_MEDICALSERVICES_ADD) &&
           withTooltip(

@@ -3,13 +3,17 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Edit as EditIcon } from "@material-ui/icons";
 import { historyPush, withModulesManager, withHistory, ErrorBoundary, formatMessage } from "@openimis/fe-core";
+import {
+  ErrorBoundary,
+  formatMessageWithValues,
+  Helmet,
+  historyPush,
+  withHistory,
+  withModulesManager
+} from "@openimis/fe-core";
 import MedicalServicePage from "./MedicalServicePage";
 
 class MedicalServiceOverviewPage extends Component {
-  componentDidMount() {
-    document.title = formatMessage(this.props.intl, "medical.service", "overviewTitle");
-  }
-
   render() {
     const { history, modulesManager, medicalServiceId } = this.props;
     const actions = [
@@ -21,6 +25,7 @@ class MedicalServiceOverviewPage extends Component {
     ];
     return (
       <ErrorBoundary>
+        <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "overviewTitle")} />
         <MedicalServicePage {...this.props} readOnly={true} overview={true} actions={actions} />
       </ErrorBoundary>
     );
