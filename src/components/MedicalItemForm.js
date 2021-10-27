@@ -8,6 +8,7 @@ import {
   coreConfirm,
   ErrorBoundary,
   Form,
+  Helmet,
   formatMessageWithValues,
   historyPush,
   journalize,
@@ -40,7 +41,6 @@ class MedicalItemForm extends Component {
   }
 
   componentDidMount() {
-    document.title = formatMessageWithValues(this.props.intl, "medical.item", "overviewTitle", { label: "" });
     if (this.props.medicalItemId) {
       this.setState(
         (state, props) => ({ medicalItemId: props.medicalItemId }),
@@ -179,6 +179,7 @@ class MedicalItemForm extends Component {
     ];
     return (
       <div className={runningMutation ? classes.lockedPage : null}>
+        <Helmet title={formatMessageWithValues(this.props.intl, "medical.item", "MedicalItemOverview.title")} />
         <ProgressOrError progress={fetchingMedicalItem} error={errorMedicalItem} />
         <ErrorBoundary>
           {((!!fetchedMedicalItem && !!medicalItem && medicalItem.uuid === medicalItemId) || !medicalItemId) && (
