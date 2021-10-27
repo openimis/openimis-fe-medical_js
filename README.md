@@ -15,17 +15,12 @@ None (Administration module providing menu entries to proxied pages for medical 
 None
 
 ## Published Components
-* `medical.DiagnosisPicker`, auto-suggestion picker that either (`cacheDiagnoses` configuration) cache the diagnoses or debounce search based on user input (GraphQL: `diagnosesStr`)
-* `medical.ItemPicker`, auto-suggestion picker that either (`cacheItems` configuration) cache the items or debounce search based on user input (GraphQL: `medicalItemsStr`)
-* `medical.ServicePicker`, auto-suggestion picker that either (`cacheServices` configuration) cache the services or debounce search based on user input (GraphQL: `medicalServicesStr`)
+* `medical.DiagnosisPicker`, auto-suggestion picker that debounces search based on user input (GraphQL: `diagnosesStr`)
+* `medical.ItemPicker`, auto-suggestion picker that debounces search based on user input (GraphQL: `medicalItemsStr`)
+* `medical.ServicePicker`, auto-suggestion picker that debounces search based on user input  (GraphQL: `medicalServicesStr`)
 * `medical.VisitTypePicker`, constant-based picker, translation keys: `medical.visitType.null`, `medical.visitType.E`,...
 * `medical.CareTypePicker`, constant-based picker, translation keys: `medical.careType.null`, `medical.careType.I`,...
 
-
-## Dispatched Redux Actions
-* `MEDICAL_DIAGNOSIS_PICKER_{REQ|RESP|ERR}`: loading diagnoses picker (either cache or ad hoc query)
-* `MEDICAL_ITEM_PICKER_{REQ|RESP|ERR}`: loading items picker (either cache or ad hoc query)
-* `MEDICAL_SERVICE_PICKER_{REQ|RESP|ERR}`: loading services picker (either cache or ad hoc query)
 
 ## Other Modules Listened Redux Actions
 None

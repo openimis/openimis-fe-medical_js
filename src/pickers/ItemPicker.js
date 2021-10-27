@@ -32,7 +32,8 @@ const ItemPicker = (props) => {
         }
       }
     }`,
-    { pricelistUuid, searchString, first: searchString ? undefined : 10, date: toISODate(date) },
+    { pricelistUuid, searchString, first: 20, date: toISODate(date) },
+    { skip: true },
   );
 
   return (
