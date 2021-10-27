@@ -2,14 +2,11 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Edit as EditIcon } from "@material-ui/icons";
-import { historyPush, withModulesManager, withHistory, ErrorBoundary, formatMessage } from "@openimis/fe-core";
+import { historyPush, withModulesManager, withHistory, ErrorBoundary, Helmet, formatMessageWithValues }
+  from "@openimis/fe-core";
 import MedicalItemPage from "./MedicalItemPage";
 
 class MedicalItemOverviewPage extends Component {
-  componentDidMount() {
-    document.title = formatMessage(this.props.intl, "medical.item", "overviewTitle");
-  }
-
   render() {
     const { history, modulesManager, medicalItemId } = this.props;
     const actions = [
@@ -21,6 +18,7 @@ class MedicalItemOverviewPage extends Component {
     ];
     return (
       <ErrorBoundary>
+        <Helmet title={formatMessageWithValues(this.props.intl, "medical.item", "overviewTitle")} />
         <MedicalItemPage {...this.props} readOnly={true} overview={true} actions={actions} />
       </ErrorBoundary>
     );

@@ -9,7 +9,7 @@ import {
   withHistory,
   historyPush,
   ErrorBoundary,
-  formatMessage,
+  Helmet,
 } from "@openimis/fe-core";
 import MedicalServiceForm from "../components/MedicalServiceForm";
 import { createMedicalService, updateMedicalService } from "../actions";
@@ -20,10 +20,6 @@ const styles = (theme) => ({
 });
 
 class MedicalServicePage extends Component {
-  componentDidMount() {
-    document.title = formatMessage(this.props.intl, "medical.service", "serviceTitle");
-  }
-
   add = () => {
     historyPush(this.props.modulesManager, this.props.history, "medical.medicalServiceNew");
   };
@@ -49,6 +45,7 @@ class MedicalServicePage extends Component {
     if (!rights.includes(RIGHT_MEDICALSERVICES_EDIT)) return null;
     return (
       <div className={classes.page}>
+        <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "serviceTitle")} />
         <ErrorBoundary>
           <MedicalServiceForm
             overview={overview}
