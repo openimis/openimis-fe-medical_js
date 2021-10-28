@@ -4,7 +4,6 @@ import { injectIntl } from "react-intl";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { historyPush, withModulesManager, withHistory, withTooltip, formatMessage } from "@openimis/fe-core";
 import { RIGHT_MEDICALITEMS_ADD } from "../constants";
 import {
   formatMessage,
