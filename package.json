@@ -1,6 +1,6 @@
 {
   "name": "@openimis/fe-medical",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "license": "AGPL-3.0-only",
   "description": "openIMIS Frontend Medical reference module",
   "repository": "openimis/openimis-fe-medical_js",
@@ -12,12 +12,13 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "start": "rollup -c -w"
+    "start": "rollup -c -w",
+    "format": "prettier src -w"
   },
   "peerDependency": {
     "react-intl": "^5.8.1"
   },
-    "devDependencies": {
+  "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -31,6 +32,7 @@
     "@rollup/plugin-node-resolve": "^7.1.3",
     "@rollup/plugin-url": "^5.0.0",
     "moment": "^2.25.3",
+    "prettier": "^2.3.2",
     "prop-types": "^15.7.2",
     "react-autosuggest": "^10.0.2",
     "react-router-dom": "^5.2.0",
