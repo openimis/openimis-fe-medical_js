@@ -143,30 +143,30 @@ class MedicalItemFilter extends Component {
                 </Grid>
               }
             />
+            <ControlledField
+              module="admin"
+              id="medicalItemFilter.package"
+              field={
+                <Grid item xs={3} className={classes.item}>
+                  <TextInput
+                    module="medicalItem"
+                    label="medical.item.package"
+                    name="package"
+                    value={this.filterValue("package")}
+                    onChange={(v) =>
+                      this.debouncedOnChangeFilter([
+                        {
+                          id: "package",
+                          value: v,
+                          filter: `package_Icontains: "${v}"`,
+                        },
+                      ])
+                    }
+                  />
+                </Grid>
+              }
+            />
           </Grid>
-          <ControlledField
-            module="admin"
-            id="medicalItemFilter.package"
-            field={
-              <Grid item xs={3} className={classes.item}>
-                <TextInput
-                  module="medicalItem"
-                  label="medical.item.package"
-                  name="package"
-                  value={this.filterValue("package")}
-                  onChange={(v) =>
-                    this.debouncedOnChangeFilter([
-                      {
-                        id: "package",
-                        value: v,
-                        filter: `package_Icontains: "${v}"`,
-                      },
-                    ])
-                  }
-                />
-              </Grid>
-            }
-          />
 
           <Grid container justify="flex-end">
             <ControlledField
