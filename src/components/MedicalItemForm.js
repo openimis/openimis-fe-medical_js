@@ -102,8 +102,8 @@ class MedicalItemForm extends Component {
   };
 
   reload = () => {
-    const { clientMutationId, medicalItemId } = this.props.mutation;
-    if (clientMutationId && !medicalItemId) {
+    if (this.props.mutation?.clientMutationId && !this.props.mutation?.medicalItemId) {
+      const { clientMutationId } = this.props.mutation;
       this.props.fetchMedicalItemMutation(this.props.modulesManager, clientMutationId).then((res) => {
         const mutationLogs = parseData(res.payload.data.mutationLogs);
         if (
@@ -120,7 +120,7 @@ class MedicalItemForm extends Component {
         }
       });
     } else {
-      this.props.fetchMedicalItem(this.props.modulesManager, medicalItemId, clientMutationId);
+      this.props.fetchMedicalItem(this.props.modulesManager, this.props.medicalItemId);
     }
   };
 
