@@ -7,6 +7,7 @@ import VisitTypePicker from "./pickers/VisitTypePicker";
 import CareTypePicker from "./pickers/CareTypePicker";
 import ServiceCategoryPicker from "./pickers/ServiceCategoryPicker";
 import ServiceTypePicker from "./pickers/ServiceTypePicker";
+import ServiceTypePPPicker from "./pickers/ServiceTypePPPicker";
 import ServiceLevelPicker from "./pickers/ServiceLevelPicker";
 import PatientCategoryPicker from "./pickers/PatientCategoryPicker";
 import MedicalServicePage from "./pages/MedicalServicePage";
@@ -56,6 +57,7 @@ const DEFAULT_CONFIG = {
     { key: "medical.ServiceLevelPicker", ref: ServiceLevelPicker },
     { key: "medical.ServiceLevelPicker.projection", ref: null },
     { key: "medical.ServiceTypePicker", ref: ServiceTypePicker },
+    { key: "medical.ServiceTypePPPicker", ref: ServiceTypePPPicker },
     { key: "medical.ServiceTypePicker.projection", ref: null },
     { key: "medical.ItemTypePicker", ref: ItemTypePicker },
     { key: "medical.ItemTypePicker.projection", ref: null },
@@ -70,6 +72,6 @@ const DEFAULT_CONFIG = {
   ],
 };
 
-export const MedicalModule = (cfg) => {
+export const ProductPackageMedicalModule = (cfg) => {
   return { ...DEFAULT_CONFIG, ...cfg };
 };

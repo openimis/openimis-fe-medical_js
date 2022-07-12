@@ -37,7 +37,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("code", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.service.name"
@@ -47,7 +47,17 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(name) => this.updateAttributes({ name })}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
+            <PublishedComponent
+              pubRef="medical.ServiceTypePPPicker"
+              withNull={true}
+              required
+              readOnly={Boolean(edited.id) || readOnly}
+              value={edited ? edited.type : ""}
+              onChange={(p) => this.updateAttribute("type", p)}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceTypePicker"
               withNull={true}
