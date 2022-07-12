@@ -1,0 +1,7 @@
+{
+    "medical.serviceTypePP": "Service type Package",
+    "medical.serviceTypePP.null": "Simple/atomic",
+    "medical.serviceTypePP.P": "Flat fee bundle",
+    "medical.serviceTypePP.F": "Fee-for-service bundle"
+  }
+  
