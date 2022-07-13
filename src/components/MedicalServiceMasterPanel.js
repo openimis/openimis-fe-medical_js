@@ -27,22 +27,37 @@ const styles = (theme) => ({
 
 class MedicalServiceMasterPanel extends FormPanel {
 
-  constructor(){
-    super();
-    this.state = {readOnly: false}
+  constructor(props) {
+    super(props);
+    this.state = {
+      readOnlyPrice : false
+    }
   }
 
-  showCheckboxManual(pSelection) {
+  showCheckboxManual= (pSelection) => {
     if(pSelection!=null){
       this.showManual = true;
+      this.setState(
+        {
+          readOnlyPrice : true
+        }
+      );
     }else{
       this.showManual = false;
+      this.setState(
+        {
+          readOnlyPrice : false
+        }
+      );
     }
   };
 
-  changeManual() {
-    console.log("Change CheckBox Manual");
-    this.setState(prevState => ({readOnly: !prevState.readOnly}))
+  changeManual =  () => {
+    this.setState(
+      {
+        readOnlyPrice : !this.state.readOnlyPrice
+      }
+    );
   };
 
   render() {
@@ -134,9 +149,9 @@ class MedicalServiceMasterPanel extends FormPanel {
             <AmountInput
               module="admin"
               label="medical.service.price"
-              required
+              required={!this.state.readOnlyPrice}
               name="price"
-              readOnly={Boolean(edited.id) || readOnly }
+              readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
               value={edited ? edited.price : ""}
               onChange={(p) => this.updateAttribute("price", p)}
             />
