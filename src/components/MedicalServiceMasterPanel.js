@@ -2,7 +2,10 @@ import React from "react";
 import { withStyles, withTheme } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Grid } from "@material-ui/core";
+import { 
+  Grid,
+  Checkbox,
+  FormControlLabel } from "@material-ui/core";
 import {
   AmountInput,
   FormPanel,
@@ -11,6 +14,7 @@ import {
   withHistory,
   withModulesManager,
   ErrorBoundary,
+  formatMessage
 } from "@openimis/fe-core";
 
 const styles = (theme) => ({
@@ -22,8 +26,27 @@ const styles = (theme) => ({
 });
 
 class MedicalServiceMasterPanel extends FormPanel {
+
+  constructor(){
+    super();
+    this.state = {readOnly: false}
+  }
+
+  showCheckboxManual(pSelection) {
+    if(pSelection!=null){
+      this.showManual = true;
+    }else{
+      this.showManual = false;
+    }
+  };
+
+  changeManual() {
+    console.log("Change CheckBox Manual");
+    this.setState(prevState => ({readOnly: !prevState.readOnly}))
+  };
+
   render() {
-    const { classes, edited, readOnly } = this.props;
+    const { classes, edited, readOnly, intl } = this.props;
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
@@ -53,8 +76,11 @@ class MedicalServiceMasterPanel extends FormPanel {
               withNull={true}
               required
               readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.type : ""}
-              onChange={(p) => this.updateAttribute("type", p)}
+              value={edited ? edited.typepp : ""}
+              onChange={(p) => {
+                this.showCheckboxManual(p);
+                this.updateAttribute("typePP", p);
+              }}
             />
           </Grid>
           <Grid item xs={3} className={classes.item}>
@@ -69,7 +95,7 @@ class MedicalServiceMasterPanel extends FormPanel {
           </Grid>
         </Grid>
         <Grid container className={classes.item}>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceCategoryPicker"
               withNull={true}
@@ -78,7 +104,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("category", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceLevelPicker"
               withNull={true}
@@ -88,13 +114,29 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("level", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          {this.showManual && <Grid item xs={2} className={classes.item}>
+            <FormControlLabel
+              key={"lblManualPrice"}
+              control={
+                <Checkbox
+                  color="primary"
+                  key={"lblManualPriceCheck"}
+                  name={`isManualPrice`}
+                  checked={this.state.isManualPrice}
+                  onChange={this.changeManual}
+                />
+              }
+              label={formatMessage(intl, "medical", "manualPrice")}
+            />
+          </Grid>
+          }
+          <Grid item xs={3} className={classes.item}>
             <AmountInput
               module="admin"
               label="medical.service.price"
               required
               name="price"
-              readOnly={Boolean(edited.id) || readOnly}
+              readOnly={Boolean(edited.id) || readOnly }
               value={edited ? edited.price : ""}
               onChange={(p) => this.updateAttribute("price", p)}
             />

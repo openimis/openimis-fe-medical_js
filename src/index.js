@@ -1,4 +1,5 @@
 import messages_en from "./translations/en.json";
+import messages_fr from "./translations/fr.json";
 import reducer from "./reducer";
 import DiagnosisPicker from "./pickers/DiagnosisPicker";
 import ItemPicker from "./pickers/ItemPicker";
@@ -75,6 +76,6 @@ const DEFAULT_CONFIG = {
   ],
 };
 
-export const ProductPackageMedicalModule = (cfg) => {
+export const MedicalModule = (cfg) => {
   return { ...DEFAULT_CONFIG, ...cfg };
 };
