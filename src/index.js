@@ -76,6 +76,6 @@ const DEFAULT_CONFIG = {
   ],
 };
 
-export const ProductPackageMedicalModule = (cfg) => {
+export const MedicalModule = (cfg) => {
   return { ...DEFAULT_CONFIG, ...cfg };
 };
