@@ -1,7 +1,8 @@
 {
-    "medical.serviceTypePP": "Service type Package",
-    "medical.serviceTypePP.null": "Simple/atomic",
-    "medical.serviceTypePP.P": "Flat fee bundle",
-    "medical.serviceTypePP.F": "Fee-for-service bundle"
+    "medical.serviceTypePP": "Type",
+    "medical.serviceTypePP.null": "Simple/atomique",
+    "medical.serviceTypePP.P": "Paquet de frais fixes",
+    "medical.serviceTypePP.F": "Paquet de services à l'acte",
+    "manualPrice": "Manual"
   }
   

@@ -215,7 +215,11 @@ export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
 
 export function newMedicalService() {
   return (dispatch) => {
-    dispatch({ type: "MEDICAL_SERVICE_NEW" });
+    dispatch(
+      { 
+        type: "MEDICAL_SERVICE_NEW",
+        typepp: "MEDICAL_SERVICE_NEW",
+     });
   };
 }
 
