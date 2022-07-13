@@ -27,20 +27,22 @@ const styles = (theme) => ({
 
 class MedicalServiceMasterPanel extends FormPanel {
 
-  showManual = false;
+  constructor(){
+    super();
+    this.state = {readOnly: false}
+  }
 
   showCheckboxManual(pSelection) {
-    console.log("Change CheckBox");
     if(pSelection!=null){
-      console.log("Show Manual");
       this.showManual = true;
     }else{
       this.showManual = false;
     }
   };
 
-  changeManual = () => {
+  changeManual() {
     console.log("Change CheckBox Manual");
+    this.setState(prevState => ({readOnly: !prevState.readOnly}))
   };
 
   render() {
@@ -121,7 +123,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                   key={"lblManualPriceCheck"}
                   name={`isManualPrice`}
                   checked={this.state.isManualPrice}
-                  onChange={this.changeManual()}
+                  onChange={this.changeManual}
                 />
               }
               label={formatMessage(intl, "medical", "manualPrice")}
@@ -134,7 +136,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               label="medical.service.price"
               required
               name="price"
-              readOnly={Boolean(edited.id) || readOnly}
+              readOnly={Boolean(edited.id) || readOnly }
               value={edited ? edited.price : ""}
               onChange={(p) => this.updateAttribute("price", p)}
             />
