@@ -18,14 +18,15 @@ import {
 } from "@openimis/fe-core";
 import { Paper, Box } from "@material-ui/core";
 import _ from "lodash";
-import { fetchMedicalService } from "../actions"
+import { fetchMedicalService, fetchMedicalServices } from "../actions"
+
 import { claimedAmount, approvedAmount } from "../helpers/amounts";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
 });
 
-class ClaimChildPanel extends Component {
+class MedicalChildPanel extends Component {
   state = {
     data: [],
   };
@@ -46,23 +47,10 @@ class ClaimChildPanel extends Component {
     if (!!this.props.edited[`${this.props.type}s`]) {
       data = this.props.edited[`${this.props.type}s`] || [];
     }
-    if (!this.props.forReview && this.props.edited.status == 2 && !_.isEqual(data[data.length - 1], {})) {
-      data.push({});
-    }
-    /*const fetchedMedicalServiceT = async () => {
-      const fetchms = await this.props.fetchMedicalService();
-      console.log("Await");
-      fetchms.payload.data.medicalServices.edges.forEach((node) => {
-        data.push(node);
-        console.log("Data Push");
-      });
-      console.log(data);
-      return data;
-    }
-    fetchedMedicalServiceT();
+    data.push({});
+    console.log("initData");
     console.log(data);
-    */
-   return data;
+    return data;
   };
 
   componentDidMount() {
@@ -109,11 +97,12 @@ class ClaimChildPanel extends Component {
 
   _price = (v) => {
     let id = decodeId(v.id);
-    return (
+    /*return (
       this.props[`${this.props.type}sPricelists`][this.props.edited.healthFacility[`${this.props.type}sPricelist`].id][
         id
       ] || v.price
     );
+    */
   };
 
   _onChangeItem = (idx, attr, v) => {
@@ -159,7 +148,7 @@ class ClaimChildPanel extends Component {
   };
 
   render() {
-    const { intl, classes, edited, type, picker, forReview, fetchingPricelist, fetchMedicalService, readOnly = false } = this.props;
+    const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
     if (!edited) return null;
     /*if (!this.props.edited.healthFacility || !this.props.edited.healthFacility[`${this.props.type}sPricelist`]?.id) {
       return (
@@ -168,22 +157,11 @@ class ClaimChildPanel extends Component {
         </Paper>
       );
     }*/
-    const totalClaimed = _.round(
-      this.state.data.reduce((sum, r) => sum + claimedAmount(r), 0),
-      2,
-    );
-    const totalApproved = _.round(
-      this.state.data.reduce((sum, r) => sum + approvedAmount(r), 0),
-      2,
-    );
+
     let preHeaders = [
       "\u200b",
       "",
-      totalClaimed > 0
-        ? formatMessageWithValues(intl, "claim", `edit.${type}s.totalClaimed`, {
-            totalClaimed: formatAmount(intl, totalClaimed),
-          })
-        : "",
+      "",
       "",
     ];
     let headers = [
@@ -193,6 +171,8 @@ class ClaimChildPanel extends Component {
       `edit.${type}s.explanation`,
     ];
 
+
+    console.log(picker)
     let itemFormatters = [
       (i, idx) => (
         <Box minWidth={400}>
@@ -202,7 +182,7 @@ class ClaimChildPanel extends Component {
             withLabel={false}
             value={i[type]}
             fullWidth
-            pricelistUuid={edited.healthFacility[`${this.props.type}sPricelist`].uuid}
+            //pricelistUuid={edited.healthFacility[`${this.props.type}sPricelist`].uuid}
             date={edited.dateClaimed}
             onChange={(v) => this._onChangeItem(idx, type, v)}
           />
@@ -230,72 +210,20 @@ class ClaimChildPanel extends Component {
         />
       ),
     ];
-    /*
     if (!!forReview || edited.status !== 2) {
       if (!this.fixedPricesAtReview) {
         preHeaders.push("");
       }
       preHeaders.push(
-        totalClaimed > 0
-          ? formatMessageWithValues(intl, "claim", `edit.${type}s.totalApproved`, {
-              totalApproved: formatAmount(intl, totalApproved),
-            })
-          : "",
-      );
-      headers.push(`edit.${type}s.appQuantity`);
-      itemFormatters.push((i, idx) => (
-        <NumberInput
-          readOnly={readOnly}
-          value={i.qtyApproved}
-          onChange={(v) => this._onChange(idx, "qtyApproved", v)}
-        />
-      ));
-      if (!this.fixedPricesAtReview) {
-        headers.push(`edit.${type}s.appPrice`);
-        itemFormatters.push((i, idx) => (
-          <AmountInput
-            readOnly={readOnly}
-            value={i.priceApproved}
-            onChange={(v) => this._onChange(idx, "priceApproved", v)}
-          />
-        ));
-      }
-    }*/
-
-    /*if (this.showJustificationAtEnter || edited.status !== 2) {
-      preHeaders.push("");
-      headers.push(`edit.${type}s.justification`);
-      itemFormatters.push((i, idx) => (
-        <TextInput
-          readOnly={readOnly}
-          value={i.justification}
-          onChange={(v) => this._onChange(idx, "justification", v)}
-        />
-      ));
-    }
-    
-    if (!!forReview || edited.status !== 2) {
-      preHeaders.push("", "");
-      headers.push(`edit.${type}s.status`, `edit.${type}s.rejectionReason`);
-      itemFormatters.push(
-        (i, idx) => (
-          <PublishedComponent
-            readOnly={readOnly}
-            pubRef="claim.ApprovalStatusPicker"
-            withNull={false}
-            withLabel={false}
-            value={i.status}
-            onChange={(v) => this._onChangeApproval(idx, "status", v)}
-          />
-        ),
-        (i, idx) => this.formatRejectedReason(i, idx),
+        "",
       );
     }
-    */
+    console.log(itemFormatters);
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
     if (fetchingPricelist) {
       header += formatMessage(intl, "claim", `edit.${this.props.type}s.fetchingPricelist`);
     }
+    console.log(itemFormatters);
     return (
       <Paper className={classes.paper}>
         <Table
@@ -304,7 +232,7 @@ class ClaimChildPanel extends Component {
           preHeaders={preHeaders}
           headers={headers}
           itemFormatters={itemFormatters}
-          items={!fetchMedicalService ? this.state.data : []}
+          items={!fetchingPricelist ? this.state.data : []}
           onDelete={!forReview && !readOnly && this._onDelete}
         />
       </Paper>
@@ -314,13 +242,9 @@ class ClaimChildPanel extends Component {
 
 const mapStateToProps = (state, props) => ({
   fetchingPricelist: !!state.medical_pricelist && state.medical_pricelist.fetchingPricelist,
-  medicalService: !!state.medical && state.medical.medicalService,
   servicesPricelists: !!state.medical_pricelist ? state.medical_pricelist.servicesPricelists : {},
   itemsPricelists: !!state.medical_pricelist ? state.medical_pricelist.itemsPricelists : {},
 });
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchMedicalService }, dispatch);
-};
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps,mapDispatchToProps)(ClaimChildPanel)))));
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalChildPanel)))));

@@ -18,7 +18,7 @@ import {
   withModulesManager,
 } from "@openimis/fe-core";
 import { RIGHT_MEDICALSERVICES } from "../constants";
-import ClaimChildPanel from "./ClaimChildPanel";
+import MedicalChildPanel from "./MedicalChildPanel";
 
 import { 
   createMedicalService,
@@ -32,9 +32,9 @@ const styles = (theme) => ({
   lockedPage: theme.page.locked,
 });
 
-class ClaimServicesPanel extends Component {
+class MedicalServicesPanel extends Component {
   render() {
-    return <ClaimChildPanel {...this.props} type="service" picker="medical.ServicePicker" />;
+    return <MedicalChildPanel {...this.props} type="service" picker="medical.ServiceFilterWithoutHFPicker" />;
   }
 }
 
@@ -206,7 +206,7 @@ class MedicalServiceForm extends Component {
               actions={actions}
               overview={overview}
               HeadPanel={MedicalServiceMasterPanel}
-              Panels={[ClaimServicesPanel]}
+              Panels={[MedicalServicesPanel]}
               medicalService={medicalService}
               onEditedChanged={this.onEditedChanged}
               canSave={this.canSave}
