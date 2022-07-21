@@ -168,8 +168,11 @@ class MedicalChildPanel extends Component {
       `edit.${type}s.${type}`,
       `edit.${type}s.quantity`,
       `edit.${type}s.price`,
-      `edit.${type}s.explanation`,
     ];
+
+    if (this.props.medicalService.typePP =="F") {
+      headers[2]=`edit.${type}s.ceiling`
+    }
 
     let itemFormatters = [
       (i, idx) => (
@@ -195,16 +198,9 @@ class MedicalChildPanel extends Component {
       ),
       (i, idx) => (
         <AmountInput
-          readOnly={!!forReview || readOnly || this.fixedPricesAtEnter}
+          readOnly={readOnly }
           value={i.priceAsked}
           onChange={(v) => this._onChange(idx, "priceAsked", v)}
-        />
-      ),
-      (i, idx) => (
-        <TextInput
-          readOnly={!!forReview || readOnly}
-          value={i.explanation}
-          onChange={(v) => this._onChange(idx, "explanation", v)}
         />
       ),
     ];

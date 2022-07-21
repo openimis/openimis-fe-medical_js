@@ -3,6 +3,7 @@
     "medical.serviceTypePP.null": "Simple/atomique",
     "medical.serviceTypePP.P": "Paquet de frais fixes",
     "medical.serviceTypePP.F": "Paquet de services à l'acte",
-    "manualPrice": "Manual"
+    "manualPrice": "Manual",
+    "edit.services.ceiling":"Plafond"
   }
   
