@@ -171,8 +171,6 @@ class MedicalChildPanel extends Component {
       `edit.${type}s.explanation`,
     ];
 
-
-    console.log(picker)
     let itemFormatters = [
       (i, idx) => (
         <Box minWidth={400}>
@@ -218,25 +216,29 @@ class MedicalChildPanel extends Component {
         "",
       );
     }
-    console.log(itemFormatters);
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
     if (fetchingPricelist) {
       header += formatMessage(intl, "claim", `edit.${this.props.type}s.fetchingPricelist`);
     }
-    console.log(itemFormatters);
-    return (
-      <Paper className={classes.paper}>
-        <Table
-          module="claim"
-          header={header}
-          preHeaders={preHeaders}
-          headers={headers}
-          itemFormatters={itemFormatters}
-          items={!fetchingPricelist ? this.state.data : []}
-          onDelete={!forReview && !readOnly && this._onDelete}
-        />
-      </Paper>
-    );
+
+    if(this.props.medicalService.typePP){
+      return (
+        <Paper className={classes.paper}>
+          <Table
+            module="claim"
+            header={header}
+            preHeaders={preHeaders}
+            headers={headers}
+            itemFormatters={itemFormatters}
+            items={!fetchingPricelist ? this.state.data : []}
+            onDelete={!forReview && !readOnly && this._onDelete}
+          />
+        </Paper>
+      );
+    }else{
+      return "";
+    }
+
   }
 }
 
