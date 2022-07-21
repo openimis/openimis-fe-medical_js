@@ -18,13 +18,25 @@ import {
   withModulesManager,
 } from "@openimis/fe-core";
 import { RIGHT_MEDICALSERVICES } from "../constants";
+import MedicalChildPanel from "./MedicalChildPanel";
 
-import { createMedicalService, fetchMedicalService, fetchMedicalServiceMutation, newMedicalService } from "../actions";
+import { 
+  createMedicalService,
+  fetchMedicalService,
+  fetchMedicalServices,
+  fetchMedicalServiceMutation,
+  newMedicalService } from "../actions";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
 });
+
+class MedicalServicesPanel extends Component {
+  render() {
+    return <MedicalChildPanel {...this.props} type="service" picker="medical.ServiceFilterWithoutHFPicker" />;
+  }
+}
 
 class MedicalServiceForm extends Component {
   state = {
@@ -40,6 +52,7 @@ class MedicalServiceForm extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchMedicalServices(this.props.modulesManager);
     if (this.props.medicalServiceId) {
       this.setState(
         (state, props) => ({ medicalServiceId: props.medicalServiceId }),
@@ -193,6 +206,7 @@ class MedicalServiceForm extends Component {
               actions={actions}
               overview={overview}
               HeadPanel={MedicalServiceMasterPanel}
+              Panels={[MedicalServicesPanel]}
               medicalService={medicalService}
               onEditedChanged={this.onEditedChanged}
               canSave={this.canSave}
@@ -211,6 +225,7 @@ const mapStateToProps = (state) => ({
   fetchingMedicalService: state.medical.fetchingMedicalService,
   errorMedicalService: state.medical.errorMedicalService,
   fetchedMedicalService: state.medical.fetchedMedicalService,
+  fetchedMedicalServices: state.medical.fetchedMedicalServices,
   submittingMutation: state.medical.submittingMutation,
   mutation: state.medical.mutation,
   medicalService: state.medical.medicalService,
@@ -222,6 +237,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchMedicalService,
+      fetchMedicalServices,
       newMedicalService,
       createMedicalService,
       fetchMedicalServiceMutation,

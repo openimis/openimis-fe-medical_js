@@ -87,7 +87,7 @@ class MedicalServiceSearcher extends Component {
   deleteService = () => {
     const service = this.state.deleteService;
     this.setState({ deleteService: null }, async (e) => {
-      await this.props.deleteMedicalService(
+       this.props.deleteMedicalService(
         this.props.modulesManager,
         service,
         formatMessage(this.props.intl, "medical.service", "deleteDialog.title"),
