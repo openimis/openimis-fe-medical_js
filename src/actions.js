@@ -202,6 +202,13 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   return graphql(payload, "MEDICAL_SERVICE_OVERVIEW");
 }
 
+export function fetchMedicalServices(mm) {
+  const filters = [];
+  console.log("fetchMedicalServices");
+  const payload = formatPageQuery("medicalServices", filters, MEDICAL_SERVICE_FULL_PROJECTION(mm));
+  return graphql(payload, "MEDICAL_SERVICE_LIST");
+}
+
 export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
   const filters = [];
   if (medicalItemId) {
@@ -215,7 +222,11 @@ export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
 
 export function newMedicalService() {
   return (dispatch) => {
-    dispatch({ type: "MEDICAL_SERVICE_NEW" });
+    dispatch(
+      { 
+        type: "MEDICAL_SERVICE_NEW",
+        typepp: "MEDICAL_SERVICE_NEW",
+     });
   };
 }
 
