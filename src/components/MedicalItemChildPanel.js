@@ -26,7 +26,7 @@ const styles = (theme) => ({
   paper: theme.paper.paper,
 });
 
-class MedicalChildPanel extends Component {
+class MedicalItemChildPanel extends Component {
   state = {
     data: [],
   };
@@ -245,4 +245,4 @@ const mapStateToProps = (state, props) => ({
 });
 
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalChildPanel)))));
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalItemChildPanel)))));
