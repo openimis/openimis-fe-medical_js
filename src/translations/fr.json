@@ -1,9 +1,12 @@
 {
+    "medical.ServicePicker.placeholder": "Recherche Service…",
+    "medical.ItemPicker.placeholder": "Recherche Produit…",
     "medical.serviceTypePP": "Type",
     "medical.serviceTypePP.null": "Unitaire",
     "medical.serviceTypePP.P": "Prestation forfaitaire",
     "medical.serviceTypePP.F": "Prestation plafonnée",
     "manualPrice": "Manual",
-    "edit.services.ceiling":"Plafond"
+    "edit.services.ceiling":"Plafond",
+    "edit.items.ceiling":"Plafond"
   }
   

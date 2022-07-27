@@ -107,5 +107,6 @@
   "medical.item.deleteItemDialog.message": "Are you sure you want to delete this item?",
   "medical.item.updateMedicalItem.mutationLabel": "Update Medical Item",
   "manualPrice": "Manual",
-  "edit.services.ceiling":"Ceiling"
+  "edit.services.ceiling":"Ceiling",
+  "edit.items.ceiling":"Ceiling"
 }
