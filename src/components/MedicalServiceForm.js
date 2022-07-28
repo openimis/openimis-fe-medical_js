@@ -46,13 +46,23 @@ class MedicalItemsPanel extends Component {
 }
 
 class MedicalServiceForm extends Component {
-  state = {
-    lockNew: false,
-    reset: 0,
-    medicalService: this.newMedicalService(),
-    newMedicalService: true,
-    confirmedAction: null,
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      lockNew: false,
+      reset: 0,
+      medicalService: this.newMedicalService(),
+      newMedicalService: true,
+      confirmedAction: null,
+      totalPrice: 0,
+      sumItems:0,
+      sumServices:0
+    };
+  }
+
+  getTotalPrice = () => {
+    return this.state.totalPrice;
+  }
 
   newMedicalService() {
     return { patientCategory: 15 };
@@ -105,6 +115,23 @@ class MedicalServiceForm extends Component {
     }
   }
 
+  onPriceChange = (dataService, dataItem) => {
+    //console.log("updatePrice");
+    if(dataItem!=""){
+      this.setState({
+        sumItems: dataItem,
+        totalPrice: this.state.sumServices+dataItem
+      });
+    }
+
+    if(dataService!=""){
+      this.setState({
+        sumServices: dataService,
+        totalPrice: this.state.sumItems+dataService
+      });
+    }
+  }
+
   add = () => {
     this.setState(
       (state) => ({
@@ -153,6 +180,7 @@ class MedicalServiceForm extends Component {
     this.state.medicalService.careType;
 
   save = (medicalService) => {
+    this.getTotalPrice();
     this.setState(
       { lockNew: !medicalService.id }, // avoid duplicates
       (e) => this.props.save(medicalService),
@@ -216,6 +244,8 @@ class MedicalServiceForm extends Component {
               Panels={[MedicalServicesPanel,MedicalItemsPanel]}
               medicalService={medicalService}
               onEditedChanged={this.onEditedChanged}
+              priceTotal={this.getTotalPrice}
+              onPriceChange={this.onPriceChange}
               canSave={this.canSave}
               save={save ? this.save : null}
               onActionToConfirm={this.onActionToConfirm}

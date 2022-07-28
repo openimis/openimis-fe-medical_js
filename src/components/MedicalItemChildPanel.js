@@ -48,8 +48,6 @@ class MedicalItemChildPanel extends Component {
       data = this.props.edited[`${this.props.type}s`] || [];
     }
     data.push({});
-    console.log("initData");
-    console.log(data);
     return data;
   };
 
@@ -92,6 +90,13 @@ class MedicalItemChildPanel extends Component {
 
   _onChange = (idx, attr, v) => {
     let data = this._updateData(idx, [{ attr, v }]);
+    let sumItems = 0;
+    data.forEach((update) => {
+      if(!isNaN(update.priceAsked) || !isNaN(update.qtyProvided)){
+        sumItems += update.priceAsked * update.qtyProvided;
+      }
+    });
+    this.props.onPriceChange("",sumItems);
     this._onEditedChanged(data);
   };
 
@@ -183,7 +188,6 @@ class MedicalItemChildPanel extends Component {
             withLabel={false}
             value={i[type]}
             fullWidth
-            //pricelistUuid={edited.healthFacility[`${this.props.type}sPricelist`].uuid}
             date={edited.dateClaimed}
             onChange={(v) => this._onChangeItem(idx, type, v)}
           />

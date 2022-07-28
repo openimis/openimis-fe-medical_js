@@ -43,13 +43,14 @@ class MedicalServiceChildPanel extends Component {
   }
 
   initData = () => {
+    //console.log("init Medical Service Child");
+    //console.log(this.props);
+
     let data = [];
     if (!!this.props.edited[`${this.props.type}s`]) {
       data = this.props.edited[`${this.props.type}s`] || [];
     }
     data.push({});
-    console.log("initData");
-    console.log(data);
     return data;
   };
 
@@ -92,6 +93,13 @@ class MedicalServiceChildPanel extends Component {
 
   _onChange = (idx, attr, v) => {
     let data = this._updateData(idx, [{ attr, v }]);
+    let sumItems = 0;
+    data.forEach((update) => {
+      if(!isNaN(update.priceAsked) || !isNaN(update.qtyProvided)){
+        sumItems += update.priceAsked * update.qtyProvided;
+      }
+    });
+    this.props.onPriceChange(sumItems,"");
     this._onEditedChanged(data);
   };
 

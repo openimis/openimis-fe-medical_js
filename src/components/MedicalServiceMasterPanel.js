@@ -30,7 +30,8 @@ class MedicalServiceMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
     this.state = {
-      readOnlyPrice : false
+      readOnlyPrice : false,
+      priceTotal: this.props.priceTotal(),
     }
   }
 
@@ -52,10 +53,15 @@ class MedicalServiceMasterPanel extends FormPanel {
     }
   };
 
+
+
   changeManual =  () => {
+    //console.log("Change Manual");
+    ///console.log(this.props.priceTotal());
     this.setState(
       {
-        readOnlyPrice : !this.state.readOnlyPrice
+        readOnlyPrice : !this.state.readOnlyPrice,
+        priceTotal : this.props.priceTotal()
       }
     );
   };
@@ -149,11 +155,14 @@ class MedicalServiceMasterPanel extends FormPanel {
             <AmountInput
               module="admin"
               label="medical.service.price"
-              required={!this.state.readOnlyPrice}
+              required={!this.state.readOnlyrice}
               name="price"
               readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
-              value={edited ? edited.price : ""}
-              onChange={(p) => this.updateAttribute("price", p)}
+              value={this.state.priceTotal}
+              onChange={(p) => {
+                this.updateAttribute("price", p);
+              }
+              }
             />
           </Grid>
         </Grid>
@@ -193,6 +202,7 @@ class MedicalServiceMasterPanel extends FormPanel {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  state
 });
 
 export default injectIntl(
