@@ -95,7 +95,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               withNull={true}
               required
               readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.typepp : ""}
+              value={edited ? edited.packagetype : ""}
               onChange={(p) => {
                 this.updateAttribute("typePP", p);
                 this.showCheckboxManual(p);

@@ -177,7 +177,7 @@ class MedicalServiceForm extends Component {
       });      
     }
 
-    this.state.totalPrice= sumItem+sumService;
+    this.state.totalPrice = sumItem+sumService;
 
     return this.state.medicalService &&
     this.state.medicalService.code &&
@@ -260,7 +260,6 @@ class MedicalServiceForm extends Component {
               onActionToConfirm={this.onActionToConfirm}
             />
           )}
-          {console.log(this.state.totalPrice)}
         </ErrorBoundary>
       </div>
     );
