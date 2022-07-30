@@ -149,7 +149,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               required={!this.state.readOnlyrice}
               name="price"
               readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
-              value={this.props.priceTotal}
+              value={edited ? edited.price : this.props.priceTotal}
               onChange={(p) => {
                 this.updateAttribute("price", p);
               }

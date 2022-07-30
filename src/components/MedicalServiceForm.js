@@ -183,6 +183,7 @@ class MedicalServiceForm extends Component {
     this.state.medicalService.code &&
     this.state.medicalService.name &&
     this.state.medicalService.type &&
+    this.state.medicalService.price &&
     this.state.medicalService.level &&
     this.state.medicalService.typePP &&
     this.state.medicalService.careType;
