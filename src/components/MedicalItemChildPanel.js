@@ -96,18 +96,11 @@ class MedicalItemChildPanel extends Component {
         sumItems += update.priceAsked * update.qtyProvided;
       }
     });
-    this.props.onPriceChange("",sumItems);
     this._onEditedChanged(data);
   };
 
   _price = (v) => {
-    let id = decodeId(v.id);
-    /*return (
-      this.props[`${this.props.type}sPricelists`][this.props.edited.healthFacility[`${this.props.type}sPricelist`].id][
-        id
-      ] || v.price
-    );
-    */
+    return v.price;
   };
 
   _onChangeItem = (idx, attr, v) => {

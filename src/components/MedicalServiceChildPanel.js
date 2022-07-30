@@ -43,9 +43,6 @@ class MedicalServiceChildPanel extends Component {
   }
 
   initData = () => {
-    //console.log("init Medical Service Child");
-    //console.log(this.props);
-
     let data = [];
     if (!!this.props.edited[`${this.props.type}s`]) {
       data = this.props.edited[`${this.props.type}s`] || [];
@@ -104,7 +101,7 @@ class MedicalServiceChildPanel extends Component {
   };
 
   _price = (v) => {
-    let id = decodeId(v.id);
+    return v.price;
   };
 
   _onChangeItem = (idx, attr, v) => {
@@ -148,7 +145,7 @@ class MedicalServiceChildPanel extends Component {
     ]);
     this._onEditedChanged(data);
   };
-
+  
   render() {
     const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
     if (!edited) return null;

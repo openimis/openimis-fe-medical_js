@@ -5,6 +5,7 @@ const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
   "uuid",
   "code",
   "name",
+  "packagetype",
   "type",
   "price",
   "validityFrom",
@@ -20,7 +21,6 @@ const MEDICAL_ITEMS_SUMMARY_PROJECTION = [
   "price",
   "validityFrom",
   "validityTo",
-  "package",
 ];
 
 const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
@@ -29,6 +29,7 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "name",
   "type",
   "price",
+  "package",
   "careType",
   "uuid",
   "frequency",

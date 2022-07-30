@@ -11,6 +11,7 @@ import ServiceCategoryPicker from "./pickers/ServiceCategoryPicker";
 import ServiceTypePicker from "./pickers/ServiceTypePicker";
 import ServiceTypePPPicker from "./pickers/ServiceTypePPPicker";
 import ServiceLevelPicker from "./pickers/ServiceLevelPicker";
+import ManualPricePicker from "./pickers/ManualPricePicker";
 import PatientCategoryPicker from "./pickers/PatientCategoryPicker";
 import MedicalServicePage from "./pages/MedicalServicePage";
 import MedicalServiceOverviewPage from "./pages/MedicalServiceOverviewPage";
@@ -67,6 +68,8 @@ const DEFAULT_CONFIG = {
     { key: "medical.ServiceTypePicker.projection", ref: null },
     { key: "medical.ItemTypePicker", ref: ItemTypePicker },
     { key: "medical.ItemTypePicker.projection", ref: null },
+    { key: "medical.ManualPricePicker", ref: ManualPricePicker },
+    { key: "medical.ManualPricePicker.projection", ref: null },
     { key: "medical.PatientCategoryPicker", ref: PatientCategoryPicker },
     { key: "medical.PatientCategoryPicker.projection", ref: null },
     { key: "medical.medicalServices", ref: ROUTE_ADMIN_MEDICAL_SERVICES },

@@ -2,10 +2,7 @@ import React from "react";
 import { withStyles, withTheme } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { 
-  Grid,
-  Checkbox,
-  FormControlLabel } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import {
   AmountInput,
   FormPanel,
@@ -29,14 +26,18 @@ class MedicalServiceMasterPanel extends FormPanel {
 
   constructor(props) {
     super(props);
+
     this.state = {
       readOnlyPrice : false,
-      priceTotal: this.props.priceTotal(),
     }
   }
 
   showCheckboxManual= (pSelection) => {
-    if(pSelection!=null){
+    console.log(this.state);
+    console.log(this.props);
+    console.log("PriceTotal");
+    console.log(this.props.priceTotal);
+    if(pSelection!=null && pSelection!="S"){
       this.showManual = true;
       this.setState(
         {
@@ -56,12 +57,9 @@ class MedicalServiceMasterPanel extends FormPanel {
 
 
   changeManual =  () => {
-    //console.log("Change Manual");
-    ///console.log(this.props.priceTotal());
     this.setState(
       {
         readOnlyPrice : !this.state.readOnlyPrice,
-        priceTotal : this.props.priceTotal()
       }
     );
   };
@@ -99,8 +97,8 @@ class MedicalServiceMasterPanel extends FormPanel {
               readOnly={Boolean(edited.id) || readOnly}
               value={edited ? edited.typepp : ""}
               onChange={(p) => {
-                this.showCheckboxManual(p);
                 this.updateAttribute("typePP", p);
+                this.showCheckboxManual(p);
               }}
             />
           </Grid>
@@ -136,18 +134,11 @@ class MedicalServiceMasterPanel extends FormPanel {
             />
           </Grid>
           {this.showManual && <Grid item xs={2} className={classes.item}>
-            <FormControlLabel
-              key={"lblManualPrice"}
-              control={
-                <Checkbox
-                  color="primary"
-                  key={"lblManualPriceCheck"}
-                  name={`isManualPrice`}
-                  checked={this.state.isManualPrice}
-                  onChange={this.changeManual}
-                />
-              }
-              label={formatMessage(intl, "medical", "manualPrice")}
+            <PublishedComponent
+              pubRef="medical.ManualPricePicker"
+              readOnly={Boolean(edited.id) || readOnly}
+              value={edited ? edited.manualPrice : ""}
+              onChange={(p) => this.updateAttribute("manualPrice", p)}
             />
           </Grid>
           }
@@ -158,7 +149,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               required={!this.state.readOnlyrice}
               name="price"
               readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
-              value={this.state.priceTotal}
+              value={this.props.priceTotal}
               onChange={(p) => {
                 this.updateAttribute("price", p);
               }

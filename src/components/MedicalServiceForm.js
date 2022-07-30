@@ -115,23 +115,6 @@ class MedicalServiceForm extends Component {
     }
   }
 
-  onPriceChange = (dataService, dataItem) => {
-    //console.log("updatePrice");
-    if(dataItem!=""){
-      this.setState({
-        sumItems: dataItem,
-        totalPrice: this.state.sumServices+dataItem
-      });
-    }
-
-    if(dataService!=""){
-      this.setState({
-        sumServices: dataService,
-        totalPrice: this.state.sumItems+dataService
-      });
-    }
-  }
-
   add = () => {
     this.setState(
       (state) => ({
@@ -170,17 +153,44 @@ class MedicalServiceForm extends Component {
     }
   };
 
-  canSave = () =>
-    this.state.medicalService &&
+  canSave = () => {
+    if(this.state.medicalService.typePP!="S" && this.state.medicalService.typePP!=null){
+      this.state.medicalService.price = this.getTotalPrice();
+    }
+
+    let sumItem = 0 ;
+    let sumService = 0 ;
+  
+    if(this.state.medicalService.items != undefined){
+      this.state.medicalService.items.forEach((item) => {
+        if(item.priceAsked != undefined){
+          sumItem += parseFloat(item.priceAsked);
+        }
+      });
+    }
+
+    if(this.state.medicalService.services != undefined){
+      this.state.medicalService.services.forEach((service) => {
+        if(service.priceAsked != undefined){
+          sumService += parseFloat(service.priceAsked);
+        }
+      });      
+    }
+
+    this.state.totalPrice= sumItem+sumService;
+
+    return this.state.medicalService &&
     this.state.medicalService.code &&
     this.state.medicalService.name &&
     this.state.medicalService.type &&
     this.state.medicalService.level &&
-    this.state.medicalService.price &&
+    this.state.medicalService.typePP &&
     this.state.medicalService.careType;
+  }
 
   save = (medicalService) => {
     this.getTotalPrice();
+    console.log(medicalService);
     this.setState(
       { lockNew: !medicalService.id }, // avoid duplicates
       (e) => this.props.save(medicalService),
@@ -244,13 +254,13 @@ class MedicalServiceForm extends Component {
               Panels={[MedicalServicesPanel,MedicalItemsPanel]}
               medicalService={medicalService}
               onEditedChanged={this.onEditedChanged}
-              priceTotal={this.getTotalPrice}
-              onPriceChange={this.onPriceChange}
+              priceTotal={this.state.totalPrice}
               canSave={this.canSave}
               save={save ? this.save : null}
               onActionToConfirm={this.onActionToConfirm}
             />
           )}
+          {console.log(this.state.totalPrice)}
         </ErrorBoundary>
       </div>
     );
