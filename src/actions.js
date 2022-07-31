@@ -72,6 +72,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.category && ms.category !== " " ? `category: "${formatGQLString(ms.category)}"` : ""}
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
+    ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
   `;
   return req;
 }
@@ -136,6 +137,8 @@ export function updateMedicalService(mm, medicalService, clientMutationLabel) {
     formatMedicalItemOrServiceGQL(mm, medicalService),
     clientMutationLabel,
   );
+  console.log("updateMedicalService");
+  console.log(mutation);
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,

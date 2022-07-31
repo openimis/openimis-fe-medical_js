@@ -174,24 +174,23 @@ class MedicalServiceForm extends Component {
     }
     this.state.totalPrice = sumItem+sumService;
 
-    if(this.state.medicalService.typePP!="S" && this.state.medicalService.typePP!=null){
+    if(this.state.medicalService.packagetype!="S" && this.state.medicalService.packagetype!=null){
       if(this.state.medicalService.manualPrice != true){
         this.state.medicalService.price = this.state.totalPrice;
       }
     }
-
+    console.log(this.state.medicalService);
     return this.state.medicalService &&
     this.state.medicalService.code &&
     this.state.medicalService.name &&
     this.state.medicalService.type &&
     this.state.medicalService.price &&
     this.state.medicalService.level &&
-    this.state.medicalService.typePP &&
+    this.state.medicalService.packagetype &&
     this.state.medicalService.careType;
   }
 
   save = (medicalService) => {
-    this.getTotalPrice();
     console.log(medicalService);
     this.setState(
       { lockNew: !medicalService.id }, // avoid duplicates

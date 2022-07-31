@@ -168,7 +168,7 @@ class MedicalItemChildPanel extends Component {
       `edit.${type}s.price`,
     ];
 
-    if (this.props.medicalService.typePP =="F") {
+    if (this.props.medicalService.packagetype =="F") {
       headers[2]=`edit.${type}s.ceiling`
     }
 
@@ -214,7 +214,7 @@ class MedicalItemChildPanel extends Component {
       header += formatMessage(intl, "claim", `edit.${this.props.type}s.fetchingPricelist`);
     }
 
-    if(this.props.medicalService.typePP){
+    if(this.props.medicalService.packagetype){
       return (
         <Paper className={classes.paper}>
           <Table
