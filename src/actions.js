@@ -58,6 +58,13 @@ const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
   "package",
 ];
 
+function formatGQLBoolean(value){
+  if(value==true){
+    return "1";
+  }
+  return "0";
+}
+
 export function formatMedicalItemOrServiceGQL(mm, ms) {
   const req = `
     ${ms.uuid ? `uuid: "${ms.uuid}"` : ""}
@@ -73,6 +80,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
     ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
+    ${ms.manualPrice ? `manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : "False"}
   `;
   return req;
 }

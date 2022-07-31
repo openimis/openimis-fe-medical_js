@@ -179,7 +179,7 @@ class MedicalServiceForm extends Component {
         this.state.medicalService.price = this.state.totalPrice;
       }
     }
-    console.log(this.state.medicalService);
+
     return this.state.medicalService &&
     this.state.medicalService.code &&
     this.state.medicalService.name &&
@@ -188,6 +188,7 @@ class MedicalServiceForm extends Component {
     this.state.medicalService.level &&
     this.state.medicalService.packagetype &&
     this.state.medicalService.careType;
+
   }
 
   save = (medicalService) => {

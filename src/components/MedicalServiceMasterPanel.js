@@ -28,7 +28,13 @@ class MedicalServiceMasterPanel extends FormPanel {
     super(props);
 
     this.state = {
-      readOnlyPrice : false,
+      readOnlyPrice : !props.medicalService.manualPrice,
+    }
+
+    if(this.props.edited){
+      if(this.props.edited.packagetype !=null && this.props.edited.packagetype!="S"){
+        this.showManual = true;
+      }
     }
   }
 
@@ -37,14 +43,14 @@ class MedicalServiceMasterPanel extends FormPanel {
       this.showManual = true;
       this.setState(
         {
-          readOnlyPrice : true
+          readOnlyPrice : 1
         }
       );
     }else{
       this.showManual = false;
       this.setState(
         {
-          readOnlyPrice : false
+          readOnlyPrice : 0
         }
       );
     }
@@ -145,7 +151,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               label="medical.service.price"
               required={!this.state.readOnlyrice}
               name="price"
-              readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
+              readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice }
               value={edited ? edited.price : this.props.priceTotal}
               onChange={(p) => {
                 this.updateAttribute("price", p);

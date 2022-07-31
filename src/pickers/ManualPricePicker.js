@@ -7,8 +7,9 @@ import { injectIntl } from "react-intl";
 class ManualPricePicker extends Component {
   state = { 
     manualPrice: this._manualPriceToState(),
-    readOnlyPrice: false
-   };
+    readOnlyPrice: this.props.value
+  };
+  
 
   _manualPriceToState() {
     let { value } = this.props;
@@ -40,7 +41,7 @@ class ManualPricePicker extends Component {
                   color="primary"
                   key={"lblManualPriceCheck"}
                   name={`isManualPrice`}
-                  checked={this.state.isManualPrice}
+                  checked={this.props.value}
                   onChange={(p) => {
                     this._onChangeManualPrice(p);
                   }
