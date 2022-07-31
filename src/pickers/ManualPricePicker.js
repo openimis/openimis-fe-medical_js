@@ -20,13 +20,14 @@ class ManualPricePicker extends Component {
   }
 
   _onChangeManualPrice = (cat) => {
-    console.log("OnChange Picker");
+    this.props.onChange(!this.state.readOnlyPrice);
     this.setState((prevState) => {
       return {
         ...prevState,
         readOnlyPrice: !this.state.readOnlyPrice,
       };
     });
+
   };
 
   render() {
@@ -41,7 +42,7 @@ class ManualPricePicker extends Component {
                   name={`isManualPrice`}
                   checked={this.state.isManualPrice}
                   onChange={(p) => {
-                    this._onChangeManualPrice;
+                    this._onChangeManualPrice(p);
                   }
                   }
               />

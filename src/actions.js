@@ -29,6 +29,7 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "code",
   "name",
   "packagetype",
+  "manualPrice",
   "type",
   "price",
   "careType",

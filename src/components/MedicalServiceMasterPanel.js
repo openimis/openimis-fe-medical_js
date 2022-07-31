@@ -33,10 +33,6 @@ class MedicalServiceMasterPanel extends FormPanel {
   }
 
   showCheckboxManual= (pSelection) => {
-    console.log(this.state);
-    console.log(this.props);
-    console.log("PriceTotal");
-    console.log(this.props.priceTotal);
     if(pSelection!=null && pSelection!="S"){
       this.showManual = true;
       this.setState(
@@ -53,8 +49,6 @@ class MedicalServiceMasterPanel extends FormPanel {
       );
     }
   };
-
-
 
   changeManual =  () => {
     this.setState(
@@ -138,7 +132,10 @@ class MedicalServiceMasterPanel extends FormPanel {
               pubRef="medical.ManualPricePicker"
               readOnly={Boolean(edited.id) || readOnly}
               value={edited ? edited.manualPrice : ""}
-              onChange={(p) => this.updateAttribute("manualPrice", p)}
+              onChange={(p) => {
+                this.updateAttribute("manualPrice", p);
+                this.changeManual();
+              }}
             />
           </Grid>
           }

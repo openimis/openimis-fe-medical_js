@@ -154,10 +154,6 @@ class MedicalServiceForm extends Component {
   };
 
   canSave = () => {
-    if(this.state.medicalService.typePP!="S" && this.state.medicalService.typePP!=null){
-      this.state.medicalService.price = this.getTotalPrice();
-    }
-
     let sumItem = 0 ;
     let sumService = 0 ;
   
@@ -176,8 +172,13 @@ class MedicalServiceForm extends Component {
         }
       });      
     }
-
     this.state.totalPrice = sumItem+sumService;
+
+    if(this.state.medicalService.typePP!="S" && this.state.medicalService.typePP!=null){
+      if(this.state.medicalService.manualPrice != true){
+        this.state.medicalService.price = this.state.totalPrice;
+      }
+    }
 
     return this.state.medicalService &&
     this.state.medicalService.code &&
