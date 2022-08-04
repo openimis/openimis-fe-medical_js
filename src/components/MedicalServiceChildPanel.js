@@ -20,8 +20,6 @@ import { Paper, Box } from "@material-ui/core";
 import _ from "lodash";
 import { fetchMedicalService, fetchMedicalServices } from "../actions"
 
-import { claimedAmount, approvedAmount } from "../helpers/amounts";
-
 const styles = (theme) => ({
   paper: theme.paper.paper,
 });
@@ -40,12 +38,14 @@ class MedicalServiceChildPanel extends Component {
       "claimForm.showJustificationAtEnter",
       false,
     );
+    console.log("Props Medical Service Child Panel");
+    console.log(props);
   }
 
   initData = () => {
     let data = [];
-    if (!!this.props.edited[`${this.props.type}s`]) {
-      data = this.props.edited[`${this.props.type}s`] || [];
+    if (!!this.props.edited[`serviceserviceSet`]) {
+      data = this.props.edited['serviceserviceSet'] || [];
     }
     data.push({});
     return data;
@@ -147,7 +147,15 @@ class MedicalServiceChildPanel extends Component {
   };
   
   render() {
-    const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
+    const { 
+      intl, 
+      classes, 
+      edited, 
+      type, 
+      picker, 
+      forReview, 
+      fetchingPricelist, 
+      readOnly = false } = this.props;
     if (!edited) return null;
 
     let preHeaders = [
@@ -173,9 +181,8 @@ class MedicalServiceChildPanel extends Component {
             readOnly={!!forReview || readOnly}
             pubRef={picker}
             withLabel={false}
-            value={i[type]}
+            value={i.service}
             fullWidth
-            //pricelistUuid={edited.healthFacility[`${this.props.type}sPricelist`].uuid}
             date={edited.dateClaimed}
             onChange={(v) => this._onChangeItem(idx, type, v)}
           />

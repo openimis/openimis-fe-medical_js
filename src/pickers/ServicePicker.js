@@ -28,6 +28,26 @@ const ServicePicker = (props) => {
           node {
             id name code price
             ${extraFragment ?? ""}
+            serviceserviceSet{
+              service{
+                id
+                code
+                name
+              }
+              priceAsked
+              qtyProvided
+              scpDate
+            }
+            servicesLinked{
+              itemId{
+                id
+                code
+                name
+              }
+              priceAsked
+              qtyProvided
+              pcpDate
+            }
           }
         }
       }

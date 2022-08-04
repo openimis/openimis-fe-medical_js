@@ -44,8 +44,8 @@ class MedicalItemChildPanel extends Component {
 
   initData = () => {
     let data = [];
-    if (!!this.props.edited[`${this.props.type}s`]) {
-      data = this.props.edited[`${this.props.type}s`] || [];
+    if (!!this.props.edited[`servicesLinked`]) {
+      data = this.props.edited[`servicesLinked`] || [];
     }
     data.push({});
     return data;
@@ -175,11 +175,13 @@ class MedicalItemChildPanel extends Component {
     let itemFormatters = [
       (i, idx) => (
         <Box minWidth={400}>
+          {console.log("Value")}
+          {console.log(i)}
           <PublishedComponent
             readOnly={!!forReview || readOnly}
             pubRef={picker}
             withLabel={false}
-            value={i[type]}
+            value={i.itemId}
             fullWidth
             date={edited.dateClaimed}
             onChange={(v) => this._onChangeItem(idx, type, v)}

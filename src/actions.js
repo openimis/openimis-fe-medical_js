@@ -1,4 +1,11 @@
-import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql } from "@openimis/fe-core";
+import { 
+  formatGQLString,
+  formatMutation,
+  formatPageQuery,
+  formatPageQueryWithCount,
+  decodeId,
+  graphql
+} from "@openimis/fe-core";
 import _ from "lodash";
 
 const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
@@ -40,6 +47,7 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "validityTo",
   "level",
   "category",
+
 ];
 
 const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
@@ -65,6 +73,24 @@ function formatGQLBoolean(value){
   return "0";
 }
 
+export function formatDetail(type, detail) {
+  return `{
+    ${detail.id !== undefined && detail.id !== null ? `id: ${detail.id}` : ""}
+    ${type}Id: ${decodeId(detail[type].id)}
+    ${detail.priceAsked !== null ? `priceAsked: "${_.round(detail.priceAsked, 2).toFixed(2)}"` : ""}
+    ${detail.qtyProvided !== null ? `qtyProvided: "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : ""}
+    status: 1
+  }`;
+}
+
+export function formatDetails(type, details) {
+  if (!details) return "";
+  let dets = details.filter((d) => !!d[type]);
+  return `${type}s: [
+      ${dets.map((d) => formatDetail(type, d)).join("\n")}
+    ]`;
+}
+
 export function formatMedicalItemOrServiceGQL(mm, ms) {
   const req = `
     ${ms.uuid ? `uuid: "${ms.uuid}"` : ""}
@@ -80,7 +106,9 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
     ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
-    ${ms.manualPrice ? `manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : "False"}
+    ${ms.manualPrice ? `manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : "manualPrice: \"0\""}
+    ${formatDetails("service", ms.services)}
+    ${formatDetails("item", ms.items)}
   `;
   return req;
 }
@@ -212,7 +240,18 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }
-  const payload = formatPageQuery("medicalServices", filters, MEDICAL_SERVICE_FULL_PROJECTION(mm));
+
+  let projections = MEDICAL_SERVICE_FULL_PROJECTION(mm)
+  projections.push(
+    "serviceserviceSet{" +
+      "service {id code name } qtyProvided, priceAsked, scpDate" +
+      "}",
+    "servicesLinked{" +
+      "itemId {id code name } qtyProvided, priceAsked, pcpDate" +
+      "}",
+  );
+
+  const payload = formatPageQuery("medicalServices", filters, projections);
   return graphql(payload, "MEDICAL_SERVICE_OVERVIEW");
 }
 

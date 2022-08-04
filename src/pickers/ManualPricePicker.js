@@ -47,13 +47,6 @@ class ManualPricePicker extends Component {
                   }
                   }
               />
-              /*<Checkbox
-                color="primary"
-                key={"patientCategory_" + cat}
-                name={`patientCategory${cat}`}
-                checked={this.state.categories[cat]}
-                onChange={(e) => this._onChangeCategory(cat)}
-              />*/
             }
             label={formatMessage(intl, "medical", "manualPrice")}
           />
