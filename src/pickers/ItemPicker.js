@@ -26,7 +26,7 @@ const ItemPicker = (props) => {
       medicalItemsStr(str: $searchString, first: $first, pricelistUuid: $pricelistUuid, date: $date) {
         edges {
           node {
-            id name code price quantity
+            id name code price
             ${extraFragment ?? ""}
           }
         }
