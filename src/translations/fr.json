@@ -8,6 +8,7 @@
     "medical.serviceTypePP.F": "Prestation plafonnée",
     "manualPrice": "Manual",
     "edit.services.ceiling":"Plafond",
-    "edit.items.ceiling":"Plafond"
+    "edit.items.ceiling":"Plafond",
+    "medical.service.packagetype": "Type"
   }
   
