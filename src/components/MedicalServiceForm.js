@@ -153,22 +153,22 @@ class MedicalServiceForm extends Component {
     }
   };
 
-  canSave = () => {
+  priceCalcul = () => {
+
     let sumItem = 0 ;
     let sumService = 0 ;
-  
-    if(this.state.medicalService.items != undefined){
-      this.state.medicalService.items.forEach((item) => {
+    if(this.state.medicalService.servicesLinked != undefined){
+      this.state.medicalService.servicesLinked.forEach((item) => {
         if(item.priceAsked != undefined){
-          sumItem += parseFloat(item.priceAsked);
+          sumItem += parseFloat(item.priceAsked)*parseFloat(item.qtyProvided);
         }
       });
     }
 
-    if(this.state.medicalService.services != undefined){
-      this.state.medicalService.services.forEach((service) => {
+    if(this.state.medicalService.serviceserviceSet != undefined){
+      this.state.medicalService.serviceserviceSet.forEach((service) => {
         if(service.priceAsked != undefined){
-          sumService += parseFloat(service.priceAsked);
+          sumService += parseFloat(service.priceAsked)*parseFloat(service.qtyProvided);
         }
       });      
     }
@@ -179,6 +179,10 @@ class MedicalServiceForm extends Component {
         this.state.medicalService.price = this.state.totalPrice;
       }
     }
+  }
+
+  canSave = () => {
+    this.priceCalcul();
 
     return this.state.medicalService &&
     this.state.medicalService.code &&
@@ -192,6 +196,7 @@ class MedicalServiceForm extends Component {
   }
 
   save = (medicalService) => {
+    console.log("Save :");
     console.log(medicalService);
     this.setState(
       { lockNew: !medicalService.id }, // avoid duplicates
@@ -200,6 +205,7 @@ class MedicalServiceForm extends Component {
   };
 
   onEditedChanged = (medicalService) => {
+    this.priceCalcul();
     this.setState({ medicalService, newMedicalService: false });
   };
 

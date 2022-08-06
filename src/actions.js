@@ -107,8 +107,8 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
     ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
     ${ms.manualPrice ? `manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : "manualPrice: \"0\""}
-    ${formatDetails("service", ms.services)}
-    ${formatDetails("item", ms.items)}
+    ${formatDetails("service", ms.serviceserviceSet)}
+    ${formatDetails("item", ms.servicesLinked)}
   `;
   return req;
 }
@@ -173,8 +173,6 @@ export function updateMedicalService(mm, medicalService, clientMutationLabel) {
     formatMedicalItemOrServiceGQL(mm, medicalService),
     clientMutationLabel,
   );
-  console.log("updateMedicalService");
-  console.log(mutation);
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
@@ -244,10 +242,10 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   let projections = MEDICAL_SERVICE_FULL_PROJECTION(mm)
   projections.push(
     "serviceserviceSet{" +
-      "service {id code name } qtyProvided, priceAsked, scpDate" +
+      "id service {id code name } qtyProvided, priceAsked, scpDate" +
       "}",
     "servicesLinked{" +
-      "itemId {id code name } qtyProvided, priceAsked, pcpDate" +
+      "id item {id code name } qtyProvided, priceAsked, pcpDate" +
       "}",
   );
 

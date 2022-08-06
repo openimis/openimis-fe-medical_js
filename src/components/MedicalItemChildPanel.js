@@ -64,8 +64,8 @@ class MedicalItemChildPanel extends Component {
       this.setState({ data, reset: this.state.reset + 1 });
     } else if (
       prevProps.reset !== this.props.reset ||
-      (!!this.props.edited[`${this.props.type}s`] &&
-        !_.isEqual(prevProps.edited[`${this.props.type}s`], this.props.edited[`${this.props.type}s`]))
+      (!!this.props.edited[`servicesLinked`] &&
+        !_.isEqual(prevProps.edited[`servicesLinked`], this.props.edited[`servicesLinked`]))
     ) {
       this.setState({
         data: this.initData(),
@@ -84,7 +84,7 @@ class MedicalItemChildPanel extends Component {
 
   _onEditedChanged = (data) => {
     let edited = { ...this.props.edited };
-    edited[`${this.props.type}s`] = data;
+    edited[`servicesLinked`] = data;
     this.props.onEditedChanged(edited);
   };
 
@@ -119,6 +119,7 @@ class MedicalItemChildPanel extends Component {
 
   _onDelete = (idx) => {
     const data = [...this.state.data];
+    console.log(data);
     data.splice(idx, 1);
     this._onEditedChanged(data);
   };
@@ -148,13 +149,6 @@ class MedicalItemChildPanel extends Component {
   render() {
     const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
     if (!edited) return null;
-    /*if (!this.props.edited.healthFacility || !this.props.edited.healthFacility[`${this.props.type}sPricelist`]?.id) {
-      return (
-        <Paper className={classes.paper}>
-          <Error error={{ message: formatMessage(intl, "claim", `${this.props.type}sPricelist.missing`) }} />
-        </Paper>
-      );
-    }*/
 
     let preHeaders = [
       "\u200b",
@@ -175,13 +169,11 @@ class MedicalItemChildPanel extends Component {
     let itemFormatters = [
       (i, idx) => (
         <Box minWidth={400}>
-          {console.log("Value")}
-          {console.log(i)}
           <PublishedComponent
             readOnly={!!forReview || readOnly}
             pubRef={picker}
             withLabel={false}
-            value={i.itemId}
+            value={i.item}
             fullWidth
             date={edited.dateClaimed}
             onChange={(v) => this._onChangeItem(idx, type, v)}
@@ -212,9 +204,6 @@ class MedicalItemChildPanel extends Component {
       );
     }
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
-    if (fetchingPricelist) {
-      header += formatMessage(intl, "claim", `edit.${this.props.type}s.fetchingPricelist`);
-    }
 
     if(this.props.medicalService.packagetype){
       return (
@@ -226,7 +215,7 @@ class MedicalItemChildPanel extends Component {
             headers={headers}
             itemFormatters={itemFormatters}
             items={!fetchingPricelist ? this.state.data : []}
-            onDelete={!forReview && !readOnly && this._onDelete}
+            onDelete={this._onDelete}
           />
         </Paper>
       );

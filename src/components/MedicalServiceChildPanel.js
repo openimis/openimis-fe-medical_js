@@ -38,8 +38,6 @@ class MedicalServiceChildPanel extends Component {
       "claimForm.showJustificationAtEnter",
       false,
     );
-    console.log("Props Medical Service Child Panel");
-    console.log(props);
   }
 
   initData = () => {
@@ -64,8 +62,8 @@ class MedicalServiceChildPanel extends Component {
       this.setState({ data, reset: this.state.reset + 1 });
     } else if (
       prevProps.reset !== this.props.reset ||
-      (!!this.props.edited[`${this.props.type}s`] &&
-        !_.isEqual(prevProps.edited[`${this.props.type}s`], this.props.edited[`${this.props.type}s`]))
+      (!!this.props.edited[`serviceserviceSet`] &&
+        !_.isEqual(prevProps.edited[`serviceserviceSet`], this.props.edited[`serviceserviceSet`]))
     ) {
       this.setState({
         data: this.initData(),
@@ -84,7 +82,7 @@ class MedicalServiceChildPanel extends Component {
 
   _onEditedChanged = (data) => {
     let edited = { ...this.props.edited };
-    edited[`${this.props.type}s`] = data;
+    edited[`serviceserviceSet`] = data;
     this.props.onEditedChanged(edited);
   };
 
@@ -96,7 +94,6 @@ class MedicalServiceChildPanel extends Component {
         sumItems += update.priceAsked * update.qtyProvided;
       }
     });
-    this.props.onPriceChange(sumItems,"");
     this._onEditedChanged(data);
   };
 
@@ -120,6 +117,7 @@ class MedicalServiceChildPanel extends Component {
 
   _onDelete = (idx) => {
     const data = [...this.state.data];
+    console.log(data);
     data.splice(idx, 1);
     this._onEditedChanged(data);
   };
@@ -212,9 +210,7 @@ class MedicalServiceChildPanel extends Component {
       );
     }
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
-    if (fetchingPricelist) {
-      header += formatMessage(intl, "claim", `edit.${this.props.type}s.fetchingPricelist`);
-    }
+    
 
     if(this.props.medicalService.packagetype){
       return (
@@ -226,7 +222,7 @@ class MedicalServiceChildPanel extends Component {
             headers={headers}
             itemFormatters={itemFormatters}
             items={!fetchingPricelist ? this.state.data : []}
-            onDelete={!forReview && !readOnly && this._onDelete}
+            onDelete={this._onDelete}
           />
         </Paper>
       );
