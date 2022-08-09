@@ -205,7 +205,7 @@ class MedicalItemChildPanel extends Component {
     }
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
 
-    if(this.props.medicalService.packagetype){
+    if(this.props.medicalService.packagetype=="P" || this.props.medicalService.packagetype=="F" ){
       return (
         <Paper className={classes.paper}>
           <Table
