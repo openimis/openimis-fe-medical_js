@@ -45,7 +45,9 @@ class MedicalServiceChildPanel extends Component {
     if (!!this.props.edited[`serviceserviceSet`]) {
       data = this.props.edited['serviceserviceSet'] || [];
     }
-    data.push({});
+    if (!_.isEqual(data[data.length - 1], {})) {
+      data.push({});
+    }
     return data;
   };
 

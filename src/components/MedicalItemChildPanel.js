@@ -47,7 +47,9 @@ class MedicalItemChildPanel extends Component {
     if (!!this.props.edited[`servicesLinked`]) {
       data = this.props.edited[`servicesLinked`] || [];
     }
-    data.push({});
+    if (!_.isEqual(data[data.length - 1], {})) {
+      data.push({});
+    }
     return data;
   };
 

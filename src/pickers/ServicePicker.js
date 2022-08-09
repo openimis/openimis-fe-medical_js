@@ -39,7 +39,7 @@ const ServicePicker = (props) => {
               scpDate
             }
             servicesLinked{
-              itemId{
+              item{
                 id
                 code
                 name
