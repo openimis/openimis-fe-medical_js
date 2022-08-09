@@ -148,7 +148,7 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={3} className={classes.item}>
             <AmountInput
               module="admin"
-              label="medical.service.price"
+              label={this.props.medicalService.packagetype=='F' ? `edit.services.ceiling` : `medical.service.price`}
               required={!this.state.readOnlyrice}
               name="price"
               readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice }
