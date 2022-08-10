@@ -45,7 +45,9 @@ class MedicalServiceChildPanel extends Component {
     if (!!this.props.edited[`serviceserviceSet`]) {
       data = this.props.edited['serviceserviceSet'] || [];
     }
-    data.push({});
+    if (!_.isEqual(data[data.length - 1], {})) {
+      data.push({});
+    }
     return data;
   };
 
@@ -212,7 +214,7 @@ class MedicalServiceChildPanel extends Component {
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
     
 
-    if(this.props.medicalService.packagetype){
+    if(this.props.medicalService.packagetype=="P" || this.props.medicalService.packagetype=="F" ){
       return (
         <Paper className={classes.paper}>
           <Table

@@ -39,7 +39,6 @@ const ServicePicker = (props) => {
               scpDate
             }
             servicesLinked{
-              id
               item{
                 id
                 code
