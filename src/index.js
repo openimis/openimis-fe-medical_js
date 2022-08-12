@@ -32,6 +32,7 @@ const DEFAULT_CONFIG = {
   "translations": [
     { key: "en", messages: messages_en },
     { key: "fr", messages: messages_fr },
+    { key: "fr_cs", messages: messages_fr },
   ],
   "reducers": [{ key: "medical", reducer }],
   "core.Router": [
