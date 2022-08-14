@@ -56,7 +56,8 @@ class MedicalServiceForm extends Component {
       confirmedAction: null,
       totalPrice: 0,
       sumItems:0,
-      sumServices:0
+      sumServices:0,
+      manualPrice: false
     };
   }
 

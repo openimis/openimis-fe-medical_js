@@ -26,9 +26,8 @@ class MedicalServiceMasterPanel extends FormPanel {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      readOnlyPrice : !props.medicalService.manualPrice,
+      readOnlyPrice : props.medicalService.packagetype=="S"? 0 : !props.medicalService.manualPrice,
     }
 
     if(this.props.edited){
@@ -149,7 +148,7 @@ class MedicalServiceMasterPanel extends FormPanel {
             <AmountInput
               module="admin"
               label={this.props.medicalService.packagetype=='F' ? `edit.services.ceiling` : `medical.service.price`}
-              required={!this.state.readOnlyrice}
+              required={!this.state.readOnlyPrice}
               name="price"
               readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice }
               value={edited ? edited.price : this.props.priceTotal}
