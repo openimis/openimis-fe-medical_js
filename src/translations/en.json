@@ -101,5 +101,6 @@
   "medical.item.deleteDialog.yes.button": "Yes",
   "medical.item.deleteItem.tooltip": "Delete item",
   "medical.item.deleteItemDialog.message": "Are you sure you want to delete this item?",
-  "medical.item.updateMedicalItem.mutationLabel": "Update Medical Item"
+  "medical.item.updateMedicalItem.mutationLabel": "Update Medical Item",
+  "medical.item.createMedicalItem.mutationLabel": "Create Medical Item"
 }
