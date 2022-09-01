@@ -110,5 +110,6 @@
   "medical.item.updateMedicalItem.mutationLabel": "Update Medical Item",
   "manualPrice": "Manual",
   "edit.services.ceiling":"Ceiling",
-  "edit.items.ceiling":"Ceiling"
+  "edit.items.ceiling":"Ceiling",
+  "medical.item.createMedicalItem.mutationLabel": "Create Medical Item"
 }
