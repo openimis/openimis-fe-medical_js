@@ -114,16 +114,15 @@ export function createMedicalService(mm, medicalService, clientMutationLabel) {
 }
 
 export function createMedicalItem(mm, medicalItem, clientMutationLabel) {
-  const mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
-  const requestedDateTime = new Date();
+  let mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
+  let requestedDateTime = new Date();
   return graphql(
-    mutation.payload,
-    ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
+    mutation.payload, ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
       requestedDateTime,
-    },
+    }
   );
 }
 
