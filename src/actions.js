@@ -97,7 +97,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.code ? `code: "${ms.code}"` : ""}
     ${ms.name ? `name: "${formatGQLString(ms.name)}"` : ""}
     ${ms.type ? `type: "${formatGQLString(ms.type)}"` : ""}
-    ${ms.price ? `price: "${ms.price}"` : ""}
+    ${!isNaN(ms.price) ? `price: "${ms.price}"` : ""}
     ${ms.quantity ? `quantity: "${ms.quantity}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
     ${ms.frequency ? `frequency: "${ms.frequency}"` : ""}
@@ -110,8 +110,6 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${formatDetails("service", ms.serviceserviceSet)}
     ${formatDetails("item", ms.servicesLinked)}
   `;
-  console.log('FormatMedicalItemorServiceGQL');
-  console.log(ms);
   return req;
 }
 
