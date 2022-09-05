@@ -129,7 +129,7 @@ class MedicalItemForm extends Component {
     this.state.medicalItem.code &&
     this.state.medicalItem.name &&
     this.state.medicalItem.type &&
-    this.state.medicalItem.price &&
+    !isNaN(this.state.medicalItem.price) &&
     this.state.medicalItem.careType;
 
   save = (medicalItem) => {
