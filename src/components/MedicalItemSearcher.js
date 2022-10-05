@@ -23,6 +23,7 @@ const MEDICAL_ITEM_SEARCHER_CONTRIBUTION_KEY = "medical.MedicalItemSearcher";
 class MedicalItemSearcher extends Component {
   state = {
     deleteItem: null,
+    params: {},
     reset: 0,
   };
 
@@ -40,8 +41,9 @@ class MedicalItemSearcher extends Component {
     }
   }
 
-  fetch = (prms) => {
-    this.props.fetchMedicalItemsSummaries(this.props.modulesManager, prms);
+  fetch = (params) => {
+    this.setState({ params });
+    this.props.fetchMedicalItemsSummaries(this.props.modulesManager, params);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -69,6 +71,7 @@ class MedicalItemSearcher extends Component {
       "medical.item.name",
       "medical.item.type",
       "medical.item.package",
+      "medical.item.quantity",
       "medical.item.price",
       "medical.item.validFrom",
       "medical.item.validTo",
@@ -81,6 +84,7 @@ class MedicalItemSearcher extends Component {
     ["name", true],
     ["type", true],
     ["package", true],
+    ["quantity", false],
     ["price", true],
     ["validityFrom", false],
     ["validityTo", false],
@@ -88,12 +92,13 @@ class MedicalItemSearcher extends Component {
 
   deleteItem = () => {
     const item = this.state.deleteItem;
-    this.setState({ deleteItem: null }, (e) => {
-      this.props.deleteMedicalItem(
+    this.setState({ deleteItem: null }, async (e) => {
+      await this.props.deleteMedicalItem(
         this.props.modulesManager,
         item,
         formatMessage(this.props.intl, "medical.item", "deleteDialog.title"),
       );
+      this.fetch(this.state.params);
     });
   };
 
@@ -117,6 +122,7 @@ class MedicalItemSearcher extends Component {
       (ms) => ms.name,
       (ms) => formatMessage(this.props.intl, "medical.itemType", ms.type),
       (ms) => ms.package,
+      (ms) => ms.quantity,
       (ms) => ms.price,
       (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
       (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),

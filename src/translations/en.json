@@ -92,6 +92,7 @@
   "medical.item.name": "Name",
   "medical.item.type": "Type",
   "medical.item.package": "Package",
+  "medical.item.quantity": "Quantity",
   "medical.item.price": "Price",
   "medical.item.validFrom": "Valid From",
   "medical.item.validTo": "Valid To",
