@@ -29,7 +29,7 @@ class MedicalItemPage extends Component {
       this.props.createMedicalItem(
         this.props.modulesManager,
         medicalItem,
-        formatMessageWithValues(this.props.intl, "medical.medicalItem", "createMedicalItem.mutationLabel"),
+        formatMessageWithValues(this.props.intl, "medical.item", "createMedicalItem.mutationLabel"),
       );
     } else {
       this.props.updateMedicalItem(
