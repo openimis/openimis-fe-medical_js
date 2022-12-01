@@ -26,6 +26,8 @@ const styles = (theme) => ({
   lockedPage: theme.page.locked,
 });
 
+const CODE_MAX_LENGTH  = 6;
+
 class MedicalServiceForm extends Component {
   state = {
     lockNew: false,
@@ -126,6 +128,7 @@ class MedicalServiceForm extends Component {
   canSave = () =>
     this.state.medicalService &&
     this.state.medicalService.code &&
+    this.state.medicalService.code.length <= CODE_MAX_LENGTH &&
     this.state.medicalService.name &&
     this.state.medicalService.type &&
     this.state.medicalService.level &&
