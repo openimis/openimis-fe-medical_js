@@ -27,6 +27,7 @@ const styles = (theme) => ({
 });
 
 const MEDICAL_ITEM_OVERVIEW_MUTATIONS_KEY = "medicalItem.MedicalItemOverview.mutations";
+const CODE_MAX_LENGTH  = 6;
 
 class MedicalItemForm extends Component {
   state = {
@@ -127,6 +128,7 @@ class MedicalItemForm extends Component {
   canSave = () =>
     this.state.medicalItem &&
     this.state.medicalItem.code &&
+    this.state.medicalItem.code.length <= CODE_MAX_LENGTH &&
     this.state.medicalItem.name &&
     this.state.medicalItem.type &&
     this.state.medicalItem.price &&
