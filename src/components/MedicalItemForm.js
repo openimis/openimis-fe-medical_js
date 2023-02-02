@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -19,7 +19,7 @@ import {
 } from "@openimis/fe-core";
 import { RIGHT_MEDICALITEMS } from "../constants";
 
-import { createMedicalItem, fetchMedicalItem, fetchMedicalItemMutation, newMedicalItem } from "../actions";
+import { createMedicalItem, fetchMedicalItem, fetchMedicalItemMutation, newMedicalItem, clearMedicalItem} from "../actions";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 
 const styles = (theme) => ({

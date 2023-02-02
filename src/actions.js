@@ -1,4 +1,4 @@
-import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql } from "@openimis/fe-core";
+import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql, graphqlWithVariables } from "@openimis/fe-core";
 import _ from "lodash";
 
 const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
@@ -240,4 +240,46 @@ export function fetchMedicalItemMutation(mm, clientMutationId) {
     ["id", "medicalItems{id}"],
   );
   return graphql(payload, "MEDICAL_ITEM");
+}
+
+export function medicalServicesValidationCheck(mm, variables) {
+  return graphqlWithVariables(
+    `
+    query ($serviceCode: String!) {
+      isValid: validateServiceCode(serviceCode: $serviceCode)
+    }
+    `,
+    variables,
+    `SERVICES_VALIDATION_FIELDS`,
+  );
+}
+
+export function medicalServicesValidationClear() {
+  return (dispatch) => {
+    dispatch({ type: `SERVICES_VALIDATION_FIELDS_CLEAR` });
+  };
+}
+
+export function medicalItemsValidationCheck(mm, variables) {
+  return graphqlWithVariables(
+    `
+    query ($itemCode: String!) {
+      isValid: validateItemCode(itemCode: $itemCode)
+    }
+    `,
+    variables,
+    `ITEMS_VALIDATION_FIELDS`,
+  );
+}
+
+export function medicalItemsValidationClear() {
+  return (dispatch) => {
+    dispatch({ type: `ITEMS_VALIDATION_FIELDS_CLEAR` });
+  };
+}
+
+export function clearForm() {
+  return (dispatch) => {
+    dispatch({ type: "FORM_CLEAR" });
+  };
 }

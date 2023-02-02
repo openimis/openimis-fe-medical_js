@@ -194,6 +194,117 @@ function reducer(
         return dispatchMutationResp(state, "createService", action);
     case "MEDICAL_SERVICE_UPDATE_RESP":
         return dispatchMutationResp(state, "updateService", action);
+    case "SERVICES_VALIDATION_FIELDS_REQ":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalServices: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "SERVICES_VALIDATION_FIELDS_RESP":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalServices: {
+            isValidating: false,
+            isValid: action.payload?.data.isValid,
+            validationError: formatGraphQLError(action.payload),
+          },
+        },
+      };
+    case "SERVICES_VALIDATION_FIELDS_ERR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalServices: {
+            isValidating: false,
+            isValid: false,
+            validationError: formatServerError(action.payload),
+          },
+        },
+      };
+    case "SERVICES_VALIDATION_FIELDS_CLEAR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalServices: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "ITEMS_VALIDATION_FIELDS_REQ":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalItems: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "ITEMS_VALIDATION_FIELDS_RESP":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalItems: {
+            isValidating: false,
+            isValid: action.payload?.data.isValid,
+            validationError: formatGraphQLError(action.payload),
+          },
+        },
+      };
+    case "ITEMS_VALIDATION_FIELDS_ERR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalItems: {
+            isValidating: false,
+            isValid: false,
+            validationError: formatServerError(action.payload),
+          },
+        },
+      };
+    case "ITEMS_VALIDATION_FIELDS_CLEAR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalItems: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "FORM_CLEAR":
+      return {
+        ...state,
+        pricelists: {
+          ...state.pricelists,
+          services: {
+            ...state.pricelists.services,
+            item: {},
+          },
+          items: {
+            ...state.pricelists.items,
+            item: {},
+          },
+        },
+      };
     default:
       return state;
   }

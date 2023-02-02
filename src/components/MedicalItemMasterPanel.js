@@ -11,6 +11,7 @@ import {
   TextInput,
   withHistory,
   withModulesManager,
+  ValidatedTextInput
 } from "@openimis/fe-core";
 
 const styles = (theme) => ({
@@ -28,13 +29,21 @@ class MedicalItemMasterPanel extends FormPanel {
       <>
         <Grid container className={classes.item}>
           <Grid item xs={2} className={classes.item}>
-            <TextInput
+            <ValidatedTextInput
+              action={servicesOrItems ? medicalServicesValidationCheck : medicalItemsValidationCheck}
+              clearAction={servicesOrItems ? medicalServicesValidationClear : medicalItemsValidationClear}
+              itemQueryIdentifier={servicesOrItems ? "servicesPricelistName" : "itemsPricelistName"}
+              isValid={servicesOrItems ? isMedicalServiceValid : isMedicalItemValid}
+              isValidating={servicesOrItems ? isMedicalServiceValidating : isMedicalItemValidating}
+              validationError={servicesOrItems ? medicalServiceValidationError : medicalItemValidationError}
+              shouldValidate={this.shouldValidate}
+              codeTakenLabel="medical_pricelist.nameTaken"
+              onChange={(name) => this.updateAttribute("name", name)}
+              required={true}
               module="admin"
-              required
               label="medical.item.code"
-              readOnly={Boolean(edited.id) || readOnly}
+              readOnly={readOnly}
               value={edited ? edited.code : ""}
-              onChange={(p) => this.updateAttribute("code", p)}
             />
           </Grid>
           <Grid item xs={10} className={classes.item}>
