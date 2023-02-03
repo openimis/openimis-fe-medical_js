@@ -278,8 +278,14 @@ export function medicalItemsValidationClear() {
   };
 }
 
-export function clearForm() {
+export function clearServiceForm() {
   return (dispatch) => {
-    dispatch({ type: "FORM_CLEAR" });
+    dispatch({ type: "CLEAR_SERVICE_FORM" });
+  };
+}
+
+export function clearItemForm() {
+  return (dispatch) => {
+    dispatch({ type: "CLEAR_ITEM_FORM" });
   };
 }

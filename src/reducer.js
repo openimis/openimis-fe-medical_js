@@ -1,7 +1,12 @@
-import { parseData, formatServerError, formatGraphQLError, pageInfo,
+import {
+  parseData,
+  formatServerError,
+  formatGraphQLError,
+  pageInfo,
   dispatchMutationReq,
   dispatchMutationResp,
-  dispatchMutationErr, } from "@openimis/fe-core";
+  dispatchMutationErr,
+} from "@openimis/fe-core";
 
 function reducer(
   state = {
@@ -178,28 +183,12 @@ function reducer(
         fetchedMedicalItem: false,
         errorMedicalItem: formatServerError(action.payload),
       };
-    case "MEDICAL_ITEM_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
-    case "MEDICAL_ITEM_MUTATION_ERR":
-      return dispatchMutationErr(state, action);
-    case "MEDICAL_SERVICE_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
-    case "MEDICAL_SERVICE_MUTATION_ERR":
-      return dispatchMutationErr(state, action);
-    case "MEDICAL_ITEM_CREATE_RESP":
-        return dispatchMutationResp(state, "createItem", action);
-    case "MEDICAL_ITEM_UPDATE_RESP":
-        return dispatchMutationResp(state, "updateItem", action);
-    case "MEDICAL_SERVICE_CREATE_RESP":
-        return dispatchMutationResp(state, "createService", action);
-    case "MEDICAL_SERVICE_UPDATE_RESP":
-        return dispatchMutationResp(state, "updateService", action);
     case "SERVICES_VALIDATION_FIELDS_REQ":
       return {
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalServices: {
+          medicalService: {
             isValidating: true,
             isValid: false,
             validationError: null,
@@ -211,7 +200,7 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalServices: {
+          medicalService: {
             isValidating: false,
             isValid: action.payload?.data.isValid,
             validationError: formatGraphQLError(action.payload),
@@ -223,7 +212,7 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalServices: {
+          medicalService: {
             isValidating: false,
             isValid: false,
             validationError: formatServerError(action.payload),
@@ -235,7 +224,7 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalServices: {
+          medicalService: {
             isValidating: true,
             isValid: false,
             validationError: null,
@@ -247,7 +236,7 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalItems: {
+          medicalItem: {
             isValidating: true,
             isValid: false,
             validationError: null,
@@ -259,7 +248,7 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalItems: {
+          medicalItem: {
             isValidating: false,
             isValid: action.payload?.data.isValid,
             validationError: formatGraphQLError(action.payload),
@@ -271,7 +260,7 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalItems: {
+          medicalItem: {
             isValidating: false,
             isValid: false,
             validationError: formatServerError(action.payload),
@@ -283,28 +272,39 @@ function reducer(
         ...state,
         validationFields: {
           ...state.validationFields,
-          medicalItems: {
+          medicalItem: {
             isValidating: true,
             isValid: false,
             validationError: null,
           },
         },
       };
-    case "FORM_CLEAR":
+    case "CLEAR_SERVICE_FORM":
       return {
         ...state,
-        pricelists: {
-          ...state.pricelists,
-          services: {
-            ...state.pricelists.services,
-            item: {},
-          },
-          items: {
-            ...state.pricelists.items,
-            item: {},
-          },
-        },
+        medicalService: null,
       };
+    case "CLEAR_ITEM_FORM":
+      return {
+        ...state,
+        medicalItem: null,
+      };
+    case "MEDICAL_ITEM_MUTATION_REQ":
+      return dispatchMutationReq(state, action);
+    case "MEDICAL_ITEM_MUTATION_ERR":
+      return dispatchMutationErr(state, action);
+    case "MEDICAL_SERVICE_MUTATION_REQ":
+      return dispatchMutationReq(state, action);
+    case "MEDICAL_SERVICE_MUTATION_ERR":
+      return dispatchMutationErr(state, action);
+    case "MEDICAL_ITEM_CREATE_RESP":
+      return dispatchMutationResp(state, "createItem", action);
+    case "MEDICAL_ITEM_UPDATE_RESP":
+      return dispatchMutationResp(state, "updateItem", action);
+    case "MEDICAL_SERVICE_CREATE_RESP":
+      return dispatchMutationResp(state, "createService", action);
+    case "MEDICAL_SERVICE_UPDATE_RESP":
+      return dispatchMutationResp(state, "updateService", action);
     default:
       return state;
   }
