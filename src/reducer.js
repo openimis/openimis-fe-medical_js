@@ -183,7 +183,7 @@ function reducer(
         fetchedMedicalItem: false,
         errorMedicalItem: formatServerError(action.payload),
       };
-    case "SERVICES_VALIDATION_FIELDS_REQ":
+    case "SERVICES_FIELDS_VALIDATION_REQ":
       return {
         ...state,
         validationFields: {
@@ -195,7 +195,7 @@ function reducer(
           },
         },
       };
-    case "SERVICES_VALIDATION_FIELDS_RESP":
+    case "SERVICES_FIELDS_VALIDATION_RESP":
       return {
         ...state,
         validationFields: {
@@ -207,7 +207,7 @@ function reducer(
           },
         },
       };
-    case "SERVICES_VALIDATION_FIELDS_ERR":
+    case "SERVICES_FIELDS_VALIDATION_ERR":
       return {
         ...state,
         validationFields: {
@@ -219,7 +219,7 @@ function reducer(
           },
         },
       };
-    case "SERVICES_VALIDATION_FIELDS_CLEAR":
+    case "SERVICES_FIELDS_VALIDATION_CLEAR":
       return {
         ...state,
         validationFields: {
@@ -231,7 +231,7 @@ function reducer(
           },
         },
       };
-    case "ITEMS_VALIDATION_FIELDS_REQ":
+    case "ITEMS_FIELDS_VALIDATION_REQ":
       return {
         ...state,
         validationFields: {
@@ -243,7 +243,7 @@ function reducer(
           },
         },
       };
-    case "ITEMS_VALIDATION_FIELDS_RESP":
+    case "ITEMS_FIELDS_VALIDATION_RESP":
       return {
         ...state,
         validationFields: {
@@ -255,7 +255,7 @@ function reducer(
           },
         },
       };
-    case "ITEMS_VALIDATION_FIELDS_ERR":
+    case "ITEMS_FIELDS_VALIDATION_ERR":
       return {
         ...state,
         validationFields: {
@@ -267,7 +267,7 @@ function reducer(
           },
         },
       };
-    case "ITEMS_VALIDATION_FIELDS_CLEAR":
+    case "ITEMS_FIELDS_VALIDATION_CLEAR":
       return {
         ...state,
         validationFields: {

@@ -250,13 +250,13 @@ export function medicalServicesValidationCheck(mm, variables) {
     }
     `,
     variables,
-    `SERVICES_VALIDATION_FIELDS`,
+    `SERVICES_FIELDS_VALIDATION`,
   );
 }
 
 export function medicalServicesValidationClear() {
   return (dispatch) => {
-    dispatch({ type: `SERVICES_VALIDATION_FIELDS_CLEAR` });
+    dispatch({ type: `SERVICES_FIELDS_VALIDATION_CLEAR` });
   };
 }
 
@@ -268,13 +268,13 @@ export function medicalItemsValidationCheck(mm, variables) {
     }
     `,
     variables,
-    `ITEMS_VALIDATION_FIELDS`,
+    `ITEMS_FIELDS_VALIDATION`,
   );
 }
 
 export function medicalItemsValidationClear() {
   return (dispatch) => {
-    dispatch({ type: `ITEMS_VALIDATION_FIELDS_CLEAR` });
+    dispatch({ type: `ITEMS_FIELDS_VALIDATION_CLEAR` });
   };
 }
 
