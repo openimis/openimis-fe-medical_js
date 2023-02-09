@@ -1,17 +1,22 @@
 import React from "react";
-import { withStyles, withTheme } from "@material-ui/core/styles";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
+
+import { withStyles, withTheme } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
+
 import {
   AmountInput,
+  ErrorBoundary,
   FormPanel,
   PublishedComponent,
   TextInput,
+  ValidatedTextInput,
   withHistory,
   withModulesManager,
-  ErrorBoundary,
 } from "@openimis/fe-core";
+import { medicalServicesValidationCheck, medicalServicesValidationClear } from "../actions";
+import { SERVICE_CODE_MAX_LENGTH } from "../constants";
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -22,19 +27,33 @@ const styles = (theme) => ({
 });
 
 class MedicalServiceMasterPanel extends FormPanel {
+  shouldValidate = (inputValue) => {
+    const { savedServiceCode } = this.props;
+    const shouldValidate = inputValue !== savedServiceCode;
+    return shouldValidate;
+  }
   render() {
-    const { classes, edited, readOnly } = this.props;
+    const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
           <Grid item xs={2} className={classes.item}>
-            <TextInput
+            <ValidatedTextInput
+              action={medicalServicesValidationCheck}
+              clearAction={medicalServicesValidationClear}
+              itemQueryIdentifier="serviceCode"
+              isValid={isServiceValid}
+              isValidating={isServiceValidating}
+              validationError={serviceValidationError}
+              shouldValidate={this.shouldValidate}
+              codeTakenLabel="medical.codeTaken"
+              onChange={(code) => this.updateAttribute("code", code)}
+              inputProps={{ maxLength: SERVICE_CODE_MAX_LENGTH }}
+              required={true}
               module="admin"
-              required
               label="medical.service.code"
-              readOnly={Boolean(edited.id) || readOnly}
+              readOnly={readOnly}
               value={edited ? edited.code : ""}
-              onChange={(p) => this.updateAttribute("code", p)}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>
@@ -126,6 +145,10 @@ class MedicalServiceMasterPanel extends FormPanel {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  isServiceValid: state.medical?.validationFields?.medicalService?.isValid,
+  isServiceValidating: state.medical?.validationFields?.medicalService?.isValidating,
+  serviceValidationError: state.medical?.validationFields?.medicalService?.validationError,
+  savedServiceCode: state.medical?.medicalService?.code,
 });
 
 export default injectIntl(
