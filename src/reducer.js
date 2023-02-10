@@ -231,6 +231,18 @@ function reducer(
           },
         },
       };
+    case "SERVICES_FIELDS_VALIDATION_SET_VALID":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalService: {
+            isValidating: false,
+            isValid: true,
+            validationError: null,
+          },
+        },
+      };
     case "ITEMS_FIELDS_VALIDATION_REQ":
       return {
         ...state,
@@ -275,6 +287,18 @@ function reducer(
           medicalItem: {
             isValidating: true,
             isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "ITEMS_FIELDS_VALIDATION_SET_VALID":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          medicalItem: {
+            isValidating: false,
+            isValid: true,
             validationError: null,
           },
         },
