@@ -15,7 +15,7 @@ import {
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
-import { medicalItemsValidationCheck, medicalItemsValidationClear } from "../actions";
+import { medicalItemsValidationCheck, medicalItemsValidationClear, medicalItemsSetValid } from "../actions";
 import { ITEM_CODE_MAX_LENGTH } from "../constants";
 
 const styles = (theme) => ({
@@ -41,6 +41,7 @@ class MedicalItemMasterPanel extends FormPanel {
             <ValidatedTextInput
               action={medicalItemsValidationCheck}
               clearAction={medicalItemsValidationClear}
+              setValidAction={medicalItemsSetValid}
               itemQueryIdentifier="itemCode"
               isValid={isItemValid}
               isValidating={isItemValidating}

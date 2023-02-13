@@ -254,6 +254,12 @@ export function medicalServicesValidationCheck(mm, variables) {
   );
 }
 
+export function medicalServicesSetValid() {
+  return (dispatch) => {
+    dispatch({ type: `SERVICES_FIELDS_VALIDATION_SET_VALID` });
+  };
+}
+
 export function medicalServicesValidationClear() {
   return (dispatch) => {
     dispatch({ type: `SERVICES_FIELDS_VALIDATION_CLEAR` });
@@ -270,6 +276,12 @@ export function medicalItemsValidationCheck(mm, variables) {
     variables,
     `ITEMS_FIELDS_VALIDATION`,
   );
+}
+
+export function medicalItemsSetValid() {
+  return (dispatch) => {
+    dispatch({ type: `ITEMS_FIELDS_VALIDATION_SET_VALID` });
+  };
 }
 
 export function medicalItemsValidationClear() {
