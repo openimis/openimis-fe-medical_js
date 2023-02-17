@@ -34,6 +34,8 @@ class MedicalServiceMasterPanel extends FormPanel {
   }
   render() {
     const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
+    console.log(edited?.category);
+    console.log(typeof "" === null);
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
@@ -70,10 +72,10 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceTypePicker"
-              withNull={true}
+              withNull={false}
               required
               readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.type : ""}
+              value={edited?.type ? edited.type : " "}
               onChange={(p) => this.updateAttribute("type", p)}
             />
           </Grid>
@@ -82,19 +84,19 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceCategoryPicker"
-              withNull={true}
+              withNull={false}
               readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.category : null}
+              value={edited?.category ? edited.category : " "}
               onChange={(p) => this.updateAttribute("category", p)}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceLevelPicker"
-              withNull={true}
+              withNull={false}
               required
               readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.level : ""}
+              value={edited?.level ? edited.level : " "}
               onChange={(p) => this.updateAttribute("level", p)}
             />
           </Grid>
@@ -115,9 +117,9 @@ class MedicalServiceMasterPanel extends FormPanel {
             <PublishedComponent
               pubRef="medical.CareTypePicker"
               required
-              withNull={true}
+              withNull={false}
               readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.careType : ""}
+              value={edited?.careType ? edited.careType : " "}
               onChange={(p) => this.updateAttribute("careType", p)}
             />
           </Grid>
