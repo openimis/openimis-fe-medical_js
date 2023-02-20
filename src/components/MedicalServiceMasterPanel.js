@@ -34,8 +34,6 @@ class MedicalServiceMasterPanel extends FormPanel {
   }
   render() {
     const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
-    console.log(edited?.category);
-    console.log(typeof "" === null);
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
