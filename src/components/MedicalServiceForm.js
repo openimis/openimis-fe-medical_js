@@ -29,7 +29,6 @@ import {
   newMedicalService,
   clearServiceForm,
 } from "../actions";
-import MedicalChildPanel from "./MedicalChildPanel";
 import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 
