@@ -1,4 +1,7 @@
-import { parseData, formatServerError, formatGraphQLError, pageInfo } from "@openimis/fe-core";
+import { parseData, formatServerError, formatGraphQLError, pageInfo,
+  dispatchMutationReq,
+  dispatchMutationResp,
+  dispatchMutationErr, } from "@openimis/fe-core";
 
 function reducer(
   state = {
@@ -29,6 +32,8 @@ function reducer(
     medicalItemsSummaries: null,
     medicalItem: null,
     medicalItemsPageInfo: { totalCount: 0 },
+    submittingMutation: false,
+    mutation: {},
   },
   action,
 ) {
@@ -173,6 +178,22 @@ function reducer(
         fetchedMedicalItem: false,
         errorMedicalItem: formatServerError(action.payload),
       };
+    case "MEDICAL_ITEM_MUTATION_REQ":
+      return dispatchMutationReq(state, action);
+    case "MEDICAL_ITEM_MUTATION_ERR":
+      return dispatchMutationErr(state, action);
+    case "MEDICAL_SERVICE_MUTATION_REQ":
+      return dispatchMutationReq(state, action);
+    case "MEDICAL_SERVICE_MUTATION_ERR":
+      return dispatchMutationErr(state, action);
+    case "MEDICAL_ITEM_CREATE_RESP":
+        return dispatchMutationResp(state, "createItem", action);
+    case "MEDICAL_ITEM_UPDATE_RESP":
+        return dispatchMutationResp(state, "updateItem", action);
+    case "MEDICAL_SERVICE_CREATE_RESP":
+        return dispatchMutationResp(state, "createService", action);
+    case "MEDICAL_SERVICE_UPDATE_RESP":
+        return dispatchMutationResp(state, "updateService", action);
     default:
       return state;
   }

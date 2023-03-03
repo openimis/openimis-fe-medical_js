@@ -1,7 +1,7 @@
 import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql } from "@openimis/fe-core";
 import _ from "lodash";
 
-const MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION = [
+const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
   "uuid",
   "code",
   "name",
@@ -9,11 +9,21 @@ const MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION = [
   "price",
   "validityFrom",
   "validityTo",
+  "level",
 ];
-const MEDICAL_SERVICES_SUMMARY_PROJECTION = [...MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION, "level"];
-const MEDICAL_ITEMS_SUMMARY_PROJECTION = [...MEDICAL_ITEM_OR_SERVICE_SUMMARY_PROJECTION, "package"];
+const MEDICAL_ITEMS_SUMMARY_PROJECTION = [
+  "uuid",
+  "code",
+  "name",
+  "type",
+  "quantity",
+  "price",
+  "validityFrom",
+  "validityTo",
+  "package",
+];
 
-const MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION = [
+const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "uuid",
   "code",
   "name",
@@ -25,11 +35,25 @@ const MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION = [
   "patientCategory",
   "validityFrom",
   "validityTo",
+  "level",
+  "category",
 ];
 
-const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [...MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION, "level", "category"];
-
-const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [...MEDICAL_ITEM_OR_SERVICE_FULL_PROJECTION, "package"];
+const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
+  "uuid",
+  "code",
+  "name",
+  "type",
+  "quantity",
+  "price",
+  "careType",
+  "uuid",
+  "frequency",
+  "patientCategory",
+  "validityFrom",
+  "validityTo",
+  "package",
+];
 
 export function formatMedicalItemOrServiceGQL(mm, ms) {
   const req = `
@@ -38,6 +62,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.name ? `name: "${formatGQLString(ms.name)}"` : ""}
     ${ms.type ? `type: "${formatGQLString(ms.type)}"` : ""}
     ${ms.price ? `price: "${ms.price}"` : ""}
+    ${ms.quantity ? `quantity: "${ms.quantity}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
     ${ms.frequency ? `frequency: "${ms.frequency}"` : ""}
     ${ms.patientCategory ? `patientCategory: ${ms.patientCategory}` : ""}
@@ -89,16 +114,15 @@ export function createMedicalService(mm, medicalService, clientMutationLabel) {
 }
 
 export function createMedicalItem(mm, medicalItem, clientMutationLabel) {
-  const mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
-  const requestedDateTime = new Date();
+  let mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
+  let requestedDateTime = new Date();
   return graphql(
-    mutation.payload,
-    ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
+    mutation.payload, ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
       requestedDateTime,
-    },
+    }
   );
 }
 

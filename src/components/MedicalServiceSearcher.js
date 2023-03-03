@@ -22,6 +22,7 @@ class MedicalServiceSearcher extends Component {
   state = {
     deleteService: null,
     reset: 0,
+    params: {},
   };
 
   constructor(props) {
@@ -36,8 +37,9 @@ class MedicalServiceSearcher extends Component {
     }
   }
 
-  fetch = (prms) => {
-    this.props.fetchMedicalServicesSummaries(this.props.modulesManager, prms);
+  fetch = (params) => {
+    this.setState({ params });
+    this.props.fetchMedicalServicesSummaries(this.props.modulesManager, params);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -84,12 +86,13 @@ class MedicalServiceSearcher extends Component {
 
   deleteService = () => {
     const service = this.state.deleteService;
-    this.setState({ deleteService: null }, (e) => {
-      this.props.deleteMedicalService(
+    this.setState({ deleteService: null }, async (e) => {
+      await this.props.deleteMedicalService(
         this.props.modulesManager,
         service,
         formatMessage(this.props.intl, "medical.service", "deleteDialog.title"),
       );
+      this.fetch(this.state.params);
     });
   };
 

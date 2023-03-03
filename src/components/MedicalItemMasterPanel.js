@@ -6,6 +6,7 @@ import { Grid } from "@material-ui/core";
 import {
   AmountInput,
   FormPanel,
+  NumberInput,
   PublishedComponent,
   TextInput,
   withHistory,
@@ -36,7 +37,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("code", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={10} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.item.name"
@@ -46,7 +47,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(name) => this.updateAttributes({ name })}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ItemTypePicker"
               withNull={true}
@@ -56,9 +57,16 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("type", p)}
             />
           </Grid>
-        </Grid>
-        <Grid container className={classes.item}>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={2} className={classes.item}>
+            <TextInput
+              module="admin"
+              label="medical.item.frequency"
+              readOnly={Boolean(edited.id) || readOnly}
+              value={edited ? edited.frequency : ""}
+              onChange={(p) => this.updateAttribute("frequency", p)}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.item.package"
@@ -67,7 +75,18 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(pkg) => this.updateAttributes({ "package": pkg })}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={2} className={classes.item}>
+            <NumberInput
+              min={0}
+              module="admin"
+              label="medical.item.quantity"
+              name="quantity"
+              readOnly={readOnly}
+              value={edited && edited.quantity ? edited.quantity : ""}
+              onChange={(quantity) => this.updateAttributes({ quantity })}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
             <AmountInput
               module="admin"
               label="medical.item.price"
@@ -90,16 +109,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("careType", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
-            <TextInput
-              module="admin"
-              label="medical.item.frequency"
-              readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.frequency : ""}
-              onChange={(p) => this.updateAttribute("frequency", p)}
-            />
-          </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item className={classes.item}>
             <PublishedComponent
               pubRef="medical.PatientCategoryPicker"
               readOnly={Boolean(edited.id) || readOnly}
