@@ -4,7 +4,8 @@ import {
   formatPageQuery,
   formatPageQueryWithCount,
   decodeId,
-  graphql
+  graphql,
+  graphqlWithVariables
 } from "@openimis/fe-core";
 import _ from "lodash";
 
@@ -301,4 +302,64 @@ export function fetchMedicalItemMutation(mm, clientMutationId) {
     ["id", "medicalItems{id}"],
   );
   return graphql(payload, "MEDICAL_ITEM");
+}
+
+export function medicalServicesValidationCheck(mm, variables) {
+  return graphqlWithVariables(
+    `
+    query ($serviceCode: String!) {
+      isValid: validateServiceCode(serviceCode: $serviceCode)
+    }
+    `,
+    variables,
+    `SERVICES_FIELDS_VALIDATION`,
+  );
+}
+
+export function medicalServicesSetValid() {
+  return (dispatch) => {
+    dispatch({ type: `SERVICES_FIELDS_VALIDATION_SET_VALID` });
+  };
+}
+
+export function medicalServicesValidationClear() {
+  return (dispatch) => {
+    dispatch({ type: `SERVICES_FIELDS_VALIDATION_CLEAR` });
+  };
+}
+
+export function medicalItemsValidationCheck(mm, variables) {
+  return graphqlWithVariables(
+    `
+    query ($itemCode: String!) {
+      isValid: validateItemCode(itemCode: $itemCode)
+    }
+    `,
+    variables,
+    `ITEMS_FIELDS_VALIDATION`,
+  );
+}
+
+export function medicalItemsSetValid() {
+  return (dispatch) => {
+    dispatch({ type: `ITEMS_FIELDS_VALIDATION_SET_VALID` });
+  };
+}
+
+export function medicalItemsValidationClear() {
+  return (dispatch) => {
+    dispatch({ type: `ITEMS_FIELDS_VALIDATION_CLEAR` });
+  };
+}
+
+export function clearServiceForm() {
+  return (dispatch) => {
+    dispatch({ type: "CLEAR_SERVICE_FORM" });
+  };
+}
+
+export function clearItemForm() {
+  return (dispatch) => {
+    dispatch({ type: "CLEAR_ITEM_FORM" });
+  };
 }
