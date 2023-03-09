@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useTranslations, Autocomplete, toISODate, useGraphqlQuery } from "@openimis/fe-core";
+import { Autocomplete, toISODate, useGraphqlQuery, useTranslations } from "@openimis/fe-core";
 
-const ItemPicker = (props) => {
+const ServicePicker = (props) => {
   const {
     onChange,
     readOnly,
     required,
-    withLabel = true,
+    withLabel,
     withPlaceholder,
     value,
     label,
@@ -22,8 +22,8 @@ const ItemPicker = (props) => {
   const { formatMessage } = useTranslations("medical");
 
   const { isLoading, data, error } = useGraphqlQuery(
-    `query ($searchString: String, $first: Int, $pricelistUuid: UUID, $date: Date) {
-      medicalItemsStr(str: $searchString, first: $first, pricelistUuid: $pricelistUuid, date: $date) {
+    `query ($searchString: String, $pricelistUuid: UUID, $date: Date) {
+      medicalServicesStr(str: $searchString, first: 20, pricelistUuid: $pricelistUuid, date: $date, packagetype_In: "S") {
         edges {
           node {
             id name code price
@@ -32,7 +32,7 @@ const ItemPicker = (props) => {
         }
       }
     }`,
-    { pricelistUuid, searchString, first: 20, date: toISODate(date) },
+    { pricelistUuid, searchString, date: toISODate(date) },
     { skip: true },
   );
 
@@ -40,16 +40,16 @@ const ItemPicker = (props) => {
     <Autocomplete
       multiple={multiple}
       required={required}
-      placeholder={placeholder ?? formatMessage("ItemPicker.placeholder")}
-      label={label ?? formatMessage("ItemPicker.label")}
+      placeholder={placeholder ?? formatMessage("ServicePicker.placeholder")}
+      label={label ?? formatMessage("ServicePicker.label")}
       error={error}
       withLabel={withLabel}
       withPlaceholder={withPlaceholder}
       readOnly={readOnly}
-      options={data?.medicalItemsStr?.edges.map((edge) => edge.node) ?? []}
+      options={data?.medicalServicesStr?.edges.map((edge) => edge.node) ?? []}
       isLoading={isLoading}
       value={value}
-      getOptionLabel={(option) => `${option.code} ${option.name} ${option.quantity ? ` (${option.quantity})` : ""}`}
+      getOptionLabel={(option) => `${option.code} ${option.name}`}
       onChange={onChange}
       filterOptions={filterOptions}
       filterSelectedOptions={filterSelectedOptions}
@@ -58,4 +58,4 @@ const ItemPicker = (props) => {
   );
 };
 
-export default ItemPicker;
+export default ServicePicker;
