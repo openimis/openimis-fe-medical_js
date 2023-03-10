@@ -58,7 +58,7 @@ function reducer(
         fetchedMedicalServices: action.meta,
         medicalServices: parseData(action.payload.data.medicalServices).map((medicalServices) => ({
           ...medicalServices,
-          medicalServicesTypes: getMedicalServicesTypes(medicalServices),
+          //medicalServicesTypes: getMedicalServicesTypes(medicalServices),
         })),
         errorMedicalServices: formatGraphQLError(action.payload),
       };
@@ -112,28 +112,6 @@ function reducer(
         ...state,
         fetchedMedicalService: false,
         errorMedicalService: formatServerError(action.payload),
-      };
-    case "MEDICAL_SERVICE_LIST_REQ":
-      return {
-        ...state,
-        fetchingMedicalServices: true,
-        fetchedMedicalServices: false,
-        errorMedicalServices: null,
-      };
-    case "MEDICAL_SERVICE_LIST_RESP":
-      const servicesL = parseData(action.payload.data.medicalServices);
-      return {
-        ...state,
-        fetchingMedicalServices: false,
-        fetchedMedicalServices: true,
-        medicalServices: !!servicesL && servicesL.length > 0 ? servicesL : null,
-        errorMedicalServices: formatGraphQLError(action.payload),
-      };
-    case "MEDICAL_SERVICE_LIST_ERR":
-      return {
-        ...state,
-        fetchedMedicalServices: false,
-        errorMedicalServices: formatServerError(action.payload),
       };
     case "MEDICAL_ITEMS_REQ":
       return {
