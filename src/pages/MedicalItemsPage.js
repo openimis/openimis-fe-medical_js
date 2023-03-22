@@ -5,7 +5,7 @@ import { injectIntl } from "react-intl";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { RIGHT_MEDICALITEMS_ADD } from "../constants";
+import { RIGHT_MEDICALITEMS_ADD, ITEMS_MODULE_NAME} from "../constants";
 import {
   formatMessage,
   formatMessageWithValues,
@@ -33,9 +33,8 @@ class MedicalItemsPage extends Component {
   };
 
   componentDidMount = () => {
-    const moduleName = "medicalItem";
     const { module } = this.props;
-    if (module !== moduleName) this.props.clearCurrentPaginationPage();
+    if (module !== ITEMS_MODULE_NAME) this.props.clearCurrentPaginationPage();
   };
 
   render() {
