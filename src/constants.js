@@ -61,3 +61,6 @@ export const PATIENT_CATEGORIES = [
   PATIENT_CATEGORY_MASK_ADULT,
   PATIENT_CATEGORY_MASK_MINOR,
 ];
+
+export const ITEMS_MODULE_NAME = "medicalItem";
+export const SERVICES_MODULE_NAME = "medicalService";

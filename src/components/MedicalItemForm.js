@@ -216,6 +216,7 @@ class MedicalItemForm extends Component {
               onEditedChanged={this.onEditedChanged}
               canSave={this.canSave}
               save={save ? this.save : null}
+              openDirty={save}
               onActionToConfirm={this.onActionToConfirm}
             />
           )}
