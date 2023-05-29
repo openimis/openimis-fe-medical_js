@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import _debounce from "lodash/debounce";
-import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
+import _debounce from "lodash/debounce";
+
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import {
   withModulesManager,
   PublishedComponent,
@@ -26,25 +28,9 @@ const styles = (theme) => ({
 });
 
 class MedicalItemFilter extends Component {
-  state = {
-    showHistory: false,
-  };
-
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.filters.showHistory !== this.props.filters.showHistory &&
-      !!this.props.filters.showHistory &&
-      this.state.showHistory !== this.props.filters.showHistory.value
-    ) {
-      this.setState((state, props) => ({
-        showHistory: props.filters.showHistory.value,
-      }));
-    }
-  }
-
   debouncedOnChangeFilter = _debounce(
     this.props.onChangeFilters,
-    this.props.modulesManager.getConf("fe-admin", "debounceTime", 800),
+    this.props.modulesManager.getConf("fe-admin", "debounceTime", 200),
   );
 
   filterValue = (k) => {
@@ -52,18 +38,20 @@ class MedicalItemFilter extends Component {
     return !!filters && !!filters[k] ? filters[k].value : null;
   };
 
-  onChangeShowHistory = () => {
-    const filters = [
+  filterTextFieldValue = (key) => {
+    const { filters } = this.props;
+    return !!filters && !!filters[key] ? filters[key].value : "";
+  };
+
+  onChangeCheckbox = (key, value) => {
+    let filters = [
       {
-        id: "showHistory",
-        value: !this.state.showHistory,
-        filter: `showHistory: ${!this.state.showHistory}`,
+        id: key,
+        value: value,
+        filter: `${key}: ${value}`,
       },
     ];
     this.props.onChangeFilters(filters);
-    this.setState((state) => ({
-      showHistory: !state.showHistory,
-    }));
   };
 
   render() {
@@ -81,7 +69,7 @@ class MedicalItemFilter extends Component {
                     module="medicalItem"
                     label="medical.item.code"
                     name="code"
-                    value={this.filterValue("code")}
+                    value={this.filterTextFieldValue("code")}
                     onChange={(v) =>
                       this.debouncedOnChangeFilter([
                         {
@@ -104,7 +92,7 @@ class MedicalItemFilter extends Component {
                     module="medicalItem"
                     label="medical.item.name"
                     name="name"
-                    value={this.filterValue("name")}
+                    value={this.filterTextFieldValue("name")}
                     onChange={(v) =>
                       this.debouncedOnChangeFilter([
                         {
@@ -126,7 +114,6 @@ class MedicalItemFilter extends Component {
                   <PublishedComponent
                     pubRef="medical.ItemTypePicker"
                     module="medical"
-                    //label="ItemType"
                     value={this.filterValue("type")}
                     withNull={true}
                     nullLabel="medical.itemType.any"
@@ -152,7 +139,7 @@ class MedicalItemFilter extends Component {
                     module="medicalItem"
                     label="medical.item.package"
                     name="package"
-                    value={this.filterValue("package")}
+                    value={this.filterTextFieldValue("package")}
                     onChange={(v) =>
                       this.debouncedOnChangeFilter([
                         {
@@ -178,8 +165,8 @@ class MedicalItemFilter extends Component {
                     control={
                       <Checkbox
                         color="primary"
-                        checked={this.state.showHistory}
-                        onChange={(e) => this.onChangeShowHistory()}
+                        checked={!!this.filterValue("showHistory")}
+                        onChange={(event) => this.onChangeCheckbox("showHistory", event.target.checked)}
                       />
                     }
                     label={formatMessage(intl, "admin", "showHistory")}
