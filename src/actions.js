@@ -193,7 +193,7 @@ export function deleteMedicalItem(mm, medicalItem, clientMutationLabel) {
 export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   const filters = [];
   if (medicalServiceId) {
-    filters.push(`uuid: "${formatGQLString(medicalServiceId)}"`);
+    filters.push(`uuid: "${formatGQLString(medicalServiceId)}", showHistory: true`);
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }
@@ -204,7 +204,7 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
 export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
   const filters = [];
   if (medicalItemId) {
-    filters.push(`uuid: "${formatGQLString(medicalItemId)}"`);
+    filters.push(`uuid: "${formatGQLString(medicalItemId)}", showHistory: true`);
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }

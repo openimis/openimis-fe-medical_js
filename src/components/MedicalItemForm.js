@@ -143,6 +143,7 @@ class MedicalItemForm extends Component {
     this.state.medicalItem.type &&
     this.state.medicalItem.price &&
     this.state.medicalItem.careType &&
+    !this.state.medicalItem.validityTo &&
     this.props.isItemValid;
 
   save = (medicalItem) => {
@@ -190,8 +191,9 @@ class MedicalItemForm extends Component {
         onlyIfDirty: !readOnly && !runningMutation,
       },
     ];
+    const shouldBeLocked = runningMutation || medicalItem?.validityTo;
     return (
-      <div className={runningMutation ? classes.lockedPage : null}>
+      <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.item", "MedicalItemOverview.title")} />
         <ProgressOrError progress={fetchingMedicalItem} error={errorMedicalItem} />
         <ErrorBoundary>
