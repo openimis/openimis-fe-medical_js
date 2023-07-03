@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
+import { withFormik} from 'formik';
+import * as yup from 'yup';
 
 import { withStyles, withTheme } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
@@ -33,13 +35,15 @@ class MedicalServiceMasterPanel extends FormPanel {
     return shouldValidate;
   }
   render() {
-    const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
+    const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError, errors, touched,
+      handleBlur, values} = this.props;
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
           <Grid item xs={2} className={classes.item}>
             <ValidatedTextInput
               action={medicalServicesValidationCheck}
+              name="serviceCode"
               clearAction={medicalServicesValidationClear}
               setValidAction={medicalServicesSetValid}
               itemQueryIdentifier="serviceCode"
@@ -55,25 +59,33 @@ class MedicalServiceMasterPanel extends FormPanel {
               label="medical.service.code"
               readOnly={readOnly}
               value={edited ? edited.code : ""}
+              error={(touched.serviceCode && Boolean(errors.serviceCode)) ? errors.serviceCode : null}
+              onBlur={handleBlur}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.service.name"
+              name="serviceName"
               required
               readOnly={readOnly}
-              value={edited && edited.name ? edited.name : ""}
+              value={values.serviceName}
               onChange={(name) => this.updateAttributes({ name })}
+              error={(touched.serviceName && Boolean(errors.serviceName)) ? errors.serviceName : null}
+              onBlur={handleBlur}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceTypePicker"
+              name="serviceType"
               withNull={false}
               required
               readOnly={Boolean(edited.id) || readOnly}
               value={edited?.type ? edited.type : " "}
+              error={(touched.serviceType && Boolean(errors.serviceType)) ? errors.serviceType : null}
+              onBlur={handleBlur}
               onChange={(p) => this.updateAttribute("type", p)}
             />
           </Grid>
@@ -83,15 +95,21 @@ class MedicalServiceMasterPanel extends FormPanel {
             <PublishedComponent
               pubRef="medical.ServiceCategoryPicker"
               withNull={false}
+              name="serviceCategory"
               readOnly={Boolean(edited.id) || readOnly}
               value={edited?.category ? edited.category : " "}
               onChange={(p) => this.updateAttribute("category", p)}
+              error={(touched.serviceCategory && Boolean(errors.serviceCategory)) ? errors.serviceCategory : null}
+              onBlur={handleBlur}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceLevelPicker"
               withNull={false}
+              name="serviceLevelPicker"
+              error={(touched.serviceLevelPicker && Boolean(errors.serviceLevelPicker)) ? errors.serviceLevelPicker : null}
+              onBlur={handleBlur}
               required
               readOnly={Boolean(edited.id) || readOnly}
               value={edited?.level ? edited.level : " "}
@@ -104,6 +122,8 @@ class MedicalServiceMasterPanel extends FormPanel {
               label="medical.service.price"
               required
               name="price"
+              error={(touched.price && Boolean(errors.price)) ? errors.price : null}
+              onBlur={handleBlur}
               readOnly={Boolean(edited.id) || readOnly}
               value={edited ? edited.price : ""}
               onChange={(p) => this.updateAttribute("price", p)}
@@ -116,6 +136,9 @@ class MedicalServiceMasterPanel extends FormPanel {
               pubRef="medical.CareTypePicker"
               required
               withNull={false}
+              name="serviceCareType"
+              error={(touched.serviceCareType && Boolean(errors.serviceCareType)) ? errors.serviceCareType : null}
+              onBlur={handleBlur}
               readOnly={Boolean(edited.id) || readOnly}
               value={edited?.careType ? edited.careType : " "}
               onChange={(p) => this.updateAttribute("careType", p)}
@@ -125,6 +148,9 @@ class MedicalServiceMasterPanel extends FormPanel {
             <TextInput
               module="admin"
               label="medical.service.frequency"
+              name="serviceFrequency"
+              error={(touched.serviceFrequency && Boolean(errors.serviceFrequency)) ? errors.serviceFrequency : null}
+              onBlur={handleBlur}
               readOnly={Boolean(edited.id) || readOnly}
               value={edited ? edited.frequency : ""}
               onChange={(p) => this.updateAttribute("frequency", p)}
@@ -133,6 +159,9 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <PublishedComponent
               pubRef="medical.PatientCategoryPicker"
+              name="servicePatientCategory"
+              error={(touched.servicePatientCategory && Boolean(errors.servicePatientCategory)) ? errors.servicePatientCategory : null}
+              onBlur={handleBlur}
               readOnly={Boolean(edited.id) || readOnly}
               value={edited ? edited.patientCategory : ""}
               onChange={(p) => this.updateAttribute("patientCategory", p)}
@@ -152,6 +181,28 @@ const mapStateToProps = (state) => ({
   savedServiceCode: state.medical?.medicalService?.code,
 });
 
+const validationSchema = yup.object({
+  serviceCode: yup.string().required('Service code is required'),
+  serviceName: yup.string().required('Service name is required'),
+  serviceType: yup.string().required('Service type is required'),
+  serviceCareType: yup.string().required('asdad')
+});
+
 export default injectIntl(
-  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(MedicalServiceMasterPanel))))),
+  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(withFormik({
+    mapPropsToValues: (props) => {return {serviceName: props.edited.name, 
+    serviceCode: props.edited.code,
+    serviceType: props.edited.type,
+    serviceCareType: props.edited.careType,
+    };},
+    validationSchema: validationSchema,
+    enableReinitialize: true,
+    validate:  values => {
+      let errors ={}
+      return errors
+    },
+    handleSubmit: (values) => {
+      console.log(values);
+    },
+  })(MedicalServiceMasterPanel)))))),
 );
