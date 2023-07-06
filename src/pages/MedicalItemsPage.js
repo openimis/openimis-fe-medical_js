@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { RIGHT_MEDICALITEMS_ADD } from "../constants";
+import { RIGHT_MEDICALITEMS_ADD, ITEMS_MODULE_NAME} from "../constants";
 import {
   formatMessage,
   formatMessageWithValues,
@@ -12,7 +13,8 @@ import {
   historyPush,
   withHistory,
   withModulesManager,
-  withTooltip
+  withTooltip,
+  clearCurrentPaginationPage,
 } from "@openimis/fe-core";
 import MedicalItemSearcher from "../components/MedicalItemSearcher";
 
@@ -28,6 +30,11 @@ class MedicalItemsPage extends Component {
 
   onAdd = () => {
     historyPush(this.props.modulesManager, this.props.history, "medical.medicalItemNew");
+  };
+
+  componentDidMount = () => {
+    const { module } = this.props;
+    if (module !== ITEMS_MODULE_NAME) this.props.clearCurrentPaginationPage();
   };
 
   render() {
@@ -52,8 +59,13 @@ class MedicalItemsPage extends Component {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  module: state.core?.savedPagination?.module,
 });
 
+const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPaginationPage }, dispatch);
+
 export default injectIntl(
-  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(MedicalItemsPage))))),
+  withModulesManager(
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(MedicalItemsPage)))),
+  ),
 );
