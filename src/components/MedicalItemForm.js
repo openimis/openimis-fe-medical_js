@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
-import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
 import { withStyles, withTheme } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
+
 import {
   coreConfirm,
   ErrorBoundary,
@@ -17,9 +19,14 @@ import {
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
-import { RIGHT_MEDICALITEMS } from "../constants";
-
-import { createMedicalItem, fetchMedicalItem, fetchMedicalItemMutation, newMedicalItem } from "../actions";
+import {
+  createMedicalItem,
+  fetchMedicalItem,
+  fetchMedicalItemMutation,
+  newMedicalItem,
+  clearItemForm,
+} from "../actions";
+import { RIGHT_MEDICALITEMS, ITEM_CODE_MAX_LENGTH } from "../constants";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 
 const styles = (theme) => ({
@@ -86,6 +93,10 @@ class MedicalItemForm extends Component {
     }
   }
 
+  componentWillUnmount = () => {
+    this.props.clearItemForm();
+  };
+
   add = () => {
     this.setState(
       (state) => ({
@@ -127,10 +138,14 @@ class MedicalItemForm extends Component {
   canSave = () =>
     this.state.medicalItem &&
     this.state.medicalItem.code &&
+    this.state.medicalItem.code.length <= ITEM_CODE_MAX_LENGTH &&
     this.state.medicalItem.name &&
     this.state.medicalItem.type &&
     !isNaN(this.state.medicalItem.price) &&
-    this.state.medicalItem.careType;
+    this.state.medicalItem.careType&&
+    this.state.medicalItem.price &&
+    this.state.medicalItem.careType &&
+    this.props.isItemValid;
 
   save = (medicalItem) => {
     this.setState(
@@ -203,6 +218,7 @@ class MedicalItemForm extends Component {
               onEditedChanged={this.onEditedChanged}
               canSave={this.canSave}
               save={save ? this.save : null}
+              openDirty={save}
               onActionToConfirm={this.onActionToConfirm}
             />
           )}
@@ -221,12 +237,14 @@ const mapStateToProps = (state) => ({
   mutation: state.medical.mutation,
   medicalItem: state.medical.medicalItem,
   confirmed: state.core.confirmed,
+  isItemValid: state.medical?.validationFields?.medicalItem?.isValid,
   state,
 });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
+      clearItemForm,
       fetchMedicalItem,
       newMedicalItem,
       createMedicalItem,
