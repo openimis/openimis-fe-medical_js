@@ -14,7 +14,6 @@ import {
   ValidatedTextInput,
   withHistory,
   withModulesManager,
-  ErrorBoundary,
   formatMessage
 } from "@openimis/fe-core";
 import { medicalServicesValidationCheck, medicalServicesValidationClear, medicalServicesSetValid } from "../actions";
