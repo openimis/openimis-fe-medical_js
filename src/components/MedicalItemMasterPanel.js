@@ -113,7 +113,7 @@ class MedicalItemMasterPanel extends FormPanel {
               label="medical.item.maximumAmount"
               name="maximumAmount"
               readOnly={readOnly}
-              value={edited && edited.maximumAmount ? edited.maximumAmount : ""}
+              value={edited?.maximumAmount ?? ""}
               onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
             />
           </Grid>
