@@ -11,6 +11,7 @@ import {
   FormPanel,
   PublishedComponent,
   TextInput,
+  NumberInput,
   ValidatedTextInput,
   withHistory,
   withModulesManager,
@@ -96,6 +97,17 @@ class MedicalServiceMasterPanel extends FormPanel {
               readOnly={Boolean(edited.id) || readOnly}
               value={edited?.level ? edited.level : " "}
               onChange={(p) => this.updateAttribute("level", p)}
+            />
+          </Grid>
+          <Grid item xs={2} className={classes.item}>
+            <NumberInput
+              min={0}
+              module="admin"
+              label="medical.service.maximumAmount"
+              name="maximumAmount"
+              readOnly={readOnly}
+              value={edited?.maximumAmount ?? ""}
+              onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>

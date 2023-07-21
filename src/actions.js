@@ -7,6 +7,7 @@ const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
   "name",
   "type",
   "price",
+  "maximumAmount",
   "validityFrom",
   "validityTo",
   "level",
@@ -17,6 +18,7 @@ const MEDICAL_ITEMS_SUMMARY_PROJECTION = [
   "name",
   "type",
   "quantity",
+  "maximumAmount",
   "price",
   "validityFrom",
   "validityTo",
@@ -29,6 +31,7 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "name",
   "type",
   "price",
+  "maximumAmount",
   "careType",
   "uuid",
   "frequency",
@@ -45,6 +48,7 @@ const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
   "name",
   "type",
   "quantity",
+  "maximumAmount",
   "price",
   "careType",
   "uuid",
@@ -63,6 +67,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.type ? `type: "${formatGQLString(ms.type)}"` : ""}
     ${ms.price ? `price: "${ms.price}"` : ""}
     ${ms.quantity ? `quantity: "${ms.quantity}"` : ""}
+    ${ms.maximumAmount ? `maximumAmount: "${ms.maximumAmount}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
     ${ms.frequency ? `frequency: "${ms.frequency}"` : ""}
     ${ms.patientCategory ? `patientCategory: ${ms.patientCategory}` : ""}
