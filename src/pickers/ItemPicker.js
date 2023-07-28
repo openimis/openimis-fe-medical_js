@@ -47,6 +47,7 @@ const ItemPicker = (props) => {
       withPlaceholder={withPlaceholder}
       readOnly={readOnly}
       options={data?.medicalItemsStr?.edges.map((edge) => edge.node) ?? []}
+      getOptionSelected={(option, value) => option.id === value?.id}
       isLoading={isLoading}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.name} ${option.quantity ? ` (${option.quantity})` : ""}`}
