@@ -48,6 +48,7 @@ const ServicePicker = (props) => {
       readOnly={readOnly}
       options={data?.medicalServicesStr?.edges.map((edge) => edge.node) ?? []}
       isLoading={isLoading}
+      getOptionSelected={(option, value) => option.id === value?.id}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.name}`}
       onChange={onChange}
