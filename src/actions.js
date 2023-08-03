@@ -1,10 +1,12 @@
-import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql, graphqlWithVariables } from "@openimis/fe-core";
+
+import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql, graphqlWithVariables, decodeId } from "@openimis/fe-core";
 import _ from "lodash";
 
 const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
   "uuid",
   "code",
   "name",
+  "packagetype",
   "type",
   "price",
   "maximumAmount",
@@ -29,6 +31,8 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "uuid",
   "code",
   "name",
+  "packagetype",
+  "manualPrice",
   "type",
   "price",
   "maximumAmount",
@@ -40,6 +44,7 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "validityTo",
   "level",
   "category",
+
 ];
 
 const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
@@ -59,13 +64,38 @@ const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
   "package",
 ];
 
+function formatGQLBoolean(value){
+  if(value==true){
+    return "1";
+  }
+  return "0";
+}
+
+export function formatDetail(type, detail) {
+  return `{
+    ${detail.id !== undefined && detail.id !== null ? `id: ${detail.id}` : ""}
+    ${type}Id: ${decodeId(detail[type].id)}
+    ${detail.priceAsked !== null ? `priceAsked: "${_.round(detail.priceAsked, 2).toFixed(2)}"` : ""}
+    ${detail.qtyProvided !== null ? `qtyProvided: "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : ""}
+    status: 1
+  }`;
+}
+
+export function formatDetails(type, details) {
+  if (!details) return "";
+  let dets = details.filter((d) => !!d[type]);
+  return `${type}s: [
+      ${dets.map((d) => formatDetail(type, d)).join("\n")}
+    ]`;
+}
+
 export function formatMedicalItemOrServiceGQL(mm, ms) {
   const req = `
     ${ms.uuid ? `uuid: "${ms.uuid}"` : ""}
     ${ms.code ? `code: "${ms.code}"` : ""}
     ${ms.name ? `name: "${formatGQLString(ms.name)}"` : ""}
     ${ms.type ? `type: "${formatGQLString(ms.type)}"` : ""}
-    ${ms.price ? `price: "${ms.price}"` : ""}
+    ${!isNaN(ms.price) ? `price: "${ms.price}"` : ""}
     ${ms.quantity ? `quantity: "${ms.quantity}"` : ""}
     ${ms.maximumAmount ? `maximumAmount: "${ms.maximumAmount}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
@@ -74,6 +104,10 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.category && ms.category !== " " ? `category: "${formatGQLString(ms.category)}"` : ""}
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
+    ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
+    ${ms.packagetype ?`manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : "" }
+    ${formatDetails("service", ms.serviceserviceSet)}
+    ${formatDetails("item", ms.servicesLinked)}
   `;
   return req;
 }
@@ -202,8 +236,25 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }
-  const payload = formatPageQuery("medicalServices", filters, MEDICAL_SERVICE_FULL_PROJECTION(mm));
+
+  let projections = MEDICAL_SERVICE_FULL_PROJECTION(mm)
+  projections.push(
+    "serviceserviceSet{" +
+      "id service {id code name } qtyProvided, priceAsked, scpDate" +
+      "}",
+    "servicesLinked{" +
+      "id item {id code name } qtyProvided, priceAsked, pcpDate" +
+      "}",
+  );
+
+  const payload = formatPageQuery("medicalServices", filters, projections);
   return graphql(payload, "MEDICAL_SERVICE_OVERVIEW");
+}
+
+export function fetchMedicalServices(mm) {
+  const filters = [];
+  const payload = formatPageQuery("medicalServices", filters, MEDICAL_SERVICE_FULL_PROJECTION(mm));
+  return graphql(payload, "MEDICAL_SERVICE_LIST");
 }
 
 export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
@@ -219,7 +270,11 @@ export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
 
 export function newMedicalService() {
   return (dispatch) => {
-    dispatch({ type: "MEDICAL_SERVICE_NEW" });
+    dispatch(
+      { 
+        type: "MEDICAL_SERVICE_NEW",
+        typepp: "MEDICAL_SERVICE_NEW",
+     });
   };
 }
 

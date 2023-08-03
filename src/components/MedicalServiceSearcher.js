@@ -69,6 +69,7 @@ class MedicalServiceSearcher extends Component {
     const h = [
       "medical.service.code",
       "medical.service.name",
+      "medical.service.packagetype",
       "medical.service.type",
       "medical.service.level",
       "medical.service.price",
@@ -81,6 +82,7 @@ class MedicalServiceSearcher extends Component {
   sorts = () => [
     ["code", true],
     ["name", true],
+    ["packagetype", true],
     ["type", true],
     ["level", true],
     ["price", true],
@@ -91,7 +93,7 @@ class MedicalServiceSearcher extends Component {
   deleteService = () => {
     const service = this.state.deleteService;
     this.setState({ deleteService: null }, async (e) => {
-      await this.props.deleteMedicalService(
+       this.props.deleteMedicalService(
         this.props.modulesManager,
         service,
         formatMessage(this.props.intl, "medical.service", "deleteDialog.title"),
@@ -118,6 +120,7 @@ class MedicalServiceSearcher extends Component {
     const formatters = [
       (ms) => ms.code,
       (ms) => ms.name,
+      (ms) => ms.packagetype,
       (ms) => ms.type,
       (ms) => ms.level,
       (ms) => ms.price,

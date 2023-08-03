@@ -23,35 +23,11 @@ const ServicePicker = (props) => {
 
   const { isLoading, data, error } = useGraphqlQuery(
     `query ($searchString: String, $pricelistUuid: UUID, $date: Date) {
-      medicalServicesStr(str: $searchString, first: 20, pricelistUuid: $pricelistUuid, date: $date) {
+      medicalServicesStr(str: $searchString, first: 20, pricelistUuid: $pricelistUuid, date: $date, packagetype_In: "S") {
         edges {
           node {
-<<<<<<< HEAD
-            id name code price packagetype
-=======
-            id name code price maximumAmount
->>>>>>> ca219aa960aa1d6d8b3f835a3384c232614f4d2b
+            id name code price
             ${extraFragment ?? ""}
-            serviceserviceSet{
-              service{
-                id
-                code
-                name
-              }
-              priceAsked
-              qtyProvided
-              scpDate
-            }
-            servicesLinked{
-              item{
-                id
-                code
-                name
-              }
-              priceAsked
-              qtyProvided
-              pcpDate
-            }
           }
         }
       }
@@ -72,7 +48,6 @@ const ServicePicker = (props) => {
       readOnly={readOnly}
       options={data?.medicalServicesStr?.edges.map((edge) => edge.node) ?? []}
       isLoading={isLoading}
-      getOptionSelected={(option, value) => option.id === value?.id}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.name}`}
       onChange={onChange}

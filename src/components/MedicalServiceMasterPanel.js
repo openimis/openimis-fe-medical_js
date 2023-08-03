@@ -28,6 +28,46 @@ const styles = (theme) => ({
 });
 
 class MedicalServiceMasterPanel extends FormPanel {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      readOnlyPrice : props.medicalService.packagetype=="S"? 0 : !props.medicalService.manualPrice,
+    }
+
+    if(this.props.edited){
+      if(this.props.edited.packagetype !=null && this.props.edited.packagetype!="S"){
+        this.showManual = true;
+      }
+    }
+  }
+
+  showCheckboxManual= (pSelection) => {
+    if(pSelection!=null && pSelection!="S"){
+      this.showManual = true;
+      this.setState(
+        {
+          readOnlyPrice : 1
+        }
+      );
+    }else{
+      this.showManual = false;
+      this.setState(
+        {
+          readOnlyPrice : 0
+        }
+      );
+    }
+  };
+
+  changeManual =  () => {
+    this.setState(
+      {
+        readOnlyPrice : !this.state.readOnlyPrice,
+      }
+    );
+  };
+
   shouldValidate = (inputValue) => {
     const { savedServiceCode } = this.props;
     const shouldValidate = inputValue !== savedServiceCode;
@@ -58,7 +98,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               value={edited ? edited.code : ""}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.service.name"
@@ -68,7 +108,20 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(name) => this.updateAttributes({ name })}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
+            <PublishedComponent
+              pubRef="medical.ServiceTypePPPicker"
+              withNull={true}
+              required
+              readOnly={Boolean(edited.id) || readOnly}
+              value={edited ? edited.packagetype : ""}
+              onChange={(p) => {
+                this.updateAttribute("packagetype", p);
+                this.showCheckboxManual(p);
+              }}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceTypePicker"
               withNull={false}
@@ -80,7 +133,7 @@ class MedicalServiceMasterPanel extends FormPanel {
           </Grid>
         </Grid>
         <Grid container className={classes.item}>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceCategoryPicker"
               withNull={false}
@@ -89,7 +142,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("category", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceLevelPicker"
               withNull={false}
@@ -113,12 +166,15 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <AmountInput
               module="admin"
-              label="medical.service.price"
-              required
+              label={this.props.medicalService.packagetype=='F' ? `edit.services.ceiling` : `medical.service.price`}
+              required={!this.state.readOnlyPrice}
               name="price"
-              readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.price : ""}
-              onChange={(p) => this.updateAttribute("price", p)}
+              readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice }
+              value={edited ? edited.price : this.props.priceTotal}
+              onChange={(p) => {
+                this.updateAttribute("price", p);
+              }
+              }
             />
           </Grid>
         </Grid>
@@ -158,6 +214,7 @@ class MedicalServiceMasterPanel extends FormPanel {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  state,
   isServiceValid: state.medical?.validationFields?.medicalService?.isValid,
   isServiceValidating: state.medical?.validationFields?.medicalService?.isValidating,
   serviceValidationError: state.medical?.validationFields?.medicalService?.validationError,

@@ -19,6 +19,9 @@ import {
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
+import MedicalServiceChildPanel from "./MedicalServiceChildPanel";
+import MedicalItemChildPanel from "./MedicalItemChildPanel";
+
 import {
   createMedicalService,
   fetchMedicalService,
@@ -33,20 +36,44 @@ const styles = (theme) => ({
   lockedPage: theme.page.locked,
 });
 
+class MedicalServicesPanel extends Component {
+  render() {
+    return <MedicalServiceChildPanel {...this.props} type="service" picker="medical.ServiceFilterWithoutHFPicker" />;
+  }
+}
+
+class MedicalItemsPanel extends Component {
+  render() {
+    return <MedicalItemChildPanel {...this.props} type="item" picker="medical.ItemPicker" />;
+  }
+}
+
 class MedicalServiceForm extends Component {
-  state = {
-    lockNew: false,
-    reset: 0,
-    medicalService: this.newMedicalService(),
-    newMedicalService: true,
-    confirmedAction: null,
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      lockNew: false,
+      reset: 0,
+      medicalService: this.newMedicalService(),
+      newMedicalService: true,
+      confirmedAction: null,
+      totalPrice: 0,
+      sumItems:0,
+      sumServices:0,
+      manualPrice: false
+    };
+  }
+
+  getTotalPrice = () => {
+    return this.state.totalPrice;
+  }
 
   newMedicalService() {
     return { patientCategory: 15 };
   }
 
   componentDidMount() {
+    this.props.fetchMedicalServices(this.props.modulesManager);
     if (this.props.medicalServiceId) {
       this.setState(
         (state, props) => ({ medicalServiceId: props.medicalServiceId }),
@@ -134,19 +161,56 @@ class MedicalServiceForm extends Component {
     }
   };
 
-  canSave = () =>
-    this.state.medicalService &&
+  priceCalcul = () => {
+
+    let sumItem = 0 ;
+    let sumService = 0 ;
+    if(this.state.medicalService.servicesLinked != undefined){
+      this.state.medicalService.servicesLinked.forEach((item) => {
+        if(item.priceAsked != undefined){
+          sumItem += parseFloat(item.priceAsked)*parseFloat(item.qtyProvided);
+        }
+      });
+    }
+
+    if(this.state.medicalService.serviceserviceSet != undefined){
+      this.state.medicalService.serviceserviceSet.forEach((service) => {
+        if(service.priceAsked != undefined){
+          sumService += parseFloat(service.priceAsked)*parseFloat(service.qtyProvided);
+        }
+      });      
+    }
+    this.state.totalPrice = sumItem+sumService;
+
+    if(this.state.medicalService.packagetype!="S" && this.state.medicalService.packagetype!=null){
+      if(this.state.medicalService.manualPrice != true){
+        this.state.medicalService.price = this.state.totalPrice;
+      }
+    }
+  }
+
+  canSave = () => {
+    this.priceCalcul();
+    console.log(this.state);
+
+    return this.state.medicalService &&
     this.state.medicalService.code &&
     this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
     this.state.medicalService.name &&
     this.state.medicalService.type &&
+    !isNaN(this.state.medicalService.price) &&
     this.state.medicalService.level &&
+    this.state.medicalService.packagetype &&
     this.state.medicalService.price &&
     this.state.medicalService.careType &&
     !this.state.medicalService.validityTo &&
     this.props.isServiceValid;
 
+  }
+
   save = (medicalService) => {
+    console.log("Save :");
+    console.log(medicalService);
     this.setState(
       { lockNew: !medicalService.id }, // avoid duplicates
       (e) => this.props.save(medicalService),
@@ -154,6 +218,7 @@ class MedicalServiceForm extends Component {
   };
 
   onEditedChanged = (medicalService) => {
+    this.priceCalcul();
     this.setState({ medicalService, newMedicalService: false });
   };
 
@@ -208,8 +273,10 @@ class MedicalServiceForm extends Component {
               actions={actions}
               overview={overview}
               HeadPanel={MedicalServiceMasterPanel}
+              Panels={[MedicalServicesPanel,MedicalItemsPanel]}
               medicalService={medicalService}
               onEditedChanged={this.onEditedChanged}
+              priceTotal={this.state.totalPrice}
               canSave={this.canSave}
               save={save ? this.save : null}
               openDirty={save}
@@ -227,6 +294,7 @@ const mapStateToProps = (state) => ({
   fetchingMedicalService: state.medical.fetchingMedicalService,
   errorMedicalService: state.medical.errorMedicalService,
   fetchedMedicalService: state.medical.fetchedMedicalService,
+  fetchedMedicalServices: state.medical.fetchedMedicalServices,
   submittingMutation: state.medical.submittingMutation,
   mutation: state.medical.mutation,
   medicalService: state.medical.medicalService,
@@ -240,6 +308,7 @@ const mapDispatchToProps = (dispatch) =>
     {
       clearServiceForm,
       fetchMedicalService,
+      fetchMedicalServices,
       newMedicalService,
       createMedicalService,
       fetchMedicalServiceMutation,
