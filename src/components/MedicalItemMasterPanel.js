@@ -1,17 +1,22 @@
 import React from "react";
-import { withStyles, withTheme } from "@material-ui/core/styles";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
+
+import { withStyles, withTheme } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
+
 import {
   AmountInput,
   FormPanel,
   NumberInput,
   PublishedComponent,
   TextInput,
+  ValidatedTextInput,
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
+import { medicalItemsValidationCheck, medicalItemsValidationClear, medicalItemsSetValid } from "../actions";
+import { ITEM_CODE_MAX_LENGTH } from "../constants";
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -22,19 +27,34 @@ const styles = (theme) => ({
 });
 
 class MedicalItemMasterPanel extends FormPanel {
+  shouldValidate = (inputValue) => {
+    const { savedItemCode } = this.props;
+    const shouldValidate = inputValue !== savedItemCode;
+    return shouldValidate;
+  }
   render() {
-    const { classes, edited, readOnly } = this.props;
+    const { classes, edited, readOnly, isItemValid, isItemValidating, itemValidationError } = this.props;
     return (
       <>
         <Grid container className={classes.item}>
           <Grid item xs={2} className={classes.item}>
-            <TextInput
+            <ValidatedTextInput
+              action={medicalItemsValidationCheck}
+              clearAction={medicalItemsValidationClear}
+              setValidAction={medicalItemsSetValid}
+              itemQueryIdentifier="itemCode"
+              isValid={isItemValid}
+              isValidating={isItemValidating}
+              validationError={itemValidationError}
+              shouldValidate={this.shouldValidate}
+              codeTakenLabel="medical.codeTaken"
+              onChange={(code) => this.updateAttribute("code", code)}
+              inputProps={{ maxLength: ITEM_CODE_MAX_LENGTH }}
+              required={true}
               module="admin"
-              required
               label="medical.item.code"
-              readOnly={Boolean(edited.id) || readOnly}
+              readOnly={readOnly}
               value={edited ? edited.code : ""}
-              onChange={(p) => this.updateAttribute("code", p)}
             />
           </Grid>
           <Grid item xs={10} className={classes.item}>
@@ -86,6 +106,17 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(quantity) => this.updateAttributes({ quantity })}
             />
           </Grid>
+          <Grid item xs={2} className={classes.item}>
+            <NumberInput
+              min={0}
+              module="admin"
+              label="medical.item.maximumAmount"
+              name="maximumAmount"
+              readOnly={readOnly}
+              value={edited?.maximumAmount ?? ""}
+              onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
+            />
+          </Grid>
           <Grid item xs={3} className={classes.item}>
             <AmountInput
               module="admin"
@@ -125,6 +156,10 @@ class MedicalItemMasterPanel extends FormPanel {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  isItemValid: state.medical?.validationFields?.medicalItem?.isValid,
+  isItemValidating: state.medical?.validationFields?.medicalItem?.isValidating,
+  itemValidationError: state.medical?.validationFields?.medicalItem?.validationError,
+  savedItemCode: state.medical?.medicalItem?.code,
 });
 
 export default injectIntl(

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
-import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
 import { withStyles, withTheme } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
+
 import {
   coreConfirm,
   Helmet,
@@ -17,16 +19,17 @@ import {
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
-import { RIGHT_MEDICALSERVICES } from "../constants";
 import MedicalServiceChildPanel from "./MedicalServiceChildPanel";
 import MedicalItemChildPanel from "./MedicalItemChildPanel";
 
-import { 
+import {
   createMedicalService,
   fetchMedicalService,
-  fetchMedicalServices,
   fetchMedicalServiceMutation,
-  newMedicalService } from "../actions";
+  newMedicalService,
+  clearServiceForm,
+} from "../actions";
+import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 
 const styles = (theme) => ({
@@ -116,6 +119,10 @@ class MedicalServiceForm extends Component {
     }
   }
 
+  componentWillUnmount = () => {
+    this.props.clearServiceForm();
+  };
+
   add = () => {
     this.setState(
       (state) => ({
@@ -188,12 +195,16 @@ class MedicalServiceForm extends Component {
 
     return this.state.medicalService &&
     this.state.medicalService.code &&
+    this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
     this.state.medicalService.name &&
     this.state.medicalService.type &&
     !isNaN(this.state.medicalService.price) &&
     this.state.medicalService.level &&
     this.state.medicalService.packagetype &&
-    this.state.medicalService.careType;
+    this.state.medicalService.price &&
+    this.state.medicalService.careType &&
+    !this.state.medicalService.validityTo &&
+    this.props.isServiceValid;
 
   }
 
@@ -238,8 +249,9 @@ class MedicalServiceForm extends Component {
         onlyIfDirty: !readOnly,
       },
     ];
+    const shouldBeLocked = lockNew || medicalService?.validityTo;
     return (
-      <div className={lockNew ? classes.lockedPage : null}>
+      <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "MedicalServiceOverview.title")} />
         <ProgressOrError progress={fetchingMedicalService} error={errorMedicalService} />
         <ErrorBoundary>
@@ -267,6 +279,7 @@ class MedicalServiceForm extends Component {
               priceTotal={this.state.totalPrice}
               canSave={this.canSave}
               save={save ? this.save : null}
+              openDirty={save}
               onActionToConfirm={this.onActionToConfirm}
             />
           )}
@@ -286,12 +299,14 @@ const mapStateToProps = (state) => ({
   mutation: state.medical.mutation,
   medicalService: state.medical.medicalService,
   confirmed: state.core.confirmed,
+  isServiceValid: state.medical?.validationFields?.medicalService?.isValid,
   state,
 });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
+      clearServiceForm,
       fetchMedicalService,
       fetchMedicalServices,
       newMedicalService,
