@@ -21,7 +21,9 @@ class PatientCategoryPicker extends Component {
     this.setState((prevState) => {
       let newCategories = { ...prevState.categories };
       newCategories[cat] = !this.state.categories[cat];
-      onChange(PATIENT_CATEGORIES.filter((c) => newCategories[c]).reduce((a, b) => a | b));
+
+      onChange(PATIENT_CATEGORIES.filter((c) => newCategories[c]).reduce((a, b) => a | b, 0));
+
       return {
         ...prevState,
         categories: newCategories,
@@ -30,7 +32,7 @@ class PatientCategoryPicker extends Component {
   };
 
   render() {
-    const { intl } = this.props;
+    const { intl, readOnly } = this.props;
     return (
       <>
         {PATIENT_CATEGORIES.map((cat) => (
@@ -43,6 +45,7 @@ class PatientCategoryPicker extends Component {
                 name={`patientCategory${cat}`}
                 checked={this.state.categories[cat]}
                 onChange={(e) => this._onChangeCategory(cat)}
+                disabled={readOnly}
               />
             }
             label={formatMessage(intl, "medical", "patientCategory." + cat)}
