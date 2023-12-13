@@ -28,6 +28,7 @@ import {
 } from "../actions";
 import { RIGHT_MEDICALITEMS, ITEM_CODE_MAX_LENGTH } from "../constants";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
+import { validateCategories } from "../utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -143,6 +144,7 @@ class MedicalItemForm extends Component {
     this.state.medicalItem.type &&
     this.state.medicalItem.price &&
     this.state.medicalItem.careType &&
+    validateCategories(this.state.medicalItem.patientCategory) &&
     !this.state.medicalItem.validityTo &&
     this.props.isItemValid;
 
