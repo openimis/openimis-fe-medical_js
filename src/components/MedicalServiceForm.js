@@ -28,6 +28,7 @@ import {
 } from "../actions";
 import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
+import { validateCategories } from "../utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -143,6 +144,7 @@ class MedicalServiceForm extends Component {
     this.state.medicalService.level &&
     this.state.medicalService.price &&
     this.state.medicalService.careType &&
+    validateCategories(this.state.medicalService.patientCategory) &&
     !this.state.medicalService.validityTo &&
     this.props.isServiceValid;
 

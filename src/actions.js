@@ -70,7 +70,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.maximumAmount ? `maximumAmount: "${ms.maximumAmount}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
     ${ms.frequency ? `frequency: "${ms.frequency}"` : ""}
-    ${ms.patientCategory ? `patientCategory: ${ms.patientCategory}` : ""}
+    ${`patientCategory: ${ms.patientCategory}`}
     ${ms.category && ms.category !== " " ? `category: "${formatGQLString(ms.category)}"` : ""}
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
