@@ -231,18 +231,18 @@ export function newMedicalItem() {
 
 export function fetchMedicalServiceMutation(mm, clientMutationId) {
   const payload = formatPageQuery(
-    "mutationLogs",
+    "medicalServices",
     [`clientMutationId:"${clientMutationId}"`],
-    ["id", "medicalServices{id}"],
+    ["uuid"],
   );
   return graphql(payload, "MEDICAL_SERVICE");
 }
 
 export function fetchMedicalItemMutation(mm, clientMutationId) {
   const payload = formatPageQuery(
-    "mutationLogs",
+    "medicalItems",
     [`clientMutationId:"${clientMutationId}"`],
-    ["id", "medicalItems{id}"],
+    ["uuid"],
   );
   return graphql(payload, "MEDICAL_ITEM");
 }
