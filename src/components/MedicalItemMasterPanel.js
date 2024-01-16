@@ -106,6 +106,17 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(quantity) => this.updateAttributes({ quantity })}
             />
           </Grid>
+          <Grid item xs={2} className={classes.item}>
+            <NumberInput
+              min={0}
+              module="admin"
+              label="medical.item.maximumAmount"
+              name="maximumAmount"
+              readOnly={readOnly}
+              value={edited?.maximumAmount ?? ""}
+              onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
+            />
+          </Grid>
           <Grid item xs={3} className={classes.item}>
             <AmountInput
               module="admin"

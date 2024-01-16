@@ -28,6 +28,7 @@ import {
 } from "../actions";
 import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
+import { validateCategories } from "../utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -143,6 +144,8 @@ class MedicalServiceForm extends Component {
     this.state.medicalService.level &&
     this.state.medicalService.price &&
     this.state.medicalService.careType &&
+    validateCategories(this.state.medicalService.patientCategory) &&
+    !this.state.medicalService.validityTo &&
     this.props.isServiceValid;
 
   save = (medicalService) => {
@@ -183,8 +186,9 @@ class MedicalServiceForm extends Component {
         onlyIfDirty: !readOnly,
       },
     ];
+    const shouldBeLocked = lockNew || medicalService?.validityTo;
     return (
-      <div className={lockNew ? classes.lockedPage : null}>
+      <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "MedicalServiceOverview.title")} />
         <ProgressOrError progress={fetchingMedicalService} error={errorMedicalService} />
         <ErrorBoundary>

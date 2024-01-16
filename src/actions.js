@@ -7,6 +7,7 @@ const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
   "name",
   "type",
   "price",
+  "maximumAmount",
   "validityFrom",
   "validityTo",
   "level",
@@ -17,6 +18,7 @@ const MEDICAL_ITEMS_SUMMARY_PROJECTION = [
   "name",
   "type",
   "quantity",
+  "maximumAmount",
   "price",
   "validityFrom",
   "validityTo",
@@ -29,6 +31,7 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "name",
   "type",
   "price",
+  "maximumAmount",
   "careType",
   "uuid",
   "frequency",
@@ -45,6 +48,7 @@ const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
   "name",
   "type",
   "quantity",
+  "maximumAmount",
   "price",
   "careType",
   "uuid",
@@ -63,9 +67,10 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.type ? `type: "${formatGQLString(ms.type)}"` : ""}
     ${ms.price ? `price: "${ms.price}"` : ""}
     ${ms.quantity ? `quantity: "${ms.quantity}"` : ""}
+    ${ms.maximumAmount ? `maximumAmount: "${ms.maximumAmount}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
     ${ms.frequency ? `frequency: "${ms.frequency}"` : ""}
-    ${ms.patientCategory ? `patientCategory: ${ms.patientCategory}` : ""}
+    ${`patientCategory: ${ms.patientCategory}`}
     ${ms.category && ms.category !== " " ? `category: "${formatGQLString(ms.category)}"` : ""}
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
@@ -193,7 +198,7 @@ export function deleteMedicalItem(mm, medicalItem, clientMutationLabel) {
 export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   const filters = [];
   if (medicalServiceId) {
-    filters.push(`uuid: "${formatGQLString(medicalServiceId)}"`);
+    filters.push(`uuid: "${formatGQLString(medicalServiceId)}", showHistory: true`);
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }
@@ -204,7 +209,7 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
 export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
   const filters = [];
   if (medicalItemId) {
-    filters.push(`uuid: "${formatGQLString(medicalItemId)}"`);
+    filters.push(`uuid: "${formatGQLString(medicalItemId)}", showHistory: true`);
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }

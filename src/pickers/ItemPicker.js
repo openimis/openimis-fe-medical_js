@@ -26,7 +26,7 @@ const ItemPicker = (props) => {
       medicalItemsStr(str: $searchString, first: $first, pricelistUuid: $pricelistUuid, date: $date) {
         edges {
           node {
-            id name code price quantity
+            id name code price quantity maximumAmount
             ${extraFragment ?? ""}
           }
         }
@@ -47,6 +47,7 @@ const ItemPicker = (props) => {
       withPlaceholder={withPlaceholder}
       readOnly={readOnly}
       options={data?.medicalItemsStr?.edges.map((edge) => edge.node) ?? []}
+      getOptionSelected={(option, value) => option.id === value?.id}
       isLoading={isLoading}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.name} ${option.quantity ? ` (${option.quantity})` : ""}`}

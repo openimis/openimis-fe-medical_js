@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
-import { formatMessage } from "@openimis/fe-core";
-import { PATIENT_CATEGORIES } from "../constants";
 import { injectIntl } from "react-intl";
 
-class PatientCategoryPicker extends Component {
-  state = { categories: this._patientCategoriesToState() };
+import { Checkbox, FormControlLabel, Typography } from "@material-ui/core";
 
-  _patientCategoriesToState() {
+import { formatMessage } from "@openimis/fe-core";
+import { PATIENT_CATEGORIES, GENDER_CATEGORIES, AGE_CATEGORIES } from "../constants";
+
+class PatientCategoryPicker extends Component {
+  state = { categories: this.patientCategoriesToState() };
+
+  patientCategoriesToState() {
     let { value } = this.props;
     let result = {};
     PATIENT_CATEGORIES.forEach((cat) => {
@@ -16,12 +18,14 @@ class PatientCategoryPicker extends Component {
     return result;
   }
 
-  _onChangeCategory = (cat) => {
+  onChangeCategory = (cat) => {
     let { onChange } = this.props;
     this.setState((prevState) => {
       let newCategories = { ...prevState.categories };
-      newCategories[cat] = !this.state.categories[cat];
-      onChange(PATIENT_CATEGORIES.filter((c) => newCategories[c]).reduce((a, b) => a | b));
+      newCategories[cat] = !prevState.categories[cat];
+
+      onChange(PATIENT_CATEGORIES.filter((c) => newCategories[c]).reduce((a, b) => a | b, 0));
+
       return {
         ...prevState,
         categories: newCategories,
@@ -29,25 +33,35 @@ class PatientCategoryPicker extends Component {
     });
   };
 
+  renderCategorySection = (categories) => {
+    const { intl, readOnly } = this.props;
+    return categories.map((cat) => (
+      <FormControlLabel
+        key={"lblPatientCategory_" + cat}
+        control={
+          <Checkbox
+            color="primary"
+            key={"patientCategory_" + cat}
+            name={`patientCategory${cat}`}
+            checked={this.state.categories[cat]}
+            onChange={(e) => this.onChangeCategory(cat)}
+            disabled={readOnly}
+          />
+        }
+        label={formatMessage(intl, "medical", "patientCategory." + cat)}
+      />
+    ));
+  };
+
   render() {
     const { intl } = this.props;
     return (
       <>
-        {PATIENT_CATEGORIES.map((cat) => (
-          <FormControlLabel
-            key={"lblPatientCategory_" + cat}
-            control={
-              <Checkbox
-                color="primary"
-                key={"patientCategory_" + cat}
-                name={`patientCategory${cat}`}
-                checked={this.state.categories[cat]}
-                onChange={(e) => this._onChangeCategory(cat)}
-              />
-            }
-            label={formatMessage(intl, "medical", "patientCategory." + cat)}
-          />
-        ))}
+        <Typography variant="subtitle1">{formatMessage(intl, "medical", "genderCategory")}</Typography>
+        <div>{this.renderCategorySection(GENDER_CATEGORIES)}</div>
+
+        <Typography variant="subtitle1">{formatMessage(intl, "medical", "ageCategory")}</Typography>
+        <div>{this.renderCategorySection(AGE_CATEGORIES)}</div>
       </>
     );
   }
