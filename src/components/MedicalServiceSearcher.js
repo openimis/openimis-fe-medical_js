@@ -65,27 +65,27 @@ class MedicalServiceSearcher extends Component {
     return prms;
   };
 
-  headers = () => {
+  headers = (filters) => {
     const h = [
       "medical.service.code",
       "medical.service.name",
       "medical.service.type",
       "medical.service.level",
       "medical.service.price",
-      "medical.service.validFrom",
-      "medical.service.validTo",
+      filters?.showHistory?.value ? "medical.service.validFrom" : null,
+      filters?.showHistory?.value ? "medical.service.validTo" : null,
     ];
     return h;
   };
 
-  sorts = () => [
+  sorts = (filters) => [
     ["code", true],
     ["name", true],
     ["type", true],
     ["level", true],
     ["price", true],
-    ["validityFrom", false],
-    ["validityTo", false],
+    filters?.showHistory?.value ? ["validityFrom", false] : null,
+    filters?.showHistory?.value ? ["validityTo", false] : null,
   ];
 
   deleteService = () => {
@@ -114,15 +114,21 @@ class MedicalServiceSearcher extends Component {
     );
   };
 
-  itemFormatters = () => {
+  itemFormatters = (filters) => {
     const formatters = [
       (ms) => ms.code,
       (ms) => ms.name,
       (ms) => ms.type,
       (ms) => ms.level,
       (ms) => ms.price,
-      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
-      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),
+      (ms) =>
+        filters?.showHistory?.value
+          ? formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom)
+          : null,
+      (ms) =>
+        filters?.showHistory?.value
+          ? formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo)
+          : null,
       (ms) => (
         <Tooltip title={formatMessage(this.props.intl, "medical.service", "openNewTab")}>
           <IconButton onClick={(e) => this.props.onDoubleClick(ms, true)}>
