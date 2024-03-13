@@ -100,7 +100,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.maximumAmount ? `maximumAmount: "${ms.maximumAmount}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
     ${ms.frequency ? `frequency: "${ms.frequency}"` : ""}
-    ${ms.patientCategory ? `patientCategory: ${ms.patientCategory}` : ""}
+    ${`patientCategory: ${ms.patientCategory}`}
     ${ms.category && ms.category !== " " ? `category: "${formatGQLString(ms.category)}"` : ""}
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
@@ -286,18 +286,18 @@ export function newMedicalItem() {
 
 export function fetchMedicalServiceMutation(mm, clientMutationId) {
   const payload = formatPageQuery(
-    "mutationLogs",
+    "medicalServices",
     [`clientMutationId:"${clientMutationId}"`],
-    ["id", "medicalServices{id}"],
+    ["uuid"],
   );
   return graphql(payload, "MEDICAL_SERVICE");
 }
 
 export function fetchMedicalItemMutation(mm, clientMutationId) {
   const payload = formatPageQuery(
-    "mutationLogs",
+    "medicalItems",
     [`clientMutationId:"${clientMutationId}"`],
-    ["id", "medicalItems{id}"],
+    ["uuid"],
   );
   return graphql(payload, "MEDICAL_ITEM");
 }

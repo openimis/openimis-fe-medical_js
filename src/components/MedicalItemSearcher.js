@@ -69,7 +69,7 @@ class MedicalItemSearcher extends Component {
     return prms;
   };
 
-  headers = () => {
+  headers = (filters) => {
     const h = [
       "medical.item.code",
       "medical.item.name",
@@ -77,21 +77,21 @@ class MedicalItemSearcher extends Component {
       "medical.item.package",
       "medical.item.quantity",
       "medical.item.price",
-      "medical.item.validFrom",
-      "medical.item.validTo",
+      filters?.showHistory?.value ? "medical.item.validFrom" : null,
+      filters?.showHistory?.value ? "medical.item.validTo" : null,
     ];
     return h;
   };
 
-  sorts = () => [
+  sorts = (filters) => [
     ["code", true],
     ["name", true],
     ["type", true],
     ["package", true],
     ["quantity", false],
     ["price", true],
-    ["validityFrom", false],
-    ["validityTo", false],
+    filters?.showHistory?.value ? ["validityFrom", false] : null,
+    filters?.showHistory?.value ? ["validityTo", false] : null,
   ];
 
   deleteItem = () => {
@@ -120,7 +120,7 @@ class MedicalItemSearcher extends Component {
     );
   };
 
-  itemFormatters = () => {
+  itemFormatters = (filters) => {
     const formatters = [
       (ms) => ms.code,
       (ms) => ms.name,
@@ -128,8 +128,14 @@ class MedicalItemSearcher extends Component {
       (ms) => ms.package,
       (ms) => ms.quantity,
       (ms) => ms.price,
-      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom),
-      (ms) => formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo),
+      (ms) =>
+        filters?.showHistory?.value
+          ? formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityFrom)
+          : null,
+      (ms) =>
+        filters?.showHistory?.value
+          ? formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo)
+          : null,
       (ms) => (
         <Tooltip title={formatMessage(this.props.intl, "medical.item", "openNewTab")}>
           <IconButton onClick={(e) => this.props.onDoubleClick(ms, true)}>

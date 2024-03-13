@@ -28,6 +28,7 @@ import {
 } from "../actions";
 import { RIGHT_MEDICALITEMS, ITEM_CODE_MAX_LENGTH } from "../constants";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
+import { validateCategories } from "../utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -41,6 +42,7 @@ class MedicalItemForm extends Component {
     medicalItem: this.newMedicalItem(),
     newMedicalItem: true,
     confirmedAction: null,
+    isSaved: false,
   };
 
   newMedicalItem() {
@@ -112,27 +114,37 @@ class MedicalItemForm extends Component {
     );
   };
 
-  reload = () => {
-    if (this.props.mutation?.clientMutationId && !this.props.mutation?.medicalItemId) {
-      const { clientMutationId } = this.props.mutation;
-      this.props.fetchMedicalItemMutation(this.props.modulesManager, clientMutationId).then((res) => {
-        const mutationLogs = parseData(res.payload.data.mutationLogs);
-        if (
-          mutationLogs &&
-          mutationLogs[0] &&
-          mutationLogs[0].medicalItems &&
-          mutationLogs[0].medicalItems[0] &&
-          mutationLogs[0].medicalItems[0].coreUser
-        ) {
-          const { id } = parseData(res.payload.data.mutationLogs)[0].users[0].coreUser;
-          if (id) {
-            historyPush(this.props.modulesManager, this.props.history, "medical.medicalItemOverview", [id]);
-          }
-        }
-      });
-    } else {
-      this.props.fetchMedicalItem(this.props.modulesManager, this.props.medicalItemId);
+  reload = async () => {
+    const { modulesManager, history, mutation, fetchMedicalItemMutation, medicalItemId, fetchMedicalItem } = this.props;
+    const { isSaved } = this.state;
+
+    if (medicalItemId) {
+      try {
+        await fetchMedicalItem(modulesManager, medicalItemId);
+      } catch (error) {
+        console.error(`[RELOAD_MEDICAL_ITEM]: Fetching medical item details failed. ${error}`);
+      }
+      return;
     }
+
+    if (isSaved) {
+      try {
+        const { clientMutationId } = mutation;
+        const response = await fetchMedicalItemMutation(modulesManager, clientMutationId);
+        const createdMedicalItemUuid = parseData(response.payload.data.medicalItems)[0].uuid;
+
+        historyPush(modulesManager, history, "medical.medicalItemOverview", [createdMedicalItemUuid]);
+      } catch (error) {
+        console.error(`[RELOAD_MEDICAL_ITEM]: Error fetching medical item mutation: ${error}`);
+      }
+    }
+
+    this.setState({
+      reset: 0,
+      medicalItem: this.newMedicalItem(),
+      newMedicalItem: true,
+      confirmedAction: null,
+    });
   };
 
   canSave = () =>
@@ -144,14 +156,12 @@ class MedicalItemForm extends Component {
     !isNaN(this.state.medicalItem.price) &&
     this.state.medicalItem.price &&
     this.state.medicalItem.careType &&
+    validateCategories(this.state.medicalItem.patientCategory) &&
     !this.state.medicalItem.validityTo &&
     this.props.isItemValid;
 
   save = (medicalItem) => {
-    this.setState(
-      { lockNew: !medicalItem.id }, // avoid duplicates
-      (e) => this.props.save(medicalItem),
-    );
+    this.setState({ lockNew: !medicalItem.id, isSaved: true }, (e) => this.props.save(medicalItem));
   };
 
   onEditedChanged = (medicalItem) => {
@@ -189,7 +199,7 @@ class MedicalItemForm extends Component {
       {
         doIt: this.reload,
         icon: <ReplayIcon />,
-        onlyIfDirty: !readOnly && !runningMutation,
+        onlyIfDirty: !readOnly && !runningMutation && !this.state.isSaved,
       },
     ];
     const shouldBeLocked = runningMutation || medicalItem?.validityTo;
