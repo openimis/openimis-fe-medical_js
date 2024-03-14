@@ -1,6 +1,6 @@
 {
   "name": "@openimis/fe-medical",
-  "version": "1.3.1",
+  "version": "1.3.0",
   "license": "AGPL-3.0-only",
   "description": "openIMIS Frontend Medical reference module",
   "repository": "openimis/openimis-fe-medical_js",

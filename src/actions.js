@@ -1,5 +1,12 @@
-
-import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql, graphqlWithVariables, decodeId } from "@openimis/fe-core";
+import {
+  formatGQLString,
+  formatMutation,
+  formatPageQuery,
+  formatPageQueryWithCount,
+  graphql,
+  graphqlWithVariables,
+  decodeId,
+} from "@openimis/fe-core";
 import _ from "lodash";
 
 const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
@@ -44,7 +51,6 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "validityTo",
   "level",
   "category",
-
 ];
 
 const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
@@ -64,29 +70,34 @@ const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
   "package",
 ];
 
-function formatGQLBoolean(value){
-  if(value==true){
-    return "1";
-  }
-  return "0";
+function formatGQLBoolean(value) {
+  return value ? "1" : "0";
 }
 
 export function formatDetail(type, detail) {
+  const id = detail?.id ?? "";
+  const typeId = decodeId(detail?.[type]?.id);
+  const priceAsked = detail?.priceAsked ? `"priceAsked": "${_.round(detail.priceAsked, 2).toFixed(2)}"` : "";
+  const qtyProvided = detail?.qtyProvided ? `"qtyProvided": "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : "";
+
   return `{
-    ${detail.id !== undefined && detail.id !== null ? `id: ${detail.id}` : ""}
-    ${type}Id: ${decodeId(detail[type].id)}
-    ${detail.priceAsked !== null ? `priceAsked: "${_.round(detail.priceAsked, 2).toFixed(2)}"` : ""}
-    ${detail.qtyProvided !== null ? `qtyProvided: "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : ""}
-    status: 1
+    ${id ? `"id": ${id},` : ""}
+    "${type}Id": ${typeId},
+    ${priceAsked ? `${priceAsked},` : ""}
+    ${qtyProvided ? `${qtyProvided},` : ""}
+    "status": 1
   }`;
 }
 
 export function formatDetails(type, details) {
   if (!details) return "";
-  let dets = details.filter((d) => !!d[type]);
-  return `${type}s: [
-      ${dets.map((d) => formatDetail(type, d)).join("\n")}
-    ]`;
+  
+  const dets = details
+    .filter((d) => Boolean(d[type]))
+    .map((d) => formatDetail(type, d))
+    .join("\n");
+  
+  return `${type}s: [${dets}]`;
 }
 
 export function formatMedicalItemOrServiceGQL(mm, ms) {
@@ -105,7 +116,7 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
     ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
-    ${ms.packagetype ?`manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : "" }
+    ${ms.packagetype ? `manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : ""}
     ${formatDetails("service", ms.serviceserviceSet)}
     ${formatDetails("item", ms.servicesLinked)}
   `;
@@ -156,12 +167,13 @@ export function createMedicalItem(mm, medicalItem, clientMutationLabel) {
   let mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
   let requestedDateTime = new Date();
   return graphql(
-    mutation.payload, ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
+    mutation.payload,
+    ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
       requestedDateTime,
-    }
+    },
   );
 }
 
@@ -237,14 +249,11 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }
 
-  let projections = MEDICAL_SERVICE_FULL_PROJECTION(mm)
-  projections.push(
-    "serviceserviceSet{" +
-      "id service {id code name } qtyProvided, priceAsked, scpDate" +
-      "}",
-    "servicesLinked{" +
-      "id item {id code name } qtyProvided, priceAsked, pcpDate" +
-      "}",
+  const projection = MEDICAL_SERVICE_FULL_PROJECTION(mm);
+
+  projection.push(
+    "serviceserviceSet{" + "id service {id code name } qtyProvided, priceAsked, scpDate" + "}",
+    "servicesLinked{" + "id item {id code name } qtyProvided, priceAsked, pcpDate" + "}",
   );
 
   const payload = formatPageQuery("medicalServices", filters, projections);
@@ -270,11 +279,10 @@ export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
 
 export function newMedicalService() {
   return (dispatch) => {
-    dispatch(
-      { 
-        type: "MEDICAL_SERVICE_NEW",
-        typepp: "MEDICAL_SERVICE_NEW",
-     });
+    dispatch({
+      type: "MEDICAL_SERVICE_NEW",
+      typepp: "MEDICAL_SERVICE_NEW",
+    });
   };
 }
 
@@ -285,20 +293,12 @@ export function newMedicalItem() {
 }
 
 export function fetchMedicalServiceMutation(mm, clientMutationId) {
-  const payload = formatPageQuery(
-    "medicalServices",
-    [`clientMutationId:"${clientMutationId}"`],
-    ["uuid"],
-  );
+  const payload = formatPageQuery("medicalServices", [`clientMutationId:"${clientMutationId}"`], ["uuid"]);
   return graphql(payload, "MEDICAL_SERVICE");
 }
 
 export function fetchMedicalItemMutation(mm, clientMutationId) {
-  const payload = formatPageQuery(
-    "medicalItems",
-    [`clientMutationId:"${clientMutationId}"`],
-    ["uuid"],
-  );
+  const payload = formatPageQuery("medicalItems", [`clientMutationId:"${clientMutationId}"`], ["uuid"]);
   return graphql(payload, "MEDICAL_ITEM");
 }
 

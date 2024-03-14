@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
+
 import { IconButton, Tooltip } from "@material-ui/core";
 import { Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
+
 import {
   withModulesManager,
   formatMessageWithValues,
@@ -12,7 +14,6 @@ import {
   journalize,
   formatDateFromISO,
 } from "@openimis/fe-core";
-
 import { fetchMedicalServicesSummaries, deleteMedicalService } from "../actions";
 import { RIGHT_MEDICALSERVICES_DELETE } from "../constants";
 import DeleteMedicalItemOrServiceDialog from "./DeleteMedicalItemOrServiceDialog";

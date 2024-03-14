@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import { Autocomplete, toISODate, useGraphqlQuery, useTranslations } from "@openimis/fe-core";
 
-const ServicePicker = (props) => {
-  const {
-    onChange,
-    readOnly,
-    required,
-    withLabel,
-    withPlaceholder,
-    value,
-    label,
-    filterOptions,
-    pricelistUuid,
-    date,
-    filterSelectedOptions,
-    placeholder,
-    extraFragment,
-    multiple,
-  } = props;
+const ServicePicker = ({
+  onChange,
+  readOnly,
+  required,
+  withLabel,
+  withPlaceholder,
+  value,
+  label,
+  filterOptions,
+  pricelistUuid,
+  date,
+  filterSelectedOptions,
+  placeholder,
+  extraFragment,
+  multiple,
+}) => {
   const [searchString, setSearchString] = useState(null);
   const { formatMessage } = useTranslations("medical");
 

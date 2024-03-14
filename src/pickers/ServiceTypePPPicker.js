@@ -1,6 +1,5 @@
 import React from "react";
 import { ConstantBasedPicker } from "@openimis/fe-core";
-
 import { SERVICE_TYPES_PP } from "../constants";
 
 const ServiceTypePPPicker = (props) => {

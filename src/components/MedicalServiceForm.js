@@ -19,9 +19,6 @@ import {
   withHistory,
   withModulesManager,
 } from "@openimis/fe-core";
-import MedicalServiceChildPanel from "./MedicalServiceChildPanel";
-import MedicalItemChildPanel from "./MedicalItemChildPanel";
-
 import {
   createMedicalService,
   fetchMedicalService,
@@ -29,9 +26,11 @@ import {
   newMedicalService,
   clearServiceForm,
 } from "../actions";
-import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
-import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 import { validateCategories } from "../utils";
+import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_S } from "../constants";
+import MedicalServiceChildPanel from "./MedicalServiceChildPanel";
+import MedicalItemChildPanel from "./MedicalItemChildPanel";
+import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -50,7 +49,7 @@ class MedicalItemsPanel extends Component {
 }
 
 class MedicalServiceForm extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       lockNew: false,
@@ -59,15 +58,11 @@ class MedicalServiceForm extends Component {
       newMedicalService: true,
       confirmedAction: null,
       totalPrice: 0,
-      sumItems:0,
-      sumServices:0,
+      sumItems: 0,
+      sumServices: 0,
       manualPrice: false,
       isSaved: false,
-  };
-  }
-
-  getTotalPrice = () => {
-    return this.state.totalPrice;
+    };
   }
 
   newMedicalService() {
@@ -175,85 +170,56 @@ class MedicalServiceForm extends Component {
     });
   };
 
-  priceCalcul = () => {
+  calculatePrice = () => {
+    const { medicalService } = this.state;
+    const { servicesLinked = [], serviceserviceSet = [], packagetype, manualPrice } = medicalService;
 
-    let sumItem = 0 ;
-    let sumService = 0 ;
-    if(this.state.medicalService.servicesLinked != undefined){
-      this.state.medicalService.servicesLinked.forEach((item) => {
-        if(item.priceAsked != undefined){
-          sumItem += parseFloat(item.priceAsked)*parseFloat(item.qtyProvided);
-        }
-      });
-    }
+    const calculateSum = (arr) =>
+      arr.reduce((sum, { priceAsked, qtyProvided }) => {
+        return sum + (priceAsked ? parseFloat(priceAsked) * parseFloat(qtyProvided) : 0);
+      }, 0);
 
-    if(this.state.medicalService.serviceserviceSet != undefined){
-      this.state.medicalService.serviceserviceSet.forEach((service) => {
-        if(service.priceAsked != undefined){
-          sumService += parseFloat(service.priceAsked)*parseFloat(service.qtyProvided);
-        }
-      });
-    } else {
-      this.props.fetchMedicalService(this.props.modulesManager, medicalServiceId, clientMutationId);
+    const sumItem = calculateSum(servicesLinked);
+    const sumService = calculateSum(serviceserviceSet);
+    const totalPrice = sumItem + sumService;
+
+    this.setState({ totalPrice });
+
+    if (packagetype !== SERVICE_TYPE_PP_S && packagetype !== null && !manualPrice) {
+      this.setState((prevState) => ({
+        medicalService: {
+          ...prevState.medicalService,
+          price: totalPrice,
+        },
+      }));
     }
   };
 
-  priceCalcul = () => {
-
-    let sumItem = 0 ;
-    let sumService = 0 ;
-    if(this.state.medicalService.servicesLinked != undefined){
-      this.state.medicalService.servicesLinked.forEach((item) => {
-        if(item.priceAsked != undefined){
-          sumItem += parseFloat(item.priceAsked)*parseFloat(item.qtyProvided);
-        }
-      });
-    }
-
-    if(this.state.medicalService.serviceserviceSet != undefined){
-      this.state.medicalService.serviceserviceSet.forEach((service) => {
-        if(service.priceAsked != undefined){
-          sumService += parseFloat(service.priceAsked)*parseFloat(service.qtyProvided);
-        }
-      });      
-    }
-    this.state.totalPrice = sumItem+sumService;
-
-    if(this.state.medicalService.packagetype!="S" && this.state.medicalService.packagetype!=null){
-      if(this.state.medicalService.manualPrice != true){
-        this.state.medicalService.price = this.state.totalPrice;
-      }
-    }
-  }
-
   canSave = () => {
-    this.priceCalcul();
-    console.log(this.state);
-
-    return this.state.medicalService &&
-    this.state.medicalService.code &&
-    this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
-    this.state.medicalService.name &&
-    this.state.medicalService.type &&
-    !isNaN(this.state.medicalService.price) &&
-    this.state.medicalService.level &&
-    this.state.medicalService.packagetype &&
-    this.state.medicalService.price &&
-    this.state.medicalService.careType &&
-    validateCategories(this.state.medicalService.patientCategory) &&
-    !this.state.medicalService.validityTo &&
-    this.props.isServiceValid;
-
-  }
+    this.calculatePrice();
+    return (
+      this.state.medicalService &&
+      this.state.medicalService.code &&
+      this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
+      this.state.medicalService.name &&
+      this.state.medicalService.type &&
+      !isNaN(this.state.medicalService.price) &&
+      this.state.medicalService.level &&
+      this.state.medicalService.packagetype &&
+      this.state.medicalService.price &&
+      this.state.medicalService.careType &&
+      validateCategories(this.state.medicalService.patientCategory) &&
+      !this.state.medicalService.validityTo &&
+      this.props.isServiceValid
+    );
+  };
 
   save = (medicalService) => {
-    console.log("Save :");
-    console.log(medicalService);
     this.setState({ lockNew: !medicalService?.id, isSaved: true }, (e) => this.props.save(medicalService));
   };
 
   onEditedChanged = (medicalService) => {
-    this.priceCalcul();
+    this.calculatePrice();
     this.setState({ medicalService, newMedicalService: false });
   };
 
@@ -308,7 +274,7 @@ class MedicalServiceForm extends Component {
               actions={actions}
               overview={overview}
               HeadPanel={MedicalServiceMasterPanel}
-              Panels={[MedicalServicesPanel,MedicalItemsPanel]}
+              Panels={[MedicalServicesPanel, MedicalItemsPanel]}
               medicalService={medicalService}
               onEditedChanged={this.onEditedChanged}
               priceTotal={this.state.totalPrice}

@@ -17,7 +17,7 @@ import {
   withModulesManager,
 } from "@openimis/fe-core";
 import { medicalServicesValidationCheck, medicalServicesValidationClear, medicalServicesSetValid } from "../actions";
-import { SERVICE_CODE_MAX_LENGTH } from "../constants";
+import { SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_S } from "../constants";
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -28,53 +28,63 @@ const styles = (theme) => ({
 });
 
 class MedicalServiceMasterPanel extends FormPanel {
-
   constructor(props) {
     super(props);
-    this.state = {
-      readOnlyPrice : props.medicalService.packagetype=="S"? 0 : !props.medicalService.manualPrice,
-    }
+    const { medicalService, edited } = props;
+    const { packagetype, manualPrice } = medicalService;
 
-    if(this.props.edited){
-      if(this.props.edited.packagetype !=null && this.props.edited.packagetype!="S"){
-        this.showManual = true;
-      }
-    }
+    this.state = {
+      readOnlyPrice: packagetype === SERVICE_TYPE_PP_S ? 0 : !manualPrice,
+    };
+
+    this.showManual = edited?.packagetype && edited.packagetype !== SERVICE_TYPE_PP_S;
   }
 
-  showCheckboxManual= (pSelection) => {
-    if(pSelection!=null && pSelection!="S"){
+  showCheckboxManual = (pSelection) => {
+    if (pSelection != null && pSelection != SERVICE_TYPE_PP_S) {
       this.showManual = true;
-      this.setState(
-        {
-          readOnlyPrice : 1
-        }
-      );
-    }else{
+      this.setState({
+        readOnlyPrice: 1,
+      });
+    } else {
       this.showManual = false;
-      this.setState(
-        {
-          readOnlyPrice : 0
-        }
-      );
+      this.setState({
+        readOnlyPrice: 0,
+      });
     }
   };
 
-  changeManual =  () => {
-    this.setState(
-      {
-        readOnlyPrice : !this.state.readOnlyPrice,
-      }
-    );
+  showCheckboxManual = (pSelection) => {
+    const isManual = pSelection && pSelection !== SERVICE_TYPE_PP_S;
+    this.showManual = isManual;
+    this.setState({
+      readOnlyPrice: isManual ? 1 : 0,
+    });
+  };
+
+  changeManual = () => {
+    this.setState((prevState) => ({
+      readOnlyPrice: !prevState.readOnlyPrice,
+    }));
   };
 
   shouldValidate = (inputValue) => {
     const { savedServiceCode } = this.props;
     const shouldValidate = inputValue !== savedServiceCode;
     return shouldValidate;
-  }
+  };
   render() {
-    const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
+    const {
+      classes,
+      edited,
+      readOnly,
+      isServiceValid,
+      isServiceValidating,
+      serviceValidationError,
+      medicalService,
+      priceTotal,
+    } = this.props;
+    const { readOnlyPrice } = this.state;
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
@@ -166,15 +176,14 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <AmountInput
               module="admin"
-              label={this.props.medicalService.packagetype=='F' ? `edit.services.ceiling` : `medical.service.price`}
-              required={!this.state.readOnlyPrice}
+              label={
+                medicalService.packagetype === SERVICE_TYPE_PP_F ? "edit.services.ceiling" : "medical.service.price"
+              }
+              required={!readOnlyPrice}
               name="price"
-              readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice }
-              value={edited ? edited.price : this.props.priceTotal}
-              onChange={(p) => {
-                this.updateAttribute("price", p);
-              }
-              }
+              readOnly={Boolean(edited.id) || readOnly || readOnlyPrice}
+              value={edited ? edited.price : priceTotal}
+              onChange={(p) => this.updateAttribute("price", p)}
             />
           </Grid>
         </Grid>
@@ -214,7 +223,6 @@ class MedicalServiceMasterPanel extends FormPanel {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
-  state,
   isServiceValid: state.medical?.validationFields?.medicalService?.isValid,
   isServiceValidating: state.medical?.validationFields?.medicalService?.isValidating,
   serviceValidationError: state.medical?.validationFields?.medicalService?.validationError,

@@ -32,7 +32,6 @@ class MedicalServicePage extends Component {
         formatMessageWithValues(this.props.intl, "medical.medicalService", "createMedicalService.mutationLabel"),
       );
     } else {
-      console.log(medicalService);
       this.props.updateMedicalService(
         this.props.modulesManager,
         medicalService,

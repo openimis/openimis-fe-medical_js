@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import { Autocomplete, toISODate, useGraphqlQuery, useTranslations } from "@openimis/fe-core";
 
-const ServicePicker = (props) => {
-  const {
-    onChange,
-    readOnly,
-    required,
-    withLabel,
-    withPlaceholder,
-    value,
-    label,
-    filterOptions,
-    pricelistUuid,
-    date,
-    filterSelectedOptions,
-    placeholder,
-    extraFragment,
-    multiple,
-  } = props;
+const ServicePicker = ({
+  onChange,
+  readOnly,
+  required,
+  withLabel,
+  withPlaceholder,
+  value,
+  label,
+  filterOptions,
+  pricelistUuid,
+  date,
+  filterSelectedOptions,
+  placeholder,
+  extraFragment,
+  multiple,
+}) => {
   const [searchString, setSearchString] = useState(null);
   const { formatMessage } = useTranslations("medical");
 
@@ -26,11 +25,7 @@ const ServicePicker = (props) => {
       medicalServicesStr(str: $searchString, first: 20, pricelistUuid: $pricelistUuid, date: $date) {
         edges {
           node {
-<<<<<<< HEAD
-            id name code price packagetype
-=======
-            id name code price maximumAmount
->>>>>>> ca219aa960aa1d6d8b3f835a3384c232614f4d2b
+            id name code price maximumAmount packagetype
             ${extraFragment ?? ""}
             serviceserviceSet{
               service{

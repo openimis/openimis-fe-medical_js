@@ -126,7 +126,7 @@ function reducer(
         ...state,
         fetchingMedicalServices: false,
         fetchedMedicalServices: true,
-        medicalServices: !!servicesL && servicesL.length > 0 ? servicesL : null,
+        medicalServices: servicesL?.length > 0 ? servicesL : null,
         errorMedicalServices: formatGraphQLError(action.payload),
       };
     case "MEDICAL_SERVICE_LIST_ERR":

@@ -1,26 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
+import _ from "lodash";
+
+import { Paper, Box } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import {
-  formatAmount,
   formatMessage,
-  formatMessageWithValues,
-  decodeId,
   withModulesManager,
   NumberInput,
   Table,
   PublishedComponent,
   AmountInput,
-  TextInput,
-  Error,
 } from "@openimis/fe-core";
-import { Paper, Box } from "@material-ui/core";
-import _ from "lodash";
-import { fetchMedicalService, fetchMedicalServices } from "../actions"
-
-import { claimedAmount, approvedAmount } from "../helpers/amounts";
+import { SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_P } from "../constants";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -94,7 +88,7 @@ class MedicalItemChildPanel extends Component {
     let data = this._updateData(idx, [{ attr, v }]);
     let sumItems = 0;
     data.forEach((update) => {
-      if(!isNaN(update.priceAsked) || !isNaN(update.qtyProvided)){
+      if (!isNaN(update.priceAsked) || !isNaN(update.qtyProvided)) {
         sumItems += update.priceAsked * update.qtyProvided;
       }
     });
@@ -149,26 +143,28 @@ class MedicalItemChildPanel extends Component {
   };
 
   render() {
-    const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
+    const {
+      intl,
+      classes,
+      edited,
+      type,
+      picker,
+      readOnly = false,
+      forReview,
+      fetchingPricelist,
+      medicalService,
+    } = this.props;
+
     if (!edited) return null;
 
-    let preHeaders = [
-      "\u200b",
-      "",
-      "",
-      "",
-    ];
-    let headers = [
-      `edit.${type}s.${type}`,
-      `edit.${type}s.quantity`,
-      `edit.${type}s.price`,
-    ];
+    const preHeaders = ["\u200b", "", "", ""];
+    let headers = [`edit.${type}s.${type}`, `edit.${type}s.quantity`, `edit.${type}s.price`];
 
-    if (this.props.medicalService.packagetype =="F") {
-      headers[2]=`edit.${type}s.ceiling`
+    if (medicalService.packagetype === SERVICE_TYPE_PP_F) {
+      headers[2] = `edit.${type}s.ceiling`;
     }
 
-    let itemFormatters = [
+    const itemFormatters = [
       (i, idx) => (
         <Box minWidth={400}>
           <PublishedComponent
@@ -190,24 +186,20 @@ class MedicalItemChildPanel extends Component {
         />
       ),
       (i, idx) => (
-        <AmountInput
-          readOnly={readOnly }
-          value={i.priceAsked}
-          onChange={(v) => this._onChange(idx, "priceAsked", v)}
-        />
+        <AmountInput readOnly={readOnly} value={i.priceAsked} onChange={(v) => this._onChange(idx, "priceAsked", v)} />
       ),
     ];
+
     if (!!forReview || edited.status !== 2) {
       if (!this.fixedPricesAtReview) {
         preHeaders.push("");
       }
-      preHeaders.push(
-        "",
-      );
+      preHeaders.push("");
     }
-    let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
 
-    if(this.props.medicalService.packagetype=="P" || this.props.medicalService.packagetype=="F" ){
+    const header = formatMessage(intl, "claim", `edit.${type}s.title`);
+
+    if (medicalService.packagetype === SERVICE_TYPE_PP_P || medicalService.packagetype === SERVICE_TYPE_PP_F) {
       return (
         <Paper className={classes.paper}>
           <Table
@@ -221,18 +213,18 @@ class MedicalItemChildPanel extends Component {
           />
         </Paper>
       );
-    }else{
-      return "";
     }
 
+    return null;
   }
 }
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state) => ({
   fetchingPricelist: !!state.medical_pricelist && state.medical_pricelist.fetchingPricelist,
   servicesPricelists: !!state.medical_pricelist ? state.medical_pricelist.servicesPricelists : {},
   itemsPricelists: !!state.medical_pricelist ? state.medical_pricelist.itemsPricelists : {},
 });
 
-
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalItemChildPanel)))));
+export default withModulesManager(
+  injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalItemChildPanel)))),
+);

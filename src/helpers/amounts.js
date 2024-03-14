@@ -1,9 +1,11 @@
 export function claimedAmount(r) {
-  return !!r.qtyProvided && !!r.priceAsked ? r.qtyProvided * parseFloat(r.priceAsked) : 0;
+  const { qtyProvided, priceAsked } = r;
+  return qtyProvided && priceAsked ? qtyProvided * Number(priceAsked) : 0;
 }
+
 export function approvedAmount(r) {
   if (r.status === 2) return 0;
-  let qty = r.qtyApproved !== null && r.qtyApproved !== "" ? r.qtyApproved : r.qtyProvided;
-  let price = r.priceApproved !== null && r.priceApproved !== "" ? r.priceApproved : r.priceAsked;
-  return qty * parseFloat(price);
+  const qty = r.qtyApproved ?? r.qtyProvided;
+  const price = r.priceApproved ?? r.priceAsked;
+  return qty * Number(price);
 }
