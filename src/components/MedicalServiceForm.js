@@ -22,6 +22,7 @@ import {
 import {
   createMedicalService,
   fetchMedicalService,
+  fetchMedicalServices,
   fetchMedicalServiceMutation,
   newMedicalService,
   clearServiceForm,
@@ -70,7 +71,7 @@ class MedicalServiceForm extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchMedicalServices(this.props.modulesManager);
+    this.props.fetchMedicalServices(this.props.modulesMnager);
     if (this.props.medicalServiceId) {
       this.setState(
         (state, props) => ({ medicalServiceId: props.medicalServiceId }),
@@ -196,7 +197,6 @@ class MedicalServiceForm extends Component {
   };
 
   canSave = () => {
-    this.calculatePrice();
     return (
       this.state.medicalService &&
       this.state.medicalService.code &&

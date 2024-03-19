@@ -115,7 +115,6 @@ class MedicalServiceChildPanel extends Component {
 
   _onDelete = (idx) => {
     const data = [...this.state.data];
-    console.log(data);
     data.splice(idx, 1);
     this._onEditedChanged(data);
   };

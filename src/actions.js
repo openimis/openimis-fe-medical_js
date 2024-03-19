@@ -75,28 +75,23 @@ function formatGQLBoolean(value) {
 }
 
 export function formatDetail(type, detail) {
-  const id = detail?.id ?? "";
-  const typeId = decodeId(detail?.[type]?.id);
-  const priceAsked = detail?.priceAsked ? `"priceAsked": "${_.round(detail.priceAsked, 2).toFixed(2)}"` : "";
-  const qtyProvided = detail?.qtyProvided ? `"qtyProvided": "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : "";
-
   return `{
-    ${id ? `"id": ${id},` : ""}
-    "${type}Id": ${typeId},
-    ${priceAsked ? `${priceAsked},` : ""}
-    ${qtyProvided ? `${qtyProvided},` : ""}
-    "status": 1
+    ${detail.id ? `id: ${detail.id}` : ""}
+    ${type}Id: ${decodeId(detail[type].id)}
+    ${detail.priceAsked ? `priceAsked: "${_.round(detail.priceAsked, 2).toFixed(2)}"` : ""}
+    ${detail.qtyProvided ? `qtyProvided: "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : ""}
+    status: 1
   }`;
 }
 
 export function formatDetails(type, details) {
   if (!details) return "";
-  
+
   const dets = details
     .filter((d) => Boolean(d[type]))
     .map((d) => formatDetail(type, d))
     .join("\n");
-  
+
   return `${type}s: [${dets}]`;
 }
 
@@ -256,7 +251,7 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
     "servicesLinked{" + "id item {id code name } qtyProvided, priceAsked, pcpDate" + "}",
   );
 
-  const payload = formatPageQuery("medicalServices", filters, projections);
+  const payload = formatPageQuery("medicalServices", filters, projection);
   return graphql(payload, "MEDICAL_SERVICE_OVERVIEW");
 }
 
