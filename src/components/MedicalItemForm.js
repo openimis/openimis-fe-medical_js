@@ -153,6 +153,7 @@ class MedicalItemForm extends Component {
     this.state.medicalItem.code.length <= ITEM_CODE_MAX_LENGTH &&
     this.state.medicalItem.name &&
     this.state.medicalItem.type &&
+    !isNaN(this.state.medicalItem.price) &&
     this.state.medicalItem.price &&
     this.state.medicalItem.careType &&
     validateCategories(this.state.medicalItem.patientCategory) &&

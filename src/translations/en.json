@@ -22,6 +22,11 @@
   "medical.careType.I": "In - Patient",
   "medical.careType.O": "Out - Patient",
   "medical.careType.B": "In & Out - Patient",
+  "medical.serviceTypePP": "Type",
+  "medical.serviceTypePP.null": "None",
+  "medical.serviceTypePP.S": "Simple/atomic",
+  "medical.serviceTypePP.P": "Flat fee bundle",
+  "medical.serviceTypePP.F": "Fee-for-service bundle",
   "medical.codeTaken": "Code already taken.",
   "medical.serviceType": "Service type",
   "medical.serviceType.null": "None",
@@ -63,6 +68,7 @@
   "medical.service.MedicalServiceOverview.title": "Medical Service details",
   "medical.service.code": "Code",
   "medical.service.name": "Name",
+  "medical.service.packagetype": "Type",
   "medical.service.type": "Type",
   "medical.service.level": "Level",
   "medical.service.price": "Price",
@@ -105,5 +111,8 @@
   "medical.item.deleteItem.tooltip": "Delete item",
   "medical.item.deleteItemDialog.message": "Are you sure you want to delete this item?",
   "medical.item.updateMedicalItem.mutationLabel": "Update Medical Item",
+  "manualPrice": "Manual",
+  "edit.services.ceiling":"Ceiling",
+  "edit.items.ceiling":"Ceiling",
   "medical.item.createMedicalItem.mutationLabel": "Create Medical Item"
 }

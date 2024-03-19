@@ -1,10 +1,19 @@
-import { formatGQLString, formatMutation, formatPageQuery, formatPageQueryWithCount, graphql, graphqlWithVariables } from "@openimis/fe-core";
+import {
+  formatGQLString,
+  formatMutation,
+  formatPageQuery,
+  formatPageQueryWithCount,
+  graphql,
+  graphqlWithVariables,
+  decodeId,
+} from "@openimis/fe-core";
 import _ from "lodash";
 
 const MEDICAL_SERVICES_SUMMARY_PROJECTION = [
   "uuid",
   "code",
   "name",
+  "packagetype",
   "type",
   "price",
   "maximumAmount",
@@ -29,6 +38,8 @@ const MEDICAL_SERVICE_FULL_PROJECTION = (mm) => [
   "uuid",
   "code",
   "name",
+  "packagetype",
+  "manualPrice",
   "type",
   "price",
   "maximumAmount",
@@ -59,13 +70,38 @@ const MEDICAL_ITEM_FULL_PROJECTION = (mm) => [
   "package",
 ];
 
+function formatGQLBoolean(value) {
+  return value ? "1" : "0";
+}
+
+export function formatDetail(type, detail) {
+  return `{
+    ${detail.id ? `id: ${detail.id}` : ""}
+    ${type}Id: ${decodeId(detail[type].id)}
+    ${detail.priceAsked ? `priceAsked: "${_.round(detail.priceAsked, 2).toFixed(2)}"` : ""}
+    ${detail.qtyProvided ? `qtyProvided: "${_.round(detail.qtyProvided, 2).toFixed(2)}"` : ""}
+    status: 1
+  }`;
+}
+
+export function formatDetails(type, details) {
+  if (!details) return "";
+
+  const dets = details
+    .filter((d) => Boolean(d[type]))
+    .map((d) => formatDetail(type, d))
+    .join("\n");
+
+  return `${type}s: [${dets}]`;
+}
+
 export function formatMedicalItemOrServiceGQL(mm, ms) {
   const req = `
     ${ms.uuid ? `uuid: "${ms.uuid}"` : ""}
     ${ms.code ? `code: "${ms.code}"` : ""}
     ${ms.name ? `name: "${formatGQLString(ms.name)}"` : ""}
     ${ms.type ? `type: "${formatGQLString(ms.type)}"` : ""}
-    ${ms.price ? `price: "${ms.price}"` : ""}
+    ${!isNaN(ms.price) ? `price: "${ms.price}"` : ""}
     ${ms.quantity ? `quantity: "${ms.quantity}"` : ""}
     ${ms.maximumAmount ? `maximumAmount: "${ms.maximumAmount}"` : ""}
     ${ms.careType ? `careType: "${formatGQLString(ms.careType)}"` : ""}
@@ -74,6 +110,10 @@ export function formatMedicalItemOrServiceGQL(mm, ms) {
     ${ms.category && ms.category !== " " ? `category: "${formatGQLString(ms.category)}"` : ""}
     ${ms.level ? `level: "${formatGQLString(ms.level)}"` : ""}
     ${ms.package ? `package: "${formatGQLString(ms.package)}"` : ""}
+    ${ms.packagetype ? `packagetype: "${formatGQLString(ms.packagetype)}"` : ""}
+    ${ms.packagetype ? `manualPrice: "${formatGQLBoolean(ms.manualPrice)}"` : ""}
+    ${formatDetails("service", ms.serviceserviceSet)}
+    ${formatDetails("item", ms.servicesLinked)}
   `;
   return req;
 }
@@ -122,12 +162,13 @@ export function createMedicalItem(mm, medicalItem, clientMutationLabel) {
   let mutation = formatMutation("createItem", formatMedicalItemOrServiceGQL(mm, medicalItem), clientMutationLabel);
   let requestedDateTime = new Date();
   return graphql(
-    mutation.payload, ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
+    mutation.payload,
+    ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_CREATE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
       requestedDateTime,
-    }
+    },
   );
 }
 
@@ -202,8 +243,22 @@ export function fetchMedicalService(mm, medicalServiceId, clientMutationId) {
   } else if (clientMutationId) {
     filters.push(`clientMutationId: "${formatGQLString(clientMutationId)}"`);
   }
-  const payload = formatPageQuery("medicalServices", filters, MEDICAL_SERVICE_FULL_PROJECTION(mm));
+
+  const projection = MEDICAL_SERVICE_FULL_PROJECTION(mm);
+
+  projection.push(
+    "serviceserviceSet{" + "id service {id code name } qtyProvided, priceAsked, scpDate" + "}",
+    "servicesLinked{" + "id item {id code name } qtyProvided, priceAsked, pcpDate" + "}",
+  );
+
+  const payload = formatPageQuery("medicalServices", filters, projection);
   return graphql(payload, "MEDICAL_SERVICE_OVERVIEW");
+}
+
+export function fetchMedicalServices(mm) {
+  const filters = [];
+  const payload = formatPageQuery("medicalServices", filters, MEDICAL_SERVICE_FULL_PROJECTION(mm));
+  return graphql(payload, "MEDICAL_SERVICE_LIST");
 }
 
 export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
@@ -219,7 +274,10 @@ export function fetchMedicalItem(mm, medicalItemId, clientMutationId) {
 
 export function newMedicalService() {
   return (dispatch) => {
-    dispatch({ type: "MEDICAL_SERVICE_NEW" });
+    dispatch({
+      type: "MEDICAL_SERVICE_NEW",
+      typepp: "MEDICAL_SERVICE_NEW",
+    });
   };
 }
 
@@ -230,20 +288,12 @@ export function newMedicalItem() {
 }
 
 export function fetchMedicalServiceMutation(mm, clientMutationId) {
-  const payload = formatPageQuery(
-    "medicalServices",
-    [`clientMutationId:"${clientMutationId}"`],
-    ["uuid"],
-  );
+  const payload = formatPageQuery("medicalServices", [`clientMutationId:"${clientMutationId}"`], ["uuid"]);
   return graphql(payload, "MEDICAL_SERVICE");
 }
 
 export function fetchMedicalItemMutation(mm, clientMutationId) {
-  const payload = formatPageQuery(
-    "medicalItems",
-    [`clientMutationId:"${clientMutationId}"`],
-    ["uuid"],
-  );
+  const payload = formatPageQuery("medicalItems", [`clientMutationId:"${clientMutationId}"`], ["uuid"]);
   return graphql(payload, "MEDICAL_ITEM");
 }
 

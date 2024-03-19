@@ -17,7 +17,7 @@ import {
   withModulesManager,
 } from "@openimis/fe-core";
 import { medicalServicesValidationCheck, medicalServicesValidationClear, medicalServicesSetValid } from "../actions";
-import { SERVICE_CODE_MAX_LENGTH } from "../constants";
+import { SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_S } from "../constants";
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -28,13 +28,63 @@ const styles = (theme) => ({
 });
 
 class MedicalServiceMasterPanel extends FormPanel {
+  constructor(props) {
+    super(props);
+    const { medicalService, edited } = props;
+    const { packagetype, manualPrice } = medicalService;
+
+    this.state = {
+      readOnlyPrice: packagetype === SERVICE_TYPE_PP_S ? 0 : !manualPrice,
+    };
+
+    this.showManual = edited?.packagetype && edited.packagetype !== SERVICE_TYPE_PP_S;
+  }
+
+  showCheckboxManual = (pSelection) => {
+    if (pSelection != null && pSelection != SERVICE_TYPE_PP_S) {
+      this.showManual = true;
+      this.setState({
+        readOnlyPrice: 1,
+      });
+    } else {
+      this.showManual = false;
+      this.setState({
+        readOnlyPrice: 0,
+      });
+    }
+  };
+
+  showCheckboxManual = (pSelection) => {
+    const isManual = pSelection && pSelection !== SERVICE_TYPE_PP_S;
+    this.showManual = isManual;
+    this.setState({
+      readOnlyPrice: isManual ? 1 : 0,
+    });
+  };
+
+  changeManual = () => {
+    this.setState((prevState) => ({
+      readOnlyPrice: !prevState.readOnlyPrice,
+    }));
+  };
+
   shouldValidate = (inputValue) => {
     const { savedServiceCode } = this.props;
     const shouldValidate = inputValue !== savedServiceCode;
     return shouldValidate;
-  }
+  };
   render() {
-    const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
+    const {
+      classes,
+      edited,
+      readOnly,
+      isServiceValid,
+      isServiceValidating,
+      serviceValidationError,
+      medicalService,
+      priceTotal,
+    } = this.props;
+    const { readOnlyPrice } = this.state;
     return (
       <ErrorBoundary>
         <Grid container className={classes.item}>
@@ -58,7 +108,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               value={edited ? edited.code : ""}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.service.name"
@@ -68,7 +118,20 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(name) => this.updateAttributes({ name })}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
+            <PublishedComponent
+              pubRef="medical.ServiceTypePPPicker"
+              withNull={true}
+              required
+              readOnly={Boolean(edited.id) || readOnly}
+              value={edited ? edited.packagetype : ""}
+              onChange={(p) => {
+                this.updateAttribute("packagetype", p);
+                this.showCheckboxManual(p);
+              }}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceTypePicker"
               withNull={false}
@@ -80,7 +143,7 @@ class MedicalServiceMasterPanel extends FormPanel {
           </Grid>
         </Grid>
         <Grid container className={classes.item}>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceCategoryPicker"
               withNull={false}
@@ -89,7 +152,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("category", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceLevelPicker"
               withNull={false}
@@ -113,11 +176,13 @@ class MedicalServiceMasterPanel extends FormPanel {
           <Grid item xs={4} className={classes.item}>
             <AmountInput
               module="admin"
-              label="medical.service.price"
-              required
+              label={
+                medicalService.packagetype === SERVICE_TYPE_PP_F ? "edit.services.ceiling" : "medical.service.price"
+              }
+              required={!readOnlyPrice}
               name="price"
-              readOnly={Boolean(edited.id) || readOnly}
-              value={edited ? edited.price : ""}
+              readOnly={Boolean(edited.id) || readOnly || readOnlyPrice}
+              value={edited ? edited.price : priceTotal}
               onChange={(p) => this.updateAttribute("price", p)}
             />
           </Grid>

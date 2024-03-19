@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
+
 import { IconButton, Tooltip } from "@material-ui/core";
 import { Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
+
 import {
   withModulesManager,
   formatMessageWithValues,
@@ -12,7 +14,6 @@ import {
   journalize,
   formatDateFromISO,
 } from "@openimis/fe-core";
-
 import { fetchMedicalServicesSummaries, deleteMedicalService } from "../actions";
 import { RIGHT_MEDICALSERVICES_DELETE } from "../constants";
 import DeleteMedicalItemOrServiceDialog from "./DeleteMedicalItemOrServiceDialog";
@@ -69,6 +70,7 @@ class MedicalServiceSearcher extends Component {
     const h = [
       "medical.service.code",
       "medical.service.name",
+      "medical.service.packagetype",
       "medical.service.type",
       "medical.service.level",
       "medical.service.price",
@@ -81,6 +83,7 @@ class MedicalServiceSearcher extends Component {
   sorts = (filters) => [
     ["code", true],
     ["name", true],
+    ["packagetype", true],
     ["type", true],
     ["level", true],
     ["price", true],
@@ -91,7 +94,7 @@ class MedicalServiceSearcher extends Component {
   deleteService = () => {
     const service = this.state.deleteService;
     this.setState({ deleteService: null }, async (e) => {
-      await this.props.deleteMedicalService(
+       this.props.deleteMedicalService(
         this.props.modulesManager,
         service,
         formatMessage(this.props.intl, "medical.service", "deleteDialog.title"),
@@ -118,6 +121,7 @@ class MedicalServiceSearcher extends Component {
     const formatters = [
       (ms) => ms.code,
       (ms) => ms.name,
+      (ms) => ms.packagetype,
       (ms) => ms.type,
       (ms) => ms.level,
       (ms) => ms.price,
