@@ -22,8 +22,8 @@ export const ITEM_TYPE_DRUG = "D";
 export const ITEM_TYPE_MEDICAL_CONSUMABLE = "M";
 export const ITEM_TYPES = [ITEM_TYPE_DRUG, ITEM_TYPE_MEDICAL_CONSUMABLE];
 
-export const SERVICE_CODE_MAX_LENGTH = 6;
-export const ITEM_CODE_MAX_LENGTH = 6;
+export const SERVICE_CODE_MAX_LENGTH = 50;
+export const ITEM_CODE_MAX_LENGTH = 50;
 
 export const SERVICE_CATEGORY_SURGERY = "S";
 export const SERVICE_CATEGORY_DELIVERY = "D";
