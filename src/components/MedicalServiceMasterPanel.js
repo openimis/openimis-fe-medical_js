@@ -48,14 +48,14 @@ class MedicalServiceMasterPanel extends FormPanel {
       this.showManual = true;
       this.setState(
         {
-          readOnlyPrice : 1
+          readOnlyPrice : true
         }
       );
     }else{
       this.showManual = false;
       this.setState(
         {
-          readOnlyPrice : 0
+          readOnlyPrice : false
         }
       );
     }
@@ -74,6 +74,7 @@ class MedicalServiceMasterPanel extends FormPanel {
     const shouldValidate = inputValue !== savedServiceCode;
     return shouldValidate;
   }
+
   render() {
     const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
     return (
@@ -99,7 +100,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               value={edited ? edited.code : ""}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <TextInput
               module="admin"
               label="medical.service.name"
@@ -143,7 +144,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("category", p)}
             />
           </Grid>
-          <Grid item xs={4} className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="medical.ServiceLevelPicker"
               withNull={false}
@@ -164,7 +165,19 @@ class MedicalServiceMasterPanel extends FormPanel {
               onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
             />
           </Grid>
-          <Grid item xs={3} className={classes.item}>
+          {this.showManual && <Grid item xs={2} className={classes.item}>
+            <PublishedComponent
+              pubRef="medical.ManualPricePicker"
+              readOnly={Boolean(edited.id) || readOnly}
+              value={edited ? edited.manualPrice : ""}
+              onChange={(p) => {
+                this.updateAttribute("manualPrice", p);
+                this.changeManual();
+              }}
+            />
+          </Grid>
+          }
+          <Grid item xs={2} className={classes.item}>
             <AmountInput
               module="admin"
               label={this.props.medicalService.packagetype== SERVICE_TYPE_PP_F ? `edit.services.ceiling` : `medical.service.price`}
