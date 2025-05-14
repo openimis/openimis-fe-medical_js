@@ -112,7 +112,15 @@
   "medical.item.deleteItemDialog.message": "Are you sure you want to delete this item?",
   "medical.item.updateMedicalItem.mutationLabel": "Update Medical Item",
   "manualPrice": "Manual",
-  "edit.services.ceiling":"Ceiling",
-  "edit.items.ceiling":"Ceiling",
-  "medical.item.createMedicalItem.mutationLabel": "Create Medical Item"
+  "edit.services.ceiling": "Ceiling",
+  "edit.items.ceiling": "Ceiling",
+  "medical.item.createMedicalItem.mutationLabel": "Create Medical Item",
+  "medical.gql_query_medical_items_perms": "Medical | Query Medical Items",
+  "medical.gql_query_medical_services_perms": "Medical | Query Medical Services",
+  "medical.gql_mutation_medical_items_add_perms": "Medical | Mutation Medical Items Add",
+  "medical.gql_mutation_medical_items_update_perms": "Medical | Mutation Medical Items Update",
+  "medical.gql_mutation_medical_items_delete_perms": "Medical | Mutation Medical Items Delete",
+  "medical.gql_mutation_medical_services_add_perms": "Medical | Mutation Medical Services Add",
+  "medical.gql_mutation_medical_services_update_perms": "Medical | Mutation Medical Services Update",
+  "medical.gql_mutation_medical_services_delete_perms": "Medical | Mutation Medical Services Delete"
 }
