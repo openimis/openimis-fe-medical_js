@@ -18,15 +18,14 @@ import {
 } from "@openimis/fe-core";
 import { Paper, Box } from "@material-ui/core";
 import _ from "lodash";
-import { fetchMedicalService, fetchMedicalServices } from "../actions"
-
-import { claimedAmount, approvedAmount } from "../helpers/amounts";
+// this i have changed
+import { fetchMedicalService, fetchMedicalServicesSummaries as fetchMedicalServices } from "../actions"
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
 });
 
-class MedicalItemChildPanel extends Component {
+class MedicalServiceChildPanel extends Component {
   state = {
     data: [],
   };
@@ -44,8 +43,8 @@ class MedicalItemChildPanel extends Component {
 
   initData = () => {
     let data = [];
-    if (!!this.props.edited[`servicesLinked`]) {
-      data = this.props.edited[`servicesLinked`] || [];
+    if (!!this.props.edited[`serviceserviceSet`]) {
+      data = this.props.edited['serviceserviceSet'] || [];
     }
     if (!_.isEqual(data[data.length - 1], {})) {
       data.push({});
@@ -66,8 +65,8 @@ class MedicalItemChildPanel extends Component {
       this.setState({ data, reset: this.state.reset + 1 });
     } else if (
       prevProps.reset !== this.props.reset ||
-      (!!this.props.edited[`servicesLinked`] &&
-        !_.isEqual(prevProps.edited[`servicesLinked`], this.props.edited[`servicesLinked`]))
+      (!!this.props.edited[`serviceserviceSet`] &&
+        !_.isEqual(prevProps.edited[`serviceserviceSet`], this.props.edited[`serviceserviceSet`]))
     ) {
       this.setState({
         data: this.initData(),
@@ -86,7 +85,7 @@ class MedicalItemChildPanel extends Component {
 
   _onEditedChanged = (data) => {
     let edited = { ...this.props.edited };
-    edited[`servicesLinked`] = data;
+    edited[`serviceserviceSet`] = data;
     this.props.onEditedChanged(edited);
   };
 
@@ -147,9 +146,17 @@ class MedicalItemChildPanel extends Component {
     ]);
     this._onEditedChanged(data);
   };
-
+  
   render() {
-    const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
+    const { 
+      intl, 
+      classes, 
+      edited, 
+      type, 
+      picker, 
+      forReview, 
+      fetchingPricelist, 
+      readOnly = false } = this.props;
     if (!edited) return null;
 
     let preHeaders = [
@@ -175,7 +182,7 @@ class MedicalItemChildPanel extends Component {
             readOnly={!!forReview || readOnly}
             pubRef={picker}
             withLabel={false}
-            value={i.item}
+            value={i.service}
             fullWidth
             date={edited.dateClaimed}
             onChange={(v) => this._onChangeItem(idx, type, v)}
@@ -206,6 +213,7 @@ class MedicalItemChildPanel extends Component {
       );
     }
     let header = formatMessage(intl, "claim", `edit.${this.props.type}s.title`);
+    
 
     if(this.props.medicalService.packagetype=="P" || this.props.medicalService.packagetype=="F" ){
       return (
@@ -235,4 +243,4 @@ const mapStateToProps = (state, props) => ({
 });
 
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalItemChildPanel)))));
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalServiceChildPanel)))));
