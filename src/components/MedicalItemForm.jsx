@@ -3,8 +3,8 @@ import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { withStyles, withTheme } from "@material-ui/core/styles";
-import ReplayIcon from "@material-ui/icons/Replay";
+import { withStyles, withTheme } from "@mui/material/styles";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
   coreConfirm,

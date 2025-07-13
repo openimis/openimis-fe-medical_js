@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Fab } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import { Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { withTheme, withStyles } from "@mui/material/styles";
 import { RIGHT_MEDICALITEMS_ADD, ITEMS_MODULE_NAME} from "../constants";
 import {
   formatMessage,

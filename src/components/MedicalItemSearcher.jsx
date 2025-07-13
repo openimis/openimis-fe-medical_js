@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { IconButton, Tooltip } from "@material-ui/core";
-import { Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import { IconButton, Tooltip } from "@mui/material";
+import { Tab as TabIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import {
   withModulesManager,
   formatMessageWithValues,

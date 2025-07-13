@@ -2,21 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import {
-  formatAmount,
-  formatMessage,
-  formatMessageWithValues,
-  decodeId,
-  withModulesManager,
-  NumberInput,
-  Table,
-  PublishedComponent,
-  AmountInput,
-  TextInput,
-  Error,
-} from "@openimis/fe-core";
-import { Paper, Box } from "@material-ui/core";
+import { withTheme, withStyles } from "@mui/material/styles";
+import { Paper, Box } from "@mui/material";
 import _ from "lodash";
 import { fetchMedicalService, fetchMedicalServicesSummaries as fetchMedicalServices } from "../actions"
 

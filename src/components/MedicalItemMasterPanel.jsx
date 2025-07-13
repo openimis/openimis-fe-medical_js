@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 
-import { withStyles, withTheme } from "@material-ui/core/styles";
-import { Grid } from "@material-ui/core";
+import { withStyles, withTheme } from "@mui/material/styles";
+import { Grid } from "@mui/material";
 
 import {
   AmountInput,
