@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 
-import { withStyles, withTheme } from "@mui/material/styles";
+import { withStyles, withTheme } from "@mui/styles";
 import { Grid } from "@mui/material";
 
 import {

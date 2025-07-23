@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Edit as EditIcon } from "@material-ui/icons";
+import { Edit as EditIcon } from "@mui/icons-material";
 import { historyPush, withModulesManager, withHistory, ErrorBoundary, Helmet, formatMessageWithValues }
   from "@openimis/fe-core";
 import MedicalItemPage from "./MedicalItemPage";

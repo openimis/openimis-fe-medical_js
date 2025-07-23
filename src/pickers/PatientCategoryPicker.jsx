@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 
-import { Checkbox, FormControlLabel, Typography } from "@material-ui/core";
+import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 
 import { formatMessage } from "@openimis/fe-core";
 import { PATIENT_CATEGORIES, GENDER_CATEGORIES, AGE_CATEGORIES } from "../constants";
