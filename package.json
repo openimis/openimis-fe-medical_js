@@ -16,7 +16,9 @@
     "format": "prettier src -w",
     "prepare": "npm run build"
   },
-  "peerDependency": {
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
     "react-intl": "^5.8.1"
   },
   "devDependencies": {
@@ -27,13 +29,8 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/runtime": "^7.9.6",
+    "@emotion/babel-plugin": "^11.12.0",
     "@vitejs/plugin-react": "^4.5.2",
-    "@mui/material": "^5.15.14",
-    "@mui/icons-material": "^5.14.17",
-    "@mui/lab": "^5.0.0-alpha.147",
-    "@mui/styles": "^5.15.14",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
     "moment": "^2.25.3",
     "prettier": "^2.3.2",
     "prop-types": "^15.7.2",
@@ -48,7 +45,13 @@
     "dist"
   ],
   "dependencies": {
-    "loadsh": "^0.0.4",
+    "@emotion/cache": "^11.12.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.17",
+    "@mui/lab": "^5.0.0-alpha.147",
+    "@mui/material": "^5.15.14",
+    "@mui/styles": "^5.15.14",
     "lodash": "^4.17.21"
   }
 }
