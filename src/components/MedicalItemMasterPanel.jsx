@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 
-import { withStyles, withTheme } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
 
 import {
@@ -18,13 +18,13 @@ import {
 import { medicalItemsValidationCheck, medicalItemsValidationClear, medicalItemsSetValid } from "../actions";
 import { ITEM_CODE_MAX_LENGTH } from "../constants";
 
-const styles = (theme) => ({
-  tableTitle: theme.table.title,
-  item: theme.paper.item,
-  fullHeight: {
+const StyledMedicalItemMasterPanel = styled('div')(({ theme }) => ({
+  '& .tableTitle': theme.table.title,
+  '& .item': theme.paper.item,
+  '& .fullHeight': {
     height: "100%",
   },
-});
+}));
 
 class MedicalItemMasterPanel extends FormPanel {
   shouldValidate = (inputValue) => {
@@ -33,11 +33,11 @@ class MedicalItemMasterPanel extends FormPanel {
     return shouldValidate;
   }
   render() {
-    const { classes, edited, readOnly, isItemValid, isItemValidating, itemValidationError } = this.props;
+    const { edited, readOnly, isItemValid, isItemValidating, itemValidationError } = this.props;
     return (
-      <>
-        <Grid container className={classes.item}>
-          <Grid item xs={2} className={classes.item}>
+      <StyledMedicalItemMasterPanel>
+        <Grid container className="item">
+          <Grid item xs={2} className="item">
             <ValidatedTextInput
               action={medicalItemsValidationCheck}
               clearAction={medicalItemsValidationClear}
@@ -57,7 +57,7 @@ class MedicalItemMasterPanel extends FormPanel {
               value={edited ? edited.code : ""}
             />
           </Grid>
-          <Grid item xs={10} className={classes.item}>
+          <Grid item xs={10} className="item">
             <TextInput
               module="admin"
               label="medical.item.name"
@@ -67,7 +67,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(name) => this.updateAttributes({ name })}
             />
           </Grid>
-          <Grid item xs={2} className={classes.item}>
+          <Grid item xs={2} className="item">
             <PublishedComponent
               pubRef="medical.ItemTypePicker"
               withNull={true}
@@ -77,7 +77,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("type", p)}
             />
           </Grid>
-          <Grid item xs={2} className={classes.item}>
+          <Grid item xs={2} className="item">
             <TextInput
               module="admin"
               label="medical.item.frequency"
@@ -86,7 +86,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("frequency", p)}
             />
           </Grid>
-          <Grid item xs={3} className={classes.item}>
+          <Grid item xs={3} className="item">
             <TextInput
               module="admin"
               label="medical.item.package"
@@ -95,7 +95,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(pkg) => this.updateAttributes({ "package": pkg })}
             />
           </Grid>
-          <Grid item xs={2} className={classes.item}>
+          <Grid item xs={2} className="item">
             <NumberInput
               min={0}
               module="admin"
@@ -106,7 +106,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(quantity) => this.updateAttributes({ quantity })}
             />
           </Grid>
-          <Grid item xs={2} className={classes.item}>
+          <Grid item xs={2} className="item">
             <NumberInput
               min={0}
               module="admin"
@@ -117,7 +117,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
             />
           </Grid>
-          <Grid item xs={3} className={classes.item}>
+          <Grid item xs={3} className="item">
             <AmountInput
               module="admin"
               label="medical.item.price"
@@ -129,8 +129,8 @@ class MedicalItemMasterPanel extends FormPanel {
             />
           </Grid>
         </Grid>
-        <Grid container className={classes.item}>
-          <Grid item xs={4} className={classes.item}>
+        <Grid container className="item">
+          <Grid item xs={4} className="item">
             <PublishedComponent
               pubRef="medical.CareTypePicker"
               withNull={true}
@@ -140,7 +140,7 @@ class MedicalItemMasterPanel extends FormPanel {
               onChange={(p) => this.updateAttribute("careType", p)}
             />
           </Grid>
-          <Grid item className={classes.item}>
+          <Grid item className="item">
             <PublishedComponent
               pubRef="medical.PatientCategoryPicker"
               readOnly={Boolean(edited.id) || readOnly}
@@ -149,7 +149,7 @@ class MedicalItemMasterPanel extends FormPanel {
             />
           </Grid>
         </Grid>
-      </>
+      </StyledMedicalItemMasterPanel>
     );
   }
 }
@@ -163,5 +163,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default injectIntl(
-  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(MedicalItemMasterPanel))))),
+  withModulesManager(withHistory(connect(mapStateToProps)(MedicalItemMasterPanel))),
 );

@@ -95,7 +95,6 @@ export default defineConfig({
         '@mui/material',
         '@mui/icons-material',
         '@mui/system',
-        '@mui/styles',
         '@material-ui/lab',
         '@material-ui/pickers',
         '@date-io/core',

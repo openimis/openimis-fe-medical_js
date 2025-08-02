@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { withStyles, withTheme } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
@@ -33,9 +33,9 @@ import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 import { validateCategories } from "../utils";
 
-const styles = (theme) => ({
-  lockedPage: theme.page.locked,
-});
+const StyledMedicalServiceForm = styled('div')(({ theme }) => ({
+  '& .lockedPage': theme.page.locked,
+}));
 
 class MedicalServicesPanel extends Component {
   render() {
@@ -233,7 +233,6 @@ class MedicalServiceForm extends Component {
 
   render() {
     const {
-      classes,
       rights,
       medicalServiceId,
       fetchingMedicalService,
@@ -256,40 +255,42 @@ class MedicalServiceForm extends Component {
     ];
     const shouldBeLocked = lockNew || medicalService?.validityTo;
     return (
-      <div className={shouldBeLocked ? classes.lockedPage : null}>
-        <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "MedicalServiceOverview.title")} />
-        <ProgressOrError progress={fetchingMedicalService} error={errorMedicalService} />
-        <ErrorBoundary>
-          {((!!fetchedMedicalService && !!medicalService && medicalService.uuid === medicalServiceId) ||
-            !medicalServiceId) && (
-              <Form
-                module="medicalService"
-                title={
-                  this.state.newMedicalService
-                    ? "medical.service.MedicalServiceOverview.newTitle"
-                    : "medical.service.MedicalServiceOverview.title"
-                }
-                edited_id={medicalServiceId}
-                edited={medicalService}
-                reset={reset}
-                back={back}
-                add={!!add && !this.state.newMedicalService ? this.add : null}
-                readOnly={readOnly || lockNew || (!!medicalService && !!medicalService.validityTo)}
-                actions={actions}
-                overview={overview}
-                HeadPanel={MedicalServiceMasterPanel}
-                Panels={[MedicalServicesPanel, MedicalItemsPanel]}
-                medicalService={medicalService}
-                onEditedChanged={this.onEditedChanged}
-                priceTotal={this.state.totalPrice}
-                canSave={this.canSave}
-                save={save ? this.save : null}
-                openDirty={save}
-                onActionToConfirm={this.onActionToConfirm}
-              />
-            )}
-        </ErrorBoundary>
-      </div>
+      <StyledMedicalServiceForm>
+        <div className={shouldBeLocked ? "lockedPage" : null}>
+          <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "MedicalServiceOverview.title")} />
+          <ProgressOrError progress={fetchingMedicalService} error={errorMedicalService} />
+          <ErrorBoundary>
+            {((!!fetchedMedicalService && !!medicalService && medicalService.uuid === medicalServiceId) ||
+              !medicalServiceId) && (
+                <Form
+                  module="medicalService"
+                  title={
+                    this.state.newMedicalService
+                      ? "medical.service.MedicalServiceOverview.newTitle"
+                      : "medical.service.MedicalServiceOverview.title"
+                  }
+                  edited_id={medicalServiceId}
+                  edited={medicalService}
+                  reset={reset}
+                  back={back}
+                  add={!!add && !this.state.newMedicalService ? this.add : null}
+                  readOnly={readOnly || lockNew || (!!medicalService && !!medicalService.validityTo)}
+                  actions={actions}
+                  overview={overview}
+                  HeadPanel={MedicalServiceMasterPanel}
+                  Panels={[MedicalServicesPanel, MedicalItemsPanel]}
+                  medicalService={medicalService}
+                  onEditedChanged={this.onEditedChanged}
+                  priceTotal={this.state.totalPrice}
+                  canSave={this.canSave}
+                  save={save ? this.save : null}
+                  openDirty={save}
+                  onActionToConfirm={this.onActionToConfirm}
+                />
+              )}
+          </ErrorBoundary>
+        </div>
+      </StyledMedicalServiceForm>
     );
   }
 }
@@ -323,6 +324,6 @@ const mapDispatchToProps = (dispatch) =>
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(MedicalServiceForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServiceForm)),
   ),
 );

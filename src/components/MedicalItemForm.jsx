@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { withStyles, withTheme } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
@@ -30,9 +30,9 @@ import { RIGHT_MEDICALITEMS, ITEM_CODE_MAX_LENGTH } from "../constants";
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 import { validateCategories } from "../utils";
 
-const styles = (theme) => ({
-  lockedPage: theme.page.locked,
-});
+const StyledMedicalItemForm = styled('div')(({ theme }) => ({
+  '& .lockedPage': theme.page.locked,
+}));
 
 const MEDICAL_ITEM_OVERVIEW_MUTATIONS_KEY = "medicalItem.MedicalItemOverview.mutations";
 
@@ -175,7 +175,6 @@ class MedicalItemForm extends Component {
   render() {
     const {
       modulesManager,
-      classes,
       state,
       rights,
       medicalItemId,
@@ -204,37 +203,39 @@ class MedicalItemForm extends Component {
     ];
     const shouldBeLocked = runningMutation || medicalItem?.validityTo;
     return (
-      <div className={shouldBeLocked ? classes.lockedPage : null}>
-        <Helmet title={formatMessageWithValues(this.props.intl, "medical.item", "MedicalItemOverview.title")} />
-        <ProgressOrError progress={fetchingMedicalItem} error={errorMedicalItem} />
-        <ErrorBoundary>
-          {((!!fetchedMedicalItem && !!medicalItem && medicalItem.uuid === medicalItemId) || !medicalItemId) && (
-            <Form
-              module="medicalItem"
-              title={
-                this.state.newMedicalItem
-                  ? "medical.item.MedicalItemOverview.newTitle"
-                  : "medical.item.MedicalItemOverview.title"
-              }
-              edited_id={medicalItemId}
-              edited={medicalItem}
-              reset={reset}
-              back={back}
-              add={!!add && !this.state.newMedicalItem ? this.add : null}
-              readOnly={readOnly || lockNew || runningMutation || (!!medicalItem && !!medicalItem.validityTo)}
-              actions={actions}
-              overview={overview}
-              HeadPanel={MedicalItemMasterPanel}
-              medicalItem={medicalItem}
-              onEditedChanged={this.onEditedChanged}
-              canSave={this.canSave}
-              save={save ? this.save : null}
-              openDirty={save}
-              onActionToConfirm={this.onActionToConfirm}
-            />
-          )}
-        </ErrorBoundary>
-      </div>
+      <StyledMedicalItemForm>
+        <div className={shouldBeLocked ? "lockedPage" : null}>
+          <Helmet title={formatMessageWithValues(this.props.intl, "medical.item", "MedicalItemOverview.title")} />
+          <ProgressOrError progress={fetchingMedicalItem} error={errorMedicalItem} />
+          <ErrorBoundary>
+            {((!!fetchedMedicalItem && !!medicalItem && medicalItem.uuid === medicalItemId) || !medicalItemId) && (
+              <Form
+                module="medicalItem"
+                title={
+                  this.state.newMedicalItem
+                    ? "medical.item.MedicalItemOverview.newTitle"
+                    : "medical.item.MedicalItemOverview.title"
+                }
+                edited_id={medicalItemId}
+                edited={medicalItem}
+                reset={reset}
+                back={back}
+                add={!!add && !this.state.newMedicalItem ? this.add : null}
+                readOnly={readOnly || lockNew || runningMutation || (!!medicalItem && !!medicalItem.validityTo)}
+                actions={actions}
+                overview={overview}
+                HeadPanel={MedicalItemMasterPanel}
+                medicalItem={medicalItem}
+                onEditedChanged={this.onEditedChanged}
+                canSave={this.canSave}
+                save={save ? this.save : null}
+                openDirty={save}
+                onActionToConfirm={this.onActionToConfirm}
+              />
+            )}
+          </ErrorBoundary>
+        </div>
+      </StyledMedicalItemForm>
     );
   }
 }
@@ -268,6 +269,6 @@ const mapDispatchToProps = (dispatch) =>
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(MedicalItemForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemForm)),
   ),
 );

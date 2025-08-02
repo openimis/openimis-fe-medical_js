@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import _debounce from "lodash/debounce";
 
 import { Grid, FormControlLabel, Checkbox } from "@mui/material";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 import {
   withModulesManager,
@@ -14,18 +14,18 @@ import {
   ErrorBoundary,
 } from "@openimis/fe-core";
 
-const styles = (theme) => ({
-  dialogTitle: theme.dialog.title,
-  dialogContent: theme.dialog.content,
-  form: {
+const StyledMedicalItemFilter = styled('div')(({ theme }) => ({
+  '& .dialogTitle': theme.dialog.title,
+  '& .dialogContent': theme.dialog.content,
+  '& .form': {
     padding: "0 0 10px 0",
     width: "100%",
   },
-  item: {
+  '& .item': {
     padding: theme.spacing(1),
   },
-  paperDivider: theme.paper.divider,
-});
+  '& .paperDivider': theme.paper.divider,
+}));
 
 class MedicalItemFilter extends Component {
   debouncedOnChangeFilter = _debounce(
@@ -55,130 +55,132 @@ class MedicalItemFilter extends Component {
   };
 
   render() {
-    const { classes, intl } = this.props;
+    const { intl } = this.props;
     return (
-      <ErrorBoundary>
-        <section className={classes.form}>
-          <Grid container>
-            <ControlledField
-              module="admin"
-              id="medicalItemFilter.code"
-              field={
-                <Grid item xs={3} className={classes.item}>
-                  <TextInput
-                    module="medicalItem"
-                    label="medical.item.code"
-                    name="code"
-                    value={this.filterTextFieldValue("code")}
-                    onChange={(v) =>
-                      this.debouncedOnChangeFilter([
-                        {
-                          id: "code",
-                          value: v,
-                          filter: `code_Icontains: "${v}"`,
-                        },
-                      ])
-                    }
-                  />
-                </Grid>
-              }
-            />
-            <ControlledField
-              module="admin"
-              id="medicalItemFilter.name"
-              field={
-                <Grid item xs={3} className={classes.item}>
-                  <TextInput
-                    module="medicalItem"
-                    label="medical.item.name"
-                    name="name"
-                    value={this.filterTextFieldValue("name")}
-                    onChange={(v) =>
-                      this.debouncedOnChangeFilter([
-                        {
-                          id: "name",
-                          value: v,
-                          filter: `name_Icontains: "${v}"`,
-                        },
-                      ])
-                    }
-                  />
-                </Grid>
-              }
-            />
-            <ControlledField
-              module="admin"
-              id="medicalItemFilter.type"
-              field={
-                <Grid item xs={3} className={classes.item}>
-                  <PublishedComponent
-                    pubRef="medical.ItemTypePicker"
-                    module="medical"
-                    value={this.filterValue("type")}
-                    withNull={true}
-                    nullLabel="medical.itemType.any"
-                    onChange={(v) =>
-                      this.debouncedOnChangeFilter([
-                        {
-                          id: "type",
-                          value: v,
-                          filter: `type: "${v}"`,
-                        },
-                      ])
-                    }
-                  />
-                </Grid>
-              }
-            />
-            <ControlledField
-              module="admin"
-              id="medicalItemFilter.package"
-              field={
-                <Grid item xs={3} className={classes.item}>
-                  <TextInput
-                    module="medicalItem"
-                    label="medical.item.package"
-                    name="package"
-                    value={this.filterTextFieldValue("package")}
-                    onChange={(v) =>
-                      this.debouncedOnChangeFilter([
-                        {
-                          id: "package",
-                          value: v,
-                          filter: `package_Icontains: "${v}"`,
-                        },
-                      ])
-                    }
-                  />
-                </Grid>
-              }
-            />
-          </Grid>
+      <StyledMedicalItemFilter>
+        <ErrorBoundary>
+          <section className="form">
+            <Grid container>
+              <ControlledField
+                module="admin"
+                id="medicalItemFilter.code"
+                field={
+                  <Grid item xs={3} className="item">
+                    <TextInput
+                      module="medicalItem"
+                      label="medical.item.code"
+                      name="code"
+                      value={this.filterTextFieldValue("code")}
+                      onChange={(v) =>
+                        this.debouncedOnChangeFilter([
+                          {
+                            id: "code",
+                            value: v,
+                            filter: `code_Icontains: "${v}"`,
+                          },
+                        ])
+                      }
+                    />
+                  </Grid>
+                }
+              />
+              <ControlledField
+                module="admin"
+                id="medicalItemFilter.name"
+                field={
+                  <Grid item xs={3} className="item">
+                    <TextInput
+                      module="medicalItem"
+                      label="medical.item.name"
+                      name="name"
+                      value={this.filterTextFieldValue("name")}
+                      onChange={(v) =>
+                        this.debouncedOnChangeFilter([
+                          {
+                            id: "name",
+                            value: v,
+                            filter: `name_Icontains: "${v}"`,
+                          },
+                        ])
+                      }
+                    />
+                  </Grid>
+                }
+              />
+              <ControlledField
+                module="admin"
+                id="medicalItemFilter.type"
+                field={
+                  <Grid item xs={3} className="item">
+                    <PublishedComponent
+                      pubRef="medical.ItemTypePicker"
+                      module="medical"
+                      value={this.filterValue("type")}
+                      withNull={true}
+                      nullLabel="medical.itemType.any"
+                      onChange={(v) =>
+                        this.debouncedOnChangeFilter([
+                          {
+                            id: "type",
+                            value: v,
+                            filter: `type: "${v}"`,
+                          },
+                        ])
+                      }
+                    />
+                  </Grid>
+                }
+              />
+              <ControlledField
+                module="admin"
+                id="medicalItemFilter.package"
+                field={
+                  <Grid item xs={3} className="item">
+                    <TextInput
+                      module="medicalItem"
+                      label="medical.item.package"
+                      name="package"
+                      value={this.filterTextFieldValue("package")}
+                      onChange={(v) =>
+                        this.debouncedOnChangeFilter([
+                          {
+                            id: "package",
+                            value: v,
+                            filter: `package_Icontains: "${v}"`,
+                          },
+                        ])
+                      }
+                    />
+                  </Grid>
+                }
+              />
+            </Grid>
 
-          <Grid container justify="flex-end">
-            <ControlledField
-              module="admin"
-              id="MedicalItemFilter.showHistory"
-              field={
-                <Grid item xs={2} className={classes.item}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        color="primary"
-                        checked={!!this.filterValue("showHistory")}
-                        onChange={(event) => this.onChangeCheckbox("showHistory", event.target.checked)}
-                      />
-                    }
-                    label={formatMessage(intl, "admin", "showHistory")}
-                  />
-                </Grid>
-              }
-            />
-          </Grid>
-        </section>
-      </ErrorBoundary>
+            <Grid container justify="flex-end">
+              <ControlledField
+                module="admin"
+                id="MedicalItemFilter.showHistory"
+                field={
+                  <Grid item xs={2} className="item">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          color="primary"
+                          checked={!!this.filterValue("showHistory")}
+                          onChange={(event) => this.onChangeCheckbox("showHistory", event.target.checked)}
+                        />
+                      }
+                      label={formatMessage(intl, "admin", "showHistory")}
+                    />
+                  </Grid>
+                }
+              />
+            </Grid>
+          </section>
+        </ErrorBoundary>
+      </StyledMedicalItemFilter>
     );
   }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(MedicalItemFilter))));
+export default withModulesManager(injectIntl(MedicalItemFilter));

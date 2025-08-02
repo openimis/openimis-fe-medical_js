@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { Paper, Box } from "@mui/material";
 import _ from "lodash";
 // this i have changed
 import { fetchMedicalService, fetchMedicalServicesSummaries as fetchMedicalServices } from "../actions"
 
-const styles = (theme) => ({
-  paper: theme.paper.paper,
-});
+const StyledMedicalServiceChildPanel = styled('div')(({ theme }) => ({
+  '& .paper': theme.paper.paper,
+}));
 
 class MedicalServiceChildPanel extends Component {
   state = {
@@ -137,7 +137,6 @@ class MedicalServiceChildPanel extends Component {
   render() {
     const { 
       intl, 
-      classes, 
       edited, 
       type, 
       picker, 
@@ -204,17 +203,19 @@ class MedicalServiceChildPanel extends Component {
 
     if(this.props.medicalService.packagetype=="P" || this.props.medicalService.packagetype=="F" ){
       return (
-        <Paper className={classes.paper}>
-          <Table
-            module="claim"
-            header={header}
-            preHeaders={preHeaders}
-            headers={headers}
-            itemFormatters={itemFormatters}
-            items={!fetchingPricelist ? this.state.data : []}
-            onDelete={this._onDelete}
-          />
-        </Paper>
+        <StyledMedicalServiceChildPanel>
+          <Paper className="paper">
+            <Table
+              module="claim"
+              header={header}
+              preHeaders={preHeaders}
+              headers={headers}
+              itemFormatters={itemFormatters}
+              items={!fetchingPricelist ? this.state.data : []}
+              onDelete={this._onDelete}
+            />
+          </Paper>
+        </StyledMedicalServiceChildPanel>
       );
     }else{
       return "";
@@ -230,4 +231,4 @@ const mapStateToProps = (state, props) => ({
 });
 
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalServiceChildPanel)))));
+export default withModulesManager(injectIntl(connect(mapStateToProps)(MedicalServiceChildPanel)));

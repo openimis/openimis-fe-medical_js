@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { RIGHT_MEDICALSERVICES_ADD, SERVICES_MODULE_NAME } from "../constants";
 import {
   formatMessage,
@@ -18,10 +18,10 @@ import {
 } from "@openimis/fe-core";
 import MedicalServiceSearcher from "../components/MedicalServiceSearcher";
 
-const styles = (theme) => ({
-  page: theme.page,
-  fab: theme.fab,
-});
+const StyledMedicalServicesPage = styled('div')(({ theme }) => ({
+  ...theme.page,
+  '& .fab': theme.fab,
+}));
 
 class MedicalServicesPage extends Component {
   onDoubleClick = (ms, newTab = false) => {
@@ -38,21 +38,21 @@ class MedicalServicesPage extends Component {
   };
 
   render() {
-    const { classes, rights, intl } = this.props;
+    const { rights, intl } = this.props;
     return (
-      <div className={classes.page}>
+      <StyledMedicalServicesPage>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "servicesTitle")} />
         <MedicalServiceSearcher cacheFiltersKey="medicalServicesPageFiltersCache" onDoubleClick={this.onDoubleClick} />
         {rights.includes(RIGHT_MEDICALSERVICES_ADD) &&
           withTooltip(
-            <div className={classes.fab}>
+            <div className="fab">
               <Fab color="primary" onClick={this.onAdd}>
                 <AddIcon />
               </Fab>
             </div>,
             formatMessage(intl, "medical.medicalService", "medical.addNewMedicalService.tooltip"),
           )}
-      </div>
+      </StyledMedicalServicesPage>
     );
   }
 }
@@ -66,6 +66,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPagina
 
 export default injectIntl(
   withModulesManager(
-    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(MedicalServicesPage)))),
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(MedicalServicesPage)),
   ),
 );

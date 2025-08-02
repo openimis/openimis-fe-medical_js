@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import {
   formatMessageWithValues,
   withModulesManager,
@@ -15,9 +15,9 @@ import MedicalServiceForm from "../components/MedicalServiceForm";
 import { createMedicalService, updateMedicalService } from "../actions";
 import { RIGHT_MEDICALSERVICES_ADD, RIGHT_MEDICALSERVICES_EDIT } from "../constants";
 
-const styles = (theme) => ({
-  page: theme.page,
-});
+const StyledMedicalServicePage = styled('div')(({ theme }) => ({
+  ...theme.page,
+}));
 
 class MedicalServicePage extends Component {
   add = () => {
@@ -41,10 +41,10 @@ class MedicalServicePage extends Component {
   };
 
   render() {
-    const { classes, rights, medicalServiceId, overview, modulesManager, history } = this.props;
+    const { rights, medicalServiceId, overview, modulesManager, history } = this.props;
     if (!rights.includes(RIGHT_MEDICALSERVICES_EDIT)) return null;
     return (
-      <div className={classes.page}>
+      <StyledMedicalServicePage>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "serviceTitle")} />
         <ErrorBoundary>
           <MedicalServiceForm
@@ -55,7 +55,7 @@ class MedicalServicePage extends Component {
             save={this.save}
           />
         </ErrorBoundary>
-      </div>
+      </StyledMedicalServicePage>
     );
   }
 }
@@ -69,6 +69,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({ createMedicalServi
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(MedicalServicePage)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServicePage)),
   ),
 );
