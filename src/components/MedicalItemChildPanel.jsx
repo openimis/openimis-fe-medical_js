@@ -8,6 +8,14 @@ import _ from "lodash";
 import { fetchMedicalService, fetchMedicalServicesSummaries as fetchMedicalServices } from "../actions"
 
 import { claimedAmount, approvedAmount } from "../helpers/amounts";
+import { 
+  withModulesManager, 
+  PublishedComponent, 
+  NumberInput, 
+  AmountInput, 
+  Table, 
+  formatMessage 
+} from "@openimis/fe-core";
 
 const StyledMedicalItemChildPanel = styled('div')(({ theme }) => ({
   '& .paper': theme.paper.paper,

@@ -7,6 +7,14 @@ import { Paper, Box } from "@mui/material";
 import _ from "lodash";
 // this i have changed
 import { fetchMedicalService, fetchMedicalServicesSummaries as fetchMedicalServices } from "../actions"
+import { 
+  withModulesManager, 
+  PublishedComponent, 
+  NumberInput, 
+  AmountInput, 
+  Table, 
+  formatMessage 
+} from "@openimis/fe-core";
 
 const StyledMedicalServiceChildPanel = styled('div')(({ theme }) => ({
   '& .paper': theme.paper.paper,
