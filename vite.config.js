@@ -16,6 +16,7 @@ const noExternal = [
 export default defineConfig({
   plugins: [
     react({
+      jsxRuntime: 'automatic',
       jsxImportSource: '@emotion/react',
       babel: {
         plugins: ['@emotion/babel-plugin'],
