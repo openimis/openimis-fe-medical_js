@@ -31,6 +31,7 @@ class MedicalServiceMasterPanel extends FormPanel {
 
   constructor(props) {
     super(props);
+    this.serviceCodeMaxlength = props.modulesManager.getConf("fe-medical", "medicalserviceForm.serviceCodeMaxlength", SERVICE_CODE_MAX_LENGTH);
     this.state = {
       readOnlyPrice : props.medicalService.packagetype==SERVICE_TYPE_PP_S? 0 : !props.medicalService.manualPrice,
     }
@@ -47,14 +48,14 @@ class MedicalServiceMasterPanel extends FormPanel {
       this.showManual = true;
       this.setState(
         {
-          readOnlyPrice : 1
+          readOnlyPrice : true
         }
       );
     }else{
       this.showManual = false;
       this.setState(
         {
-          readOnlyPrice : 0
+          readOnlyPrice : false
         }
       );
     }
@@ -73,6 +74,7 @@ class MedicalServiceMasterPanel extends FormPanel {
     const shouldValidate = inputValue !== savedServiceCode;
     return shouldValidate;
   }
+
   render() {
     const { classes, edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
     return (
@@ -90,7 +92,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               shouldValidate={this.shouldValidate}
               codeTakenLabel="medical.codeTaken"
               onChange={(code) => this.updateAttribute("code", code)}
-              inputProps={{ maxLength: SERVICE_CODE_MAX_LENGTH }}
+              inputProps={{ maxLength: this.serviceCodeMaxlength }}
               required={true}
               module="admin"
               label="medical.service.code"
@@ -236,3 +238,4 @@ const mapStateToProps = (state) => ({
 export default injectIntl(
   withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(MedicalServiceMasterPanel))))),
 );
+

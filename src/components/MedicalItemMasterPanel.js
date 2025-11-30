@@ -27,6 +27,11 @@ const styles = (theme) => ({
 });
 
 class MedicalItemMasterPanel extends FormPanel {
+  constructor(props) {
+    super(props);
+    this.itemCodeMaxlength = props.modulesManager.getConf("fe-medical", "medicalitemForm.itemCodeMaxlength", ITEM_CODE_MAX_LENGTH);
+    //console.log("itemCodeMaxlength:", this.itemCodeMaxlength);
+  }
   shouldValidate = (inputValue) => {
     const { savedItemCode } = this.props;
     const shouldValidate = inputValue !== savedItemCode;
@@ -49,7 +54,7 @@ class MedicalItemMasterPanel extends FormPanel {
               shouldValidate={this.shouldValidate}
               codeTakenLabel="medical.codeTaken"
               onChange={(code) => this.updateAttribute("code", code)}
-              inputProps={{ maxLength: ITEM_CODE_MAX_LENGTH }}
+              inputProps={{ maxLength:  this.itemCodeMaxlength }}
               required={true}
               module="admin"
               label="medical.item.code"

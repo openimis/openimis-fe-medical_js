@@ -147,18 +147,22 @@ class MedicalItemForm extends Component {
     });
   };
 
-  canSave = () =>
-    this.state.medicalItem &&
-    this.state.medicalItem.code &&
-    this.state.medicalItem.code.length <= ITEM_CODE_MAX_LENGTH &&
-    this.state.medicalItem.name &&
-    this.state.medicalItem.type &&
-    !isNaN(this.state.medicalItem.price) &&
-    this.state.medicalItem.price &&
-    this.state.medicalItem.careType &&
-    validateCategories(this.state.medicalItem.patientCategory) &&
-    !this.state.medicalItem.validityTo &&
-    this.props.isItemValid;
+  canSave = () => {
+    const configuredItemCodeMaxLength = this.props.modulesManager.getConf("fe-medical", "medicalitemForm.itemCodeMaxlength", ITEM_CODE_MAX_LENGTH);
+    return (
+      this.state.medicalItem &&
+      this.state.medicalItem.code &&
+      this.state.medicalItem.code.length <= configuredItemCodeMaxLength &&
+      this.state.medicalItem.name &&
+      this.state.medicalItem.type &&
+      this.state.medicalItem.price &&
+      this.state.medicalItem.careType &&
+      validateCategories(this.state.medicalItem.patientCategory) &&
+      !this.state.medicalItem.validityTo &&
+      this.props.isItemValid
+    );
+  }
+    
 
   save = (medicalItem) => {
     this.setState({ lockNew: !medicalItem.id, isSaved: true }, (e) => this.props.save(medicalItem));

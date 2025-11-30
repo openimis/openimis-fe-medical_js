@@ -58,7 +58,7 @@ function reducer(
         fetchedMedicalServices: action.meta,
         medicalServices: parseData(action.payload.data.medicalServices).map((medicalServices) => ({
           ...medicalServices,
-          medicalServicesTypes: getMedicalServicesTypes(medicalServices),
+          //medicalServicesTypes: getMedicalServicesTypes(medicalServices),
         })),
         errorMedicalServices: formatGraphQLError(action.payload),
       };

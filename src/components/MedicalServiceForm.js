@@ -200,11 +200,12 @@ class MedicalServiceForm extends Component {
   }
 
   canSave = () => {
+    const configuredServiceCodeMaxLength = this.props.modulesManager.getConf("fe-medical", "medicalserviceForm.serviceCodeMaxlength", SERVICE_CODE_MAX_LENGTH);
     this.priceCalcul();
-
-    return this.state.medicalService &&
+    return (
+      this.state.medicalService &&
       this.state.medicalService.code &&
-      this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
+      this.state.medicalService.code.length <= configuredServiceCodeMaxLength &&
       this.state.medicalService.name &&
       this.state.medicalService.type &&
       !isNaN(this.state.medicalService.price) &&
@@ -214,9 +215,10 @@ class MedicalServiceForm extends Component {
       this.state.medicalService.careType &&
       validateCategories(this.state.medicalService.patientCategory) &&
       !this.state.medicalService.validityTo &&
-      this.props.isServiceValid;
-
+      this.props.isServiceValid
+    );
   }
+    
 
   save = (medicalService) => {
     this.setState({ lockNew: !medicalService?.id, isSaved: true }, (e) => this.props.save(medicalService));
