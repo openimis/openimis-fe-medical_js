@@ -16,7 +16,7 @@
     "format": "prettier src -w",
     "prepare":"npm run build"
   },
-  "peerDependency": {
+  "peerDependencies": {
     "react-intl": "^5.8.1"
   },
   "devDependencies": {
