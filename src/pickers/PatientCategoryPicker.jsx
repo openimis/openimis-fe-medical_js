@@ -67,4 +67,5 @@ class PatientCategoryPicker extends Component {
   }
 }
 
+export { PatientCategoryPicker };
 export default injectIntl(PatientCategoryPicker);

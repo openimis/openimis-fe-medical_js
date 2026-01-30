@@ -67,6 +67,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ createMedicalService, updateMedicalService }, dispatch);
 
+export { StyledMedicalServicePage };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServicePage)),

@@ -54,4 +54,5 @@ class ManualPricePicker extends Component {
   }
 }
 
+export { ManualPricePicker };
 export default injectIntl(ManualPricePicker);

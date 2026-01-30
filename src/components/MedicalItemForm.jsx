@@ -122,7 +122,7 @@ class MedicalItemForm extends Component {
       try {
         await fetchMedicalItem(modulesManager, medicalItemId);
       } catch (error) {
-        console.error(`[RELOAD_MEDICAL_ITEM]: Fetching medical item details failed. ${error}`);
+        console.error(`[RELOAD_MEDICAL_ITEM]: Fetching medical details failed. ${error}`);
       }
       return;
     }
@@ -135,7 +135,7 @@ class MedicalItemForm extends Component {
 
         historyPush(modulesManager, history, "medical.medicalItemOverview", [createdMedicalItemUuid]);
       } catch (error) {
-        console.error(`[RELOAD_MEDICAL_ITEM]: Error fetching medical item mutation: ${error}`);
+        console.error(`[RELOAD_MEDICAL_ITEM]: Error fetching medical mutation: ${error}`);
       }
     }
 
@@ -267,6 +267,7 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
+export { StyledMedicalItemForm };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemForm)),

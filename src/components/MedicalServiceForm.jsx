@@ -322,6 +322,8 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
+export { StyledMedicalServiceForm };
+export { MedicalServicesPanel };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServiceForm)),

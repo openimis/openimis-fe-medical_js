@@ -37,4 +37,5 @@ const mapStateToProps = (state, props) => {
   };
 };
 
+export { MedicalServiceOverviewPage };
 export default withHistory(withModulesManager(connect(mapStateToProps)(injectIntl(MedicalServiceOverviewPage))));

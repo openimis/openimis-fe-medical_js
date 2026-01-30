@@ -40,4 +40,5 @@ class DeleteMedicalItemOrServiceDialog extends Component {
   }
 }
 
+export { StyledDeleteMedicalItemOrServiceDialog };
 export default injectIntl(DeleteMedicalItemOrServiceDialog);

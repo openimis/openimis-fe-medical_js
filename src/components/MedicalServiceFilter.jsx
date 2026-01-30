@@ -65,7 +65,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="medicalServiceFilter.code"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <TextInput
                       module="medicalService"
                       label="medical.service.code"
@@ -88,7 +88,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="medicalServiceFilter.name"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <TextInput
                       module="medicalService"
                       label="medical.service.name"
@@ -111,7 +111,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="medicalServiceFilter.type"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <PublishedComponent
                       pubRef="medical.ServiceTypePicker"
                       module="medical"
@@ -137,7 +137,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="ServiceFilter.showHistory"
                 field={
-                  <Grid item xs={2} className="item">
+                  <Grid size={2} className="item">
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -159,4 +159,5 @@ class MedicalServiceFilter extends Component {
   }
 }
 
+export { StyledMedicalServiceFilter };
 export default withModulesManager(injectIntl(MedicalServiceFilter));

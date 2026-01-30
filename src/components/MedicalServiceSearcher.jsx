@@ -212,4 +212,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ fetchMedicalServicesSummaries, deleteMedicalService, journalize }, dispatch);
 
+export { MedicalServiceSearcher };
 export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServiceSearcher)));

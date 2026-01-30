@@ -79,7 +79,7 @@ class MedicalServiceMasterPanel extends FormPanel {
       <StyledMedicalServiceMasterPanel>
         <ErrorBoundary>
           <Grid container className="item">
-            <Grid item xs={2} className="item">
+            <Grid size={2} className="item">
               <ValidatedTextInput
                 action={medicalServicesValidationCheck}
                 clearAction={medicalServicesValidationClear}
@@ -99,7 +99,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 value={edited ? edited.code : ""}
               />
             </Grid>
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <TextInput
                 module="admin"
                 label="medical.service.name"
@@ -109,7 +109,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(name) => this.updateAttributes({ name })}
               />
             </Grid>
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="medical.ServiceTypePPPicker"
                 withNull={true}
@@ -122,7 +122,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 }}
               />
             </Grid>
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="medical.ServiceTypePicker"
                 withNull={false}
@@ -134,7 +134,7 @@ class MedicalServiceMasterPanel extends FormPanel {
             </Grid>
           </Grid>
           <Grid container className="item">
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="medical.ServiceCategoryPicker"
                 withNull={false}
@@ -143,7 +143,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(p) => this.updateAttribute("category", p)}
               />
             </Grid>
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="medical.ServiceLevelPicker"
                 withNull={false}
@@ -153,7 +153,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(p) => this.updateAttribute("level", p)}
               />
             </Grid>
-            <Grid item xs={2} className="item">
+            <Grid size={2} className="item">
               <NumberInput
                 min={0}
                 module="admin"
@@ -164,7 +164,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
               />
             </Grid>
-            {this.showManual && <Grid item xs={2} className="item">
+            {this.showManual && <Grid size={2} className="item">
               <PublishedComponent
                 pubRef="medical.ManualPricePicker"
                 readOnly={Boolean(edited.id) || readOnly}
@@ -176,7 +176,7 @@ class MedicalServiceMasterPanel extends FormPanel {
               />
             </Grid>
             }
-            <Grid item xs={2} className="item">
+            <Grid size={2} className="item">
               <AmountInput
                 module="admin"
                 label={this.props.medicalService.packagetype== SERVICE_TYPE_PP_F ? `edit.services.ceiling` : `medical.service.price`}
@@ -192,7 +192,7 @@ class MedicalServiceMasterPanel extends FormPanel {
             </Grid>
           </Grid>
           <Grid container className="item">
-            <Grid item xs={4} className="item">
+            <Grid size={4} className="item">
               <PublishedComponent
                 pubRef="medical.CareTypePicker"
                 required
@@ -202,7 +202,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(p) => this.updateAttribute("careType", p)}
               />
             </Grid>
-            <Grid item xs={4} className="item">
+            <Grid size={4} className="item">
               <TextInput
                 module="admin"
                 label="medical.service.frequency"
@@ -211,7 +211,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(p) => this.updateAttribute("frequency", p)}
               />
             </Grid>
-            <Grid item xs={4} className="item">
+            <Grid size={4} className="item">
               <PublishedComponent
                 pubRef="medical.PatientCategoryPicker"
                 readOnly={Boolean(edited.id) || readOnly}
@@ -235,6 +235,7 @@ const mapStateToProps = (state) => ({
   savedServiceCode: state.medical?.medicalService?.code,
 });
 
+export { StyledMedicalServiceMasterPanel };
 export default injectIntl(
   withModulesManager(withHistory(connect(mapStateToProps)(MedicalServiceMasterPanel))),
 );

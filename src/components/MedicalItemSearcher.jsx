@@ -95,11 +95,11 @@ class MedicalItemSearcher extends Component {
   ];
 
   deleteItem = () => {
-    const item = this.state.deleteItem;
+    const deleteItem = this.state.deleteItem;
     this.setState({ deleteItem: null }, async (e) => {
       await this.props.deleteMedicalItem(
         this.props.modulesManager,
-        item,
+        deleteItem,
         formatMessage(this.props.intl, "medical.item", "deleteDialog.title"),
       );
       this.fetch(this.state.params);
@@ -222,4 +222,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ fetchMedicalItemsSummaries, deleteMedicalItem, journalize }, dispatch);
 
+export { MEDICAL_ITEM_SEARCHER_CONTRIBUTION_KEY };
 export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemSearcher)));

@@ -232,4 +232,5 @@ const mapStateToProps = (state, props) => ({
 });
 
 
+export { StyledMedicalItemChildPanel };
 export default withModulesManager(injectIntl(connect(mapStateToProps)(MedicalItemChildPanel)));

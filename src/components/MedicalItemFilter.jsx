@@ -65,7 +65,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.code"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <TextInput
                       module="medicalItem"
                       label="medical.item.code"
@@ -88,7 +88,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.name"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <TextInput
                       module="medicalItem"
                       label="medical.item.name"
@@ -111,7 +111,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.type"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <PublishedComponent
                       pubRef="medical.ItemTypePicker"
                       module="medical"
@@ -135,7 +135,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.package"
                 field={
-                  <Grid item xs={3} className="item">
+                  <Grid size={3} className="item">
                     <TextInput
                       module="medicalItem"
                       label="medical.item.package"
@@ -161,7 +161,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="MedicalItemFilter.showHistory"
                 field={
-                  <Grid item xs={2} className="item">
+                  <Grid size={2} className="item">
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -183,4 +183,5 @@ class MedicalItemFilter extends Component {
   }
 }
 
+export { StyledMedicalItemFilter };
 export default withModulesManager(injectIntl(MedicalItemFilter));
