@@ -35,3 +35,4 @@ None
 * `DiagnosisPicker.selectThreshold`: Diagnosis suggestions count threshold under which the AutoSuggestion switch to a SelectInut (drop down list), default: 10
 * `ItemPicker.selectThreshold`: Items suggestions count threshold under which the AutoSuggestion switch to a SelectInut (drop down list), default: 10
 * `ServicePicker.selectThreshold`: Services suggestions count threshold under which the AutoSuggestion switch to a SelectInut (drop down list), default: 10
+* `isProgramAvailable`: wherever program picker is available or not. Default: `false` the program picker is used to select the program of the service/item. If set to `true` the program picker is displayed, if set to `false` the program picker is not displayed and the program of the service/item is set to `null`

@@ -15,6 +15,7 @@ import {
   ValidatedTextInput,
   withHistory,
   withModulesManager,
+  formatMessage,
 } from "@openimis/fe-core";
 import { medicalServicesValidationCheck, medicalServicesValidationClear, medicalServicesSetValid } from "../actions";
 import { SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_S } from "../constants";
@@ -40,6 +41,8 @@ class MedicalServiceMasterPanel extends FormPanel {
         this.showManual = true;
       }
     }
+
+    this.isProgramAvailable = this.props.modulesManager.getConf("fe-core", "isProgramAvailable", false);
   }
 
   showCheckboxManual= (pSelection) => {
@@ -73,8 +76,9 @@ class MedicalServiceMasterPanel extends FormPanel {
     const shouldValidate = inputValue !== savedServiceCode;
     return shouldValidate;
   }
+
   render() {
-    const { edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
+    const { edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError, intl} = this.props;
     return (
       <StyledMedicalServiceMasterPanel>
         <ErrorBoundary>
@@ -192,7 +196,21 @@ class MedicalServiceMasterPanel extends FormPanel {
             </Grid>
           </Grid>
           <Grid container className="item">
-            <Grid size={4} className="item">
+            {this.isProgramAvailable && (
+              <Grid size={3} className="item">
+                <PublishedComponent
+                  pubRef="program.ProgramPicker"
+                  name="program"
+                  label={formatMessage(intl, "medical", "programPicker.label")}
+                  placeholder={formatMessage(intl, "medical", "programPicker.placeholder")}
+                  value={edited ? edited.program : ""}
+                  readOnly={readOnly}
+                  required={true}
+                  onChange={(program) => this.updateAttribute("program", program)}
+                />
+              </Grid>
+            )}
+            <Grid size={this.isProgramAvailable ? 4 : 5} className="item">
               <PublishedComponent
                 pubRef="medical.CareTypePicker"
                 required
@@ -202,7 +220,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(p) => this.updateAttribute("careType", p)}
               />
             </Grid>
-            <Grid size={4} className="item">
+            <Grid size={this.isProgramAvailable ? 4 : 5} className="item">
               <TextInput
                 module="admin"
                 label="medical.service.frequency"
@@ -211,7 +229,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                 onChange={(p) => this.updateAttribute("frequency", p)}
               />
             </Grid>
-            <Grid size={4} className="item">
+            <Grid size={this.isProgramAvailable ? 4 : 5} className="item">
               <PublishedComponent
                 pubRef="medical.PatientCategoryPicker"
                 readOnly={Boolean(edited.id) || readOnly}

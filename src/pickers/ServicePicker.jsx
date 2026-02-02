@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Autocomplete, toISODate, useGraphqlQuery, useTranslations } from "@openimis/fe-core";
 
 const ServicePicker = (props) => {
@@ -17,6 +17,7 @@ const ServicePicker = (props) => {
     placeholder,
     extraFragment,
     multiple,
+    claimProgram
   } = props;
   const [searchString, setSearchString] = useState(null);
   const { formatMessage } = useTranslations("medical");
@@ -28,6 +29,10 @@ const ServicePicker = (props) => {
           node {
             id name code price packagetype maximumAmount manualPrice
             ${extraFragment ?? ""}
+            program {
+              idProgram 
+              nameProgram
+            }
             serviceserviceSet{
               service{
                 id
@@ -53,8 +58,33 @@ const ServicePicker = (props) => {
       }
     }`,
     { pricelistUuid, searchString, date: toISODate(date) },
-    { skip: true },
+    { skip: !pricelistUuid },
   );
+
+  const options = useMemo(() => {
+    const services = data?.medicalServicesStr?.edges.map((edge) => edge.node) ?? [];
+    
+    if (!claimProgram) {
+      const uniqueServices = new Map();
+      services.forEach(service => {
+        if (!uniqueServices.has(service.code)) {
+          uniqueServices.set(service.code, service);
+        }
+      });
+      return Array.from(uniqueServices.values());
+    }
+
+    const filteredServices = new Map();
+    services.forEach(service => {
+      if (service?.program?.idProgram === claimProgram) {
+        if (!filteredServices.has(service.code)) {
+          filteredServices.set(service.code, service);
+        }
+      }
+    });
+    
+    return Array.from(filteredServices.values());
+  }, [data, claimProgram]);
 
   return (
     <Autocomplete
@@ -66,7 +96,7 @@ const ServicePicker = (props) => {
       withLabel={withLabel}
       withPlaceholder={withPlaceholder}
       readOnly={readOnly}
-      options={data?.medicalServicesStr?.edges.map((edge) => edge.node) ?? []}
+      options={options}
       isLoading={isLoading}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
       value={value}

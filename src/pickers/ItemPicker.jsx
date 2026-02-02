@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useTranslations, Autocomplete, toISODate, useGraphqlQuery } from "@openimis/fe-core";
+import React, { useState, useMemo } from "react";
+import { Autocomplete, toISODate, useGraphqlQuery, useTranslations } from "@openimis/fe-core";
 
 const ItemPicker = (props) => {
   const {
@@ -17,6 +17,7 @@ const ItemPicker = (props) => {
     placeholder,
     extraFragment,
     multiple,
+    claimProgram
   } = props;
   const [searchString, setSearchString] = useState(null);
   const { formatMessage } = useTranslations("medical");
@@ -28,13 +29,42 @@ const ItemPicker = (props) => {
           node {
             id name code price quantity maximumAmount
             ${extraFragment ?? ""}
+            program {
+              idProgram 
+              nameProgram
+            }
           }
         }
       }
     }`,
     { pricelistUuid, searchString, first: 20, date: toISODate(date) },
-    { skip: true },
+    { skip: !pricelistUuid },
   );
+
+  const options = useMemo(() => {
+    const items = data?.medicalItemsStr?.edges.map((edge) => edge.node) ?? [];
+    
+    if (!claimProgram) {
+      const uniqueItems = new Map();
+      items.forEach(item => {
+        if (!uniqueItems.has(item.code)) {
+          uniqueItems.set(item.code, item);
+        }
+      });
+      return Array.from(uniqueItems.values());
+    }
+
+    const filteredItems = new Map();
+    items.forEach(item => {
+      if (item?.program?.idProgram === claimProgram) {
+        if (!filteredItems.has(item.code)) {
+          filteredItems.set(item.code, item);
+        }
+      }
+    });
+    
+    return Array.from(filteredItems.values());
+  }, [data, claimProgram]);
 
   return (
     <Autocomplete
@@ -46,8 +76,8 @@ const ItemPicker = (props) => {
       withLabel={withLabel}
       withPlaceholder={withPlaceholder}
       readOnly={readOnly}
-      options={data?.medicalItemsStr?.edges.map((edge) => edge.node) ?? []}
-      isOptionEqualToValue={(option, value) => option.id === value?.id}
+      options={options}
+      getOptionSelected={(option, value) => option.id === value?.id}
       isLoading={isLoading}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.name} ${option.quantity ? ` (${option.quantity})` : ""}`}
