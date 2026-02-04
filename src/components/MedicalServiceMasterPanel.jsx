@@ -20,8 +20,8 @@ import { medicalServicesValidationCheck, medicalServicesValidationClear, medical
 import { SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_S } from "../constants";
 
 const StyledMedicalServiceMasterPanel = styled('div')(({ theme }) => ({
-  '& .tableTitle': theme.table.title,
-  '& .item': theme.paper.item,
+  '& .tableTitle': theme.table?.title ?? {},
+  '& .item': theme.paper?.item ?? {},
   '& .fullHeight': {
     height: "100%",
   },

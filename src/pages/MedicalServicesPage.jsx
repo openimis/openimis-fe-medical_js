@@ -19,8 +19,8 @@ import {
 import MedicalServiceSearcher from "../components/MedicalServiceSearcher";
 
 const StyledMedicalServicesPage = styled('div')(({ theme }) => ({
-  ...theme.page,
-  '& .fab': theme.fab,
+  ...theme.page ?? {},
+  '& .fab': theme.fab ?? {},
 }));
 
 class MedicalServicesPage extends Component {

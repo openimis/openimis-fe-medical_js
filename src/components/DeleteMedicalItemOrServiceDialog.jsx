@@ -7,8 +7,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { FormattedMessage } from "@openimis/fe-core";
 
 const StyledDeleteMedicalItemOrServiceDialog = styled('div')(({ theme }) => ({
-  '& .primaryButton': theme.dialog.primaryButton,
-  '& .secondaryButton': theme.dialog.secondaryButton,
+  '& .primaryButton': theme.dialog?.primaryButton ?? {},
+  '& .secondaryButton': theme.dialog?.secondaryButton ?? {},
 }));
 
 class DeleteMedicalItemOrServiceDialog extends Component {

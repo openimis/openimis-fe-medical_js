@@ -16,7 +16,7 @@ import { createMedicalService, updateMedicalService } from "../actions";
 import { RIGHT_MEDICALSERVICES_ADD, RIGHT_MEDICALSERVICES_EDIT } from "../constants";
 
 const StyledMedicalServicePage = styled('div')(({ theme }) => ({
-  ...theme.page,
+  ...theme.page ?? {},
 }));
 
 class MedicalServicePage extends Component {

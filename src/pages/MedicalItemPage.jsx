@@ -18,7 +18,7 @@ import { createMedicalItem, updateMedicalItem } from "../actions";
 import { RIGHT_MEDICALITEMS_ADD, RIGHT_MEDICALITEMS_EDIT } from "../constants";
 
 const StyledMedicalItemPage = styled('div')(({ theme }) => ({
-  ...theme.page,
+  ...theme.page ?? {},
 }));
 
 class MedicalItemPage extends Component {

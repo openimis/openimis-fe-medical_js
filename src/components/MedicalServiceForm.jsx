@@ -34,7 +34,7 @@ import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 import { validateCategories } from "../utils";
 
 const StyledMedicalServiceForm = styled('div')(({ theme }) => ({
-  '& .lockedPage': theme.page.locked,
+  '& .lockedPage': theme.page?.locked ?? {},
 }));
 
 class MedicalServicesPanel extends Component {

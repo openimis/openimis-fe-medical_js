@@ -19,8 +19,8 @@ import { medicalItemsValidationCheck, medicalItemsValidationClear, medicalItemsS
 import { ITEM_CODE_MAX_LENGTH } from "../constants";
 
 const StyledMedicalItemMasterPanel = styled('div')(({ theme }) => ({
-  '& .tableTitle': theme.table.title,
-  '& .item': theme.paper.item,
+  '& .tableTitle': theme.table?.title ?? {},
+  '& .item': theme.paper?.item ?? {},
   '& .fullHeight': {
     height: "100%",
   },

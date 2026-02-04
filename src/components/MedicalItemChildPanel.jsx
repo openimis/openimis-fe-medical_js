@@ -18,7 +18,7 @@ import {
 } from "@openimis/fe-core";
 
 const StyledMedicalItemChildPanel = styled('div')(({ theme }) => ({
-  '& .paper': theme.paper.paper,
+  '& .paper': theme.paper?.paper ?? {},
 }));
 
 class MedicalItemChildPanel extends Component {

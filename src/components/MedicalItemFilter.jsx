@@ -15,8 +15,8 @@ import {
 } from "@openimis/fe-core";
 
 const StyledMedicalItemFilter = styled('div')(({ theme }) => ({
-  '& .dialogTitle': theme.dialog.title,
-  '& .dialogContent': theme.dialog.content,
+  '& .dialogTitle': theme.dialog?.title ?? {},
+  '& .dialogContent': theme.dialog?.content ?? {},
   '& .form': {
     padding: "0 0 10px 0",
     width: "100%",
@@ -24,7 +24,7 @@ const StyledMedicalItemFilter = styled('div')(({ theme }) => ({
   '& .item': {
     padding: theme.spacing(1),
   },
-  '& .paperDivider': theme.paper.divider,
+  '& .paperDivider': theme.paper?.divider ?? {},
 }));
 
 class MedicalItemFilter extends Component {

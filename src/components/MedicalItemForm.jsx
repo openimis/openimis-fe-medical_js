@@ -31,7 +31,7 @@ import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 import { validateCategories } from "../utils";
 
 const StyledMedicalItemForm = styled('div')(({ theme }) => ({
-  '& .lockedPage': theme.page.locked,
+  '& .lockedPage': theme.page?.locked ?? {},
 }));
 
 const MEDICAL_ITEM_OVERVIEW_MUTATIONS_KEY = "medicalItem.MedicalItemOverview.mutations";
