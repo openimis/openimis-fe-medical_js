@@ -26,7 +26,8 @@
     "@mui/icons-material": "^7.2.0",
     "redux": "^4.0.5",
     "react-router-dom": "^5.2.0",
-    "moment": "^2.25.3"
+    "moment": "^2.25.3",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -50,7 +51,6 @@
     "dist"
   ],
   "dependencies": {
-    "@emotion/cache": "^11.12.0",
-    "lodash": "^4.17.21"
+    "@emotion/cache": "^11.12.0"
   }
 }
