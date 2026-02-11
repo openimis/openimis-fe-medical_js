@@ -12,6 +12,8 @@ import {
   TextInput,
   formatMessage,
   ErrorBoundary,
+  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_SMALL,
 } from "@openimis/fe-core";
 
 const StyledMedicalServiceFilter = styled('div')(({ theme }) => ({
@@ -65,7 +67,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="medicalServiceFilter.code"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <TextInput
                       module="medicalService"
                       label="medical.service.code"
@@ -88,7 +90,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="medicalServiceFilter.name"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <TextInput
                       module="medicalService"
                       label="medical.service.name"
@@ -111,7 +113,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="medicalServiceFilter.type"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <PublishedComponent
                       pubRef="medical.ServiceTypePicker"
                       module="medical"
@@ -137,7 +139,7 @@ class MedicalServiceFilter extends Component {
                 module="admin"
                 id="ServiceFilter.showHistory"
                 field={
-                  <Grid size={2} className="item">
+                  <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                     <FormControlLabel
                       control={
                         <Checkbox

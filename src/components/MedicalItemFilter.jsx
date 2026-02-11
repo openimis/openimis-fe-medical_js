@@ -12,6 +12,8 @@ import {
   TextInput,
   formatMessage,
   ErrorBoundary,
+  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_SMALL,
 } from "@openimis/fe-core";
 
 const StyledMedicalItemFilter = styled('div')(({ theme }) => ({
@@ -65,7 +67,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.code"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <TextInput
                       module="medicalItem"
                       label="medical.item.code"
@@ -88,7 +90,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.name"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <TextInput
                       module="medicalItem"
                       label="medical.item.name"
@@ -111,7 +113,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.type"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <PublishedComponent
                       pubRef="medical.ItemTypePicker"
                       module="medical"
@@ -135,7 +137,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="medicalItemFilter.package"
                 field={
-                  <Grid size={3} className="item">
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                     <TextInput
                       module="medicalItem"
                       label="medical.item.package"
@@ -161,7 +163,7 @@ class MedicalItemFilter extends Component {
                 module="admin"
                 id="MedicalItemFilter.showHistory"
                 field={
-                  <Grid size={2} className="item">
+                  <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                     <FormControlLabel
                       control={
                         <Checkbox
