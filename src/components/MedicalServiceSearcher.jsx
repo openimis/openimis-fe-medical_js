@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { IconButton, Tooltip } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { Tab as TabIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import {
   withModulesManager,
@@ -109,9 +109,7 @@ class MedicalServiceSearcher extends Component {
   deleteAction = (i) => {
     return !!i.validityTo || !!i.clientMutationId ? null : (
       <Tooltip title={formatMessage(this.props.intl, "medical.service", "deleteService.tooltip")}>
-        <Button onClick={(e) => this.confirmDelete(i)}
-          startIcon={<DeleteIcon />}
-        >
+        <Button onClick={(e) => this.confirmDelete(i)} startIcon={<DeleteIcon />}>
           {formatMessage(this.props.intl, "medical.service", "deleteServiceButton.buttonText")}
         </Button>
       </Tooltip>
@@ -136,9 +134,7 @@ class MedicalServiceSearcher extends Component {
           : null,
       (ms) => (
         <Tooltip title={formatMessage(this.props.intl, "medical.service", "openNewTab")}>
-          <Button onClick={(e) => this.props.onDoubleClick(ms, true)}
-            startIcon={<TabIcon />}
-          >
+          <Button onClick={(e) => this.props.onDoubleClick(ms, true)} startIcon={<TabIcon />}>
             {formatMessage(this.props.intl, "medical.service", "openNewTabButton.buttonText")}
           </Button>
         </Tooltip>
