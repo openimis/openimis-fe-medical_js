@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Edit as EditIcon } from "@mui/icons-material";
-import { historyPush, withModulesManager, withHistory, ErrorBoundary, Helmet, formatMessageWithValues }
+
+
+import { GetIconComponent, historyPush, withModulesManager, withHistory, ErrorBoundary, Helmet, formatMessageWithValues }
   from "@openimis/fe-core";
 import MedicalItemPage from "./MedicalItemPage";
-
+const EditIcon = GetIconComponent("Edit")
 class MedicalItemOverviewPage extends Component {
   render() {
     const { history, modulesManager, medicalItemId } = this.props;

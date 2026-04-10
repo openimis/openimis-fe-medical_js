@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 import { styled } from "@mui/material/styles";
-import ReplayIcon from "@mui/icons-material/Replay";
+
 
 import {
   coreConfirm,
@@ -18,6 +18,7 @@ import {
   ProgressOrError,
   withHistory,
   withModulesManager,
+  GetIconComponent,
 } from "@openimis/fe-core";
 import MedicalServiceChildPanel from "./MedicalServiceChildPanel";
 import MedicalItemChildPanel from "./MedicalItemChildPanel";
@@ -32,7 +33,7 @@ import {
 import { RIGHT_MEDICALSERVICES, SERVICE_CODE_MAX_LENGTH } from "../constants";
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 import { validateCategories } from "../utils";
-
+const ReplayIcon = GetIconComponent("Replay")
 const StyledMedicalServiceForm = styled('div')(({ theme }) => ({
   '& .lockedPage': theme.page?.locked ?? {},
 }));
