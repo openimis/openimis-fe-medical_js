@@ -19,7 +19,7 @@ import MedicalItemsPage from "./pages/MedicalItemsPage";
 import MedicalItemPage from "./pages/MedicalItemPage";
 import MedicalItemOverviewPage from "./pages/MedicalItemOverviewPage";
 import ItemTypePicker from "./pickers/ItemTypePicker";
-
+import { RIGHT_MEDICALITEMS, RIGHT_MEDICALSERVICES} from "./constants"
 const ROUTE_ADMIN_MEDICAL_SERVICES = "medical/medicalServices";
 const ROUTE_ADMIN_MEDICAL_SERVICES_OVERVIEW = "medical/medicalServices/overview";
 const ROUTE_ADMIN_MEDICAL_SERVICES_NEW = "medical/medicalServices/new";
@@ -31,19 +31,48 @@ const DEFAULT_CONFIG = {
   "translations": [{ key: "en", messages: messages_en }],
   "reducers": [{ key: "medical", reducer }],
   "core.Router": [
-    { path: ROUTE_ADMIN_MEDICAL_SERVICES, component: MedicalServicesPage },
-    { path: ROUTE_ADMIN_MEDICAL_SERVICES_NEW, component: MedicalServicePage },
+    { 
+      path: ROUTE_ADMIN_MEDICAL_SERVICES,
+      component: MedicalServicesPage,
+      rights:[RIGHT_MEDICALSERVICES],
+      id: "medical.medicalServices",
+      text: "medical.Service",
+      icon: "MedicalServices",
+    },
+    { 
+      path: ROUTE_ADMIN_MEDICAL_SERVICES_NEW,
+      component: MedicalServicePage
+    },
     {
       path: `${ROUTE_ADMIN_MEDICAL_SERVICES_OVERVIEW}/:medical_service_id`,
       component: MedicalServiceOverviewPage,
     },
-    { path: ROUTE_ADMIN_MEDICAL_ITEMS, component: MedicalItemsPage },
-    { path: ROUTE_ADMIN_MEDICAL_ITEMS_NEW, component: MedicalItemPage },
+    { 
+      path: ROUTE_ADMIN_MEDICAL_ITEMS,
+      component: MedicalItemsPage,
+      rights:[RIGHT_MEDICALITEMS],
+      id: "medical.medicalItems",
+      text: "medical.Item",
+      icon: "Vaccines",
+    },
+    { 
+      path: ROUTE_ADMIN_MEDICAL_ITEMS_NEW,
+      component: MedicalItemPage
+    },
     {
       path: `${ROUTE_ADMIN_MEDICAL_ITEMS_OVERVIEW}/:medical_item_id`,
       component: MedicalItemOverviewPage,
     },
     //    { path: "medical/medicalItems", component: MedicalItemsPage },
+  ],
+  "admin.MainMenu": [
+    {
+      route:  ROUTE_ADMIN_MEDICAL_SERVICES,
+    },
+    {
+      route:  ROUTE_ADMIN_MEDICAL_ITEMS,
+      withDivider: true
+    },
   ],
   "refs": [
     { key: "medical.DiagnosisPicker", ref: DiagnosisPicker },
