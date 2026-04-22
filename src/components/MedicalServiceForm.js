@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 import { withStyles, withTheme } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
@@ -201,8 +202,9 @@ class MedicalServiceForm extends Component {
 
   canSave = () => {
     this.priceCalcul();
+    const isServiceChanged = _.isEqual(this.props.medicalService, this.state.medicalService)
 
-    return this.state.medicalService &&
+    return !isServiceChanged && this.state.medicalService &&
       this.state.medicalService.code &&
       this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
       this.state.medicalService.name &&
