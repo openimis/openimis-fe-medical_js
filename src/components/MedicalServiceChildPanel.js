@@ -18,7 +18,7 @@ import {
 } from "@openimis/fe-core";
 import { Paper, Box } from "@material-ui/core";
 import _ from "lodash";
-import { fetchMedicalService, fetchMedicalServices } from "../actions"
+import { fetchMedicalService } from "../actions"
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
