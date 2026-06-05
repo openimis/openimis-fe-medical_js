@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 import { Paper, Box } from "@mui/material";
 import _ from "lodash";
-// this i have changed
-import { fetchMedicalService, fetchMedicalServicesSummaries as fetchMedicalServices } from "../actions"
+
 import { 
   withModulesManager, 
   PublishedComponent, 
