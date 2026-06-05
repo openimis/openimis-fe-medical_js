@@ -1,30 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import {
-  formatAmount,
-  formatMessage,
-  formatMessageWithValues,
-  decodeId,
-  withModulesManager,
-  NumberInput,
-  Table,
-  PublishedComponent,
-  AmountInput,
-  TextInput,
-  Error,
-} from "@openimis/fe-core";
-import { Paper, Box } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import { Paper, Box } from "@mui/material";
 import _ from "lodash";
-import { fetchMedicalService } from "../actions"
 
-import { claimedAmount, approvedAmount } from "../helpers/amounts";
+import { 
+  withModulesManager, 
+  PublishedComponent, 
+  NumberInput, 
+  AmountInput, 
+  Table, 
+  formatMessage 
+} from "@openimis/fe-core";
 
-const styles = (theme) => ({
-  paper: theme.paper.paper,
-});
+const StyledMedicalItemChildPanel = styled('div')(({ theme }) => ({
+  '& .paper': theme.paper?.paper ?? {},
+}));
 
 class MedicalItemChildPanel extends Component {
   state = {
@@ -149,7 +141,7 @@ class MedicalItemChildPanel extends Component {
   };
 
   render() {
-    const { intl, classes, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
+    const { intl, edited, type, picker, forReview, fetchingPricelist, readOnly = false } = this.props;
     if (!edited) return null;
 
     let preHeaders = [
@@ -209,17 +201,19 @@ class MedicalItemChildPanel extends Component {
 
     if(this.props.medicalService.packagetype=="P" || this.props.medicalService.packagetype=="F" ){
       return (
-        <Paper className={classes.paper}>
-          <Table
-            module="claim"
-            header={header}
-            preHeaders={preHeaders}
-            headers={headers}
-            itemFormatters={itemFormatters}
-            items={!fetchingPricelist ? this.state.data : []}
-            onDelete={this._onDelete}
-          />
-        </Paper>
+        <StyledMedicalItemChildPanel>
+          <Paper className="paper">
+            <Table
+              module="claim"
+              header={header}
+              preHeaders={preHeaders}
+              headers={headers}
+              itemFormatters={itemFormatters}
+              items={!fetchingPricelist ? this.state.data : []}
+              onDelete={this._onDelete}
+            />
+          </Paper>
+        </StyledMedicalItemChildPanel>
       );
     }else{
       return "";
@@ -235,4 +229,5 @@ const mapStateToProps = (state, props) => ({
 });
 
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(MedicalItemChildPanel)))));
+export { StyledMedicalItemChildPanel };
+export default withModulesManager(injectIntl(connect(mapStateToProps)(MedicalItemChildPanel)));

@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Fab } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import { Fab } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { RIGHT_MEDICALSERVICES_ADD, SERVICES_MODULE_NAME } from "../constants";
 import {
   formatMessage,
@@ -15,13 +14,15 @@ import {
   withModulesManager,
   withTooltip,
   clearCurrentPaginationPage,
+  GetIconComponent
 } from "@openimis/fe-core";
 import MedicalServiceSearcher from "../components/MedicalServiceSearcher";
+const AddIcon = GetIconComponent("Add")
 
-const styles = (theme) => ({
-  page: theme.page,
-  fab: theme.fab,
-});
+const StyledMedicalServicesPage = styled('div')(({ theme }) => ({
+  ...theme.page ?? {},
+  '& .fab': theme.fab ?? {},
+}));
 
 class MedicalServicesPage extends Component {
   onDoubleClick = (ms, newTab = false) => {
@@ -38,21 +39,21 @@ class MedicalServicesPage extends Component {
   };
 
   render() {
-    const { classes, rights, intl } = this.props;
+    const { rights, intl } = this.props;
     return (
-      <div className={classes.page}>
+      <StyledMedicalServicesPage>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.service", "servicesTitle")} />
         <MedicalServiceSearcher cacheFiltersKey="medicalServicesPageFiltersCache" onDoubleClick={this.onDoubleClick} />
         {rights.includes(RIGHT_MEDICALSERVICES_ADD) &&
           withTooltip(
-            <div className={classes.fab}>
+            <div className="fab">
               <Fab color="primary" onClick={this.onAdd}>
                 <AddIcon />
               </Fab>
             </div>,
             formatMessage(intl, "medical.medicalService", "medical.addNewMedicalService.tooltip"),
           )}
-      </div>
+      </StyledMedicalServicesPage>
     );
   }
 }
@@ -64,8 +65,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPaginationPage }, dispatch);
 
+export { StyledMedicalServicesPage };
 export default injectIntl(
   withModulesManager(
-    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(MedicalServicesPage)))),
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(MedicalServicesPage)),
   ),
 );

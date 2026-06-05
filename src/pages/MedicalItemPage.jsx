@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+
+import { styled } from "@mui/material/styles";
+
 import {
   formatMessageWithValues,
   withModulesManager,
@@ -15,9 +17,9 @@ import MedicalItemForm from "../components/MedicalItemForm";
 import { createMedicalItem, updateMedicalItem } from "../actions";
 import { RIGHT_MEDICALITEMS_ADD, RIGHT_MEDICALITEMS_EDIT } from "../constants";
 
-const styles = (theme) => ({
-  page: theme.page,
-});
+const StyledMedicalItemPage = styled('div')(({ theme }) => ({
+  ...theme.page ?? {},
+}));
 
 class MedicalItemPage extends Component {
   add = () => {
@@ -41,10 +43,10 @@ class MedicalItemPage extends Component {
   };
 
   render() {
-    const { classes, rights, medicalItemId, overview, modulesManager, history } = this.props;
+    const { rights, medicalItemId, overview, modulesManager, history } = this.props;
     if (!rights.includes(RIGHT_MEDICALITEMS_EDIT)) return null;
     return (
-      <div className={classes.page}>
+      <StyledMedicalItemPage>
         <Helmet title={formatMessageWithValues(this.props.intl, "medical.item", "itemTitle")} />
         <ErrorBoundary>
           <MedicalItemForm
@@ -55,7 +57,7 @@ class MedicalItemPage extends Component {
             save={rights.includes(RIGHT_MEDICALITEMS_EDIT) ? this.save : null}
           />
         </ErrorBoundary>
-      </div>
+      </StyledMedicalItemPage>
     );
   }
 }
@@ -67,8 +69,9 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ createMedicalItem, updateMedicalItem }, dispatch);
 
+export { StyledMedicalItemPage };
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(MedicalItemPage)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemPage)),
   ),
 );

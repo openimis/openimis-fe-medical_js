@@ -18,6 +18,7 @@
   "medical.visitType.O": "Other",
   "medical.genderCategory": "Gender Categories *",
   "medical.ageCategory": "Age Categories *",
+  "medical.careType": "Care Type",
   "medical.careType.null": "Any",
   "medical.careType.I": "In - Patient",
   "medical.careType.O": "Out - Patient",
