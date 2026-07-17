@@ -1,7 +1,7 @@
 # openIMIS Frontend Medical reference module
 This repository holds the files of the openIMIS Frontend Medical reference module.
 
-> NOTE: This branch contains development version of this module based on Vite. Please use the `release/26.04` branch if you intend to fix issues via Pull Requests for the [current release](https://openimis.atlassian.net/wiki/spaces/OP/pages/4653678593/Sources+Release+2026-04) of openIMIS. The migration to vite is scheduled to conclude by end of June 2026.
+
 
 It is dedicated to be deployed as a module of [openimis-fe_js](https://github.com/openimis/openimis-fe_js).
 
