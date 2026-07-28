@@ -109,7 +109,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                   value={edited ? edited.code : ""}
                 />
               </Grid>
-              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+              <Grid size={GRID_RESPONSIVE_LARGE} className="item">
                 <TextInput
                   module="admin"
                   label="medical.service.name"
