@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 
-import { Checkbox, FormControlLabel, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 
-import { formatMessage } from "@openimis/fe-core";
+import { formatMessage, GRID_RESPONSIVE_STANDARD} from "@openimis/fe-core";
 import { PATIENT_CATEGORIES, GENDER_CATEGORIES, AGE_CATEGORIES } from "../constants";
 
 class PatientCategoryPicker extends Component {
@@ -57,11 +57,15 @@ class PatientCategoryPicker extends Component {
     const { intl } = this.props;
     return (
       <>
-        <Typography variant="subtitle1">{formatMessage(intl, "medical", "genderCategory")}</Typography>
-        <div>{this.renderCategorySection(GENDER_CATEGORIES)}</div>
+        <Grid size={GRID_RESPONSIVE_STANDARD} container direction="column">
+          <Typography variant="subtitle1">{formatMessage(intl, "medical", "genderCategory")}</Typography>
+          <div>{this.renderCategorySection(GENDER_CATEGORIES)}</div>
+        </Grid>
 
-        <Typography variant="subtitle1">{formatMessage(intl, "medical", "ageCategory")}</Typography>
-        <div>{this.renderCategorySection(AGE_CATEGORIES)}</div>
+        <Grid size={GRID_RESPONSIVE_STANDARD} container direction="column">
+          <Typography variant="subtitle1">{formatMessage(intl, "medical", "ageCategory")}</Typography>
+          <div>{this.renderCategorySection(AGE_CATEGORIES)}</div>
+        </Grid>
       </>
     );
   }
