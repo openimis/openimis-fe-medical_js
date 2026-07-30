@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Button, Tooltip } from "@material-ui/core";
-import { Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import { Button, Tooltip } from "@mui/material";
+import { GetIconComponent } from "@openimis/fe-core";
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
+
 import {
   withModulesManager,
   formatMessageWithValues,
@@ -95,11 +98,11 @@ class MedicalItemSearcher extends Component {
   ];
 
   deleteItem = () => {
-    const item = this.state.deleteItem;
+    const deleteItem = this.state.deleteItem;
     this.setState({ deleteItem: null }, async (e) => {
       await this.props.deleteMedicalItem(
         this.props.modulesManager,
-        item,
+        deleteItem,
         formatMessage(this.props.intl, "medical.item", "deleteDialog.title"),
       );
       this.fetch(this.state.params);
@@ -226,4 +229,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ fetchMedicalItemsSummaries, deleteMedicalItem, journalize }, dispatch);
 
+export { MEDICAL_ITEM_SEARCHER_CONTRIBUTION_KEY };
 export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalItemSearcher)));

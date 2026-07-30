@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { Checkbox, FormControlLabel } from "@mui/material";
 import { formatMessage } from "@openimis/fe-core";
 import { MANUAL_PRICE } from "../constants";
 import { injectIntl } from "react-intl";
@@ -54,4 +54,5 @@ class ManualPricePicker extends Component {
   }
 }
 
+export { ManualPricePicker };
 export default injectIntl(ManualPricePicker);

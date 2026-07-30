@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Edit as EditIcon } from "@material-ui/icons";
+
 import {
   ErrorBoundary,
   formatMessageWithValues,
   Helmet,
   historyPush,
   withHistory,
-  withModulesManager
+  withModulesManager,
+  GetIconComponent,
 } from "@openimis/fe-core";
 import MedicalServicePage from "./MedicalServicePage";
+const EditIcon = GetIconComponent("Edit")
 
 class MedicalServiceOverviewPage extends Component {
   render() {
@@ -37,4 +39,5 @@ const mapStateToProps = (state, props) => {
   };
 };
 
+export { MedicalServiceOverviewPage };
 export default withHistory(withModulesManager(connect(mapStateToProps)(injectIntl(MedicalServiceOverviewPage))));

@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Button, Tooltip } from "@material-ui/core";
-import { Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import { Button, Tooltip } from "@mui/material";
+import { GetIconComponent } from "@openimis/fe-core";
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
+
 import {
   withModulesManager,
   formatMessageWithValues,
@@ -109,9 +112,7 @@ class MedicalServiceSearcher extends Component {
   deleteAction = (i) => {
     return !!i.validityTo || !!i.clientMutationId ? null : (
       <Tooltip title={formatMessage(this.props.intl, "medical.service", "deleteService.tooltip")}>
-        <Button onClick={(e) => this.confirmDelete(i)}
-          startIcon={<DeleteIcon />}
-        >
+        <Button onClick={(e) => this.confirmDelete(i)} startIcon={<DeleteIcon />}>
           {formatMessage(this.props.intl, "medical.service", "deleteServiceButton.buttonText")}
         </Button>
       </Tooltip>
@@ -136,9 +137,7 @@ class MedicalServiceSearcher extends Component {
           : null,
       (ms) => (
         <Tooltip title={formatMessage(this.props.intl, "medical.service", "openNewTab")}>
-          <Button onClick={(e) => this.props.onDoubleClick(ms, true)}
-            startIcon={<TabIcon />}
-          >
+          <Button onClick={(e) => this.props.onDoubleClick(ms, true)} startIcon={<TabIcon />}>
             {formatMessage(this.props.intl, "medical.service", "openNewTabButton.buttonText")}
           </Button>
         </Tooltip>
@@ -216,4 +215,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ fetchMedicalServicesSummaries, deleteMedicalService, journalize }, dispatch);
 
+export { MedicalServiceSearcher };
 export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(MedicalServiceSearcher)));
