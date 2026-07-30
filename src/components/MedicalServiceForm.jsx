@@ -201,11 +201,12 @@ class MedicalServiceForm extends Component {
     }
   }
 
+  doesServiceChange = () => _.isEqual(this.props.medicalService, this.state.medicalService)
+
   canSave = () => {
     this.priceCalcul();
-    const isServiceChanged = _.isEqual(this.props.medicalService, this.state.medicalService)
 
-    return !isServiceChanged && this.state.medicalService &&
+    return !this.doesServiceChange() && this.state.medicalService &&
       this.state.medicalService.code &&
       this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
       this.state.medicalService.name &&
