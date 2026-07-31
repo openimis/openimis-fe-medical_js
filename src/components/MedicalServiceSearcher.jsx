@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Button, Tooltip } from "@mui/material";
-import { GetIconComponent } from "@openimis/fe-core";
+import { GetIconComponent, ActionMenu } from "@openimis/fe-core";
 const TabIcon = GetIconComponent("Tab")
 const DeleteIcon = GetIconComponent("Delete")
 
@@ -109,16 +108,6 @@ class MedicalServiceSearcher extends Component {
     this.setState({ deleteService: deletedService });
   };
 
-  deleteAction = (i) => {
-    return !!i.validityTo || !!i.clientMutationId ? null : (
-      <Tooltip title={formatMessage(this.props.intl, "medical.service", "deleteService.tooltip")}>
-        <Button onClick={(e) => this.confirmDelete(i)} startIcon={<DeleteIcon />}>
-          {formatMessage(this.props.intl, "medical.service", "deleteServiceButton.buttonText")}
-        </Button>
-      </Tooltip>
-    );
-  };
-
   itemFormatters = (filters) => {
     const formatters = [
       (ms) => ms.code,
@@ -136,17 +125,26 @@ class MedicalServiceSearcher extends Component {
           ? formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo)
           : null,
       (ms) => (
-        <Tooltip title={formatMessage(this.props.intl, "medical.service", "openNewTab")}>
-          <Button onClick={(e) => this.props.onDoubleClick(ms, true)} startIcon={<TabIcon />}>
-            {formatMessage(this.props.intl, "medical.service", "openNewTabButton.buttonText")}
-          </Button>
-        </Tooltip>
+        <ActionMenu
+          actions={[
+            {
+              icon: <TabIcon fontSize="small"/>,
+              label: formatMessage(this.props.intl, "medical.service", "openNewTabButton.buttonText"),
+              onClick: () => this.props.onDoubleClick(ms, true),
+              tooltip: formatMessage(this.props.intl, "medical.service", "openNewTab")
+            },
+            this.props.rights.includes(RIGHT_MEDICALSERVICES_DELETE) && (!ms.validityTo || !ms.clientMutationId) && {
+              divider: true,
+              icon: <DeleteIcon fontSize="small" color="error"/>,
+              label: formatMessage(this.props.intl, "medical.service", "deleteServiceButton.buttonText"),
+              onClick: () => this.confirmDelete(ms),
+              tooltip: formatMessage(this.props.intl, "medical.service", "deleteService.tooltip")
+            }
+          ].filter(Boolean)}
+        />
+        
       ),
     ];
-
-    if (this.props.rights.includes(RIGHT_MEDICALSERVICES_DELETE)) {
-      formatters.push(this.deleteAction);
-    }
     return formatters;
   };
 
