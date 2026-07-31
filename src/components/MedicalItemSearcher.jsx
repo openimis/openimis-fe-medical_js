@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { GetIconComponent, ActionMenu } from "@openimis/fe-core";
-const TabIcon = GetIconComponent("Tab")
-const DeleteIcon = GetIconComponent("Delete")
+
 
 import {
   withModulesManager,
@@ -13,7 +11,11 @@ import {
   Searcher,
   journalize,
   formatDateFromISO,
+  GetIconComponent,
+  ActionMenu,
 } from "@openimis/fe-core";
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
 
 import { fetchMedicalItemsSummaries, deleteMedicalItem } from "../actions";
 import { RIGHT_MEDICALITEMS_DELETE } from "../constants";
