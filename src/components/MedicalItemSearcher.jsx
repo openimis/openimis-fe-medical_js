@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Button, Tooltip } from "@mui/material";
-import { GetIconComponent } from "@openimis/fe-core";
-const TabIcon = GetIconComponent("Tab")
-const DeleteIcon = GetIconComponent("Delete")
+
 
 import {
   withModulesManager,
@@ -14,7 +11,11 @@ import {
   Searcher,
   journalize,
   formatDateFromISO,
+  GetIconComponent,
+  ActionMenu,
 } from "@openimis/fe-core";
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
 
 import { fetchMedicalItemsSummaries, deleteMedicalItem } from "../actions";
 import { RIGHT_MEDICALITEMS_DELETE } from "../constants";
@@ -113,18 +114,6 @@ class MedicalItemSearcher extends Component {
     this.setState({ deleteItem: deletedItem });
   };
 
-  deleteAction = (i) => {
-    return !!i.validityTo || !!i.clientMutationId ? null : (
-      <Tooltip title={formatMessage(this.props.intl, "medical.item", "deleteService.tooltip")}>
-        <Button onClick={(e) => this.confirmDelete(i)}
-          startIcon={<DeleteIcon />}
-        >
-          {formatMessage(this.props.intl, "medical.service", "deleteServiceButton.buttonText")}
-        </Button>
-      </Tooltip>
-    );
-  };
-
   itemFormatters = (filters) => {
     const formatters = [
       (ms) => ms.code,
@@ -142,19 +131,25 @@ class MedicalItemSearcher extends Component {
           ? formatDateFromISO(this.props.modulesManager, this.props.intl, ms.validityTo)
           : null,
       (ms) => (
-        <Tooltip title={formatMessage(this.props.intl, "medical.item", "openNewTab")}>
-          <Button onClick={(e) => this.props.onDoubleClick(ms, true)}
-            startIcon={<TabIcon />}
-          >
-            {formatMessage(this.props.intl, "medical.item", "openNewTabButton.buttonText")}
-          </Button>
-        </Tooltip>
+        <ActionMenu
+          actions={[
+            {
+              icon: <TabIcon  fontSize="small"/>,
+              label: formatMessage(this.props.intl, "medical.item", "openNewTabButton.buttonText"),
+              tooltip: formatMessage(this.props.intl, "medical.item", "openNewTab"),
+              onClick: () => this.props.onDoubleClick(ms, true)
+            },
+            this.props.rights.includes(RIGHT_MEDICALITEMS_DELETE) && (!ms.validityTo || !!ms.clientMutationId) && {
+              divider: true,
+              icon: <DeleteIcon fontSize="small" />,
+              label: formatMessage(this.props.intl, "medical.service", "deleteServiceButton.buttonText"),
+              tooltip: formatMessage(this.props.intl, "medical.item", "deleteService.tooltip"),
+              onClick: () => this.confirmDelete(ms)
+            }
+          ].filter(Boolean)}
+        />
       ),
     ];
-
-    if (this.props.rights.includes(RIGHT_MEDICALITEMS_DELETE)) {
-      formatters.push(this.deleteAction);
-    }
     return formatters;
   };
 
