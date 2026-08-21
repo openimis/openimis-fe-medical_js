@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 import { styled } from "@mui/material/styles";
 
@@ -200,10 +201,12 @@ class MedicalServiceForm extends Component {
     }
   }
 
+  doesServiceChange = () => _.isEqual(this.props.medicalService, this.state.medicalService)
+
   canSave = () => {
     this.priceCalcul();
 
-    return this.state.medicalService &&
+    return !this.doesServiceChange() && this.state.medicalService &&
       this.state.medicalService.code &&
       this.state.medicalService.code.length <= SERVICE_CODE_MAX_LENGTH &&
       this.state.medicalService.name &&
