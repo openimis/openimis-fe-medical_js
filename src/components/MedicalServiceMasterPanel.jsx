@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 
 import { styled } from "@mui/material/styles";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import {
   AmountInput,
@@ -15,6 +15,12 @@ import {
   ValidatedTextInput,
   withHistory,
   withModulesManager,
+  GRID_RESPONSIVE_FULL,
+  GRID_RESPONSIVE_SMALL,
+  GRID_RESPONSIVE_HALF,
+  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_LARGE,
+  FormattedMessage
 } from "@openimis/fe-core";
 import { medicalServicesValidationCheck, medicalServicesValidationClear, medicalServicesSetValid } from "../actions";
 import { SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_S } from "../constants";
@@ -32,38 +38,38 @@ class MedicalServiceMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
     this.state = {
-      readOnlyPrice : props.medicalService.packagetype==SERVICE_TYPE_PP_S? 0 : !props.medicalService.manualPrice,
+      readOnlyPrice: props.medicalService.packagetype == SERVICE_TYPE_PP_S ? 0 : !props.medicalService.manualPrice,
     }
 
-    if(this.props.edited){
-      if(this.props.edited.packagetype !=null && this.props.edited.packagetype!=SERVICE_TYPE_PP_S){
+    if (this.props.edited) {
+      if (this.props.edited.packagetype != null && this.props.edited.packagetype != SERVICE_TYPE_PP_S) {
         this.showManual = true;
       }
     }
   }
 
-  showCheckboxManual= (pSelection) => {
-    if(pSelection!=null && pSelection!="S"){
+  showCheckboxManual = (pSelection) => {
+    if (pSelection != null && pSelection != "S") {
       this.showManual = true;
       this.setState(
         {
-          readOnlyPrice : 1
+          readOnlyPrice: 1
         }
       );
-    }else{
+    } else {
       this.showManual = false;
       this.setState(
         {
-          readOnlyPrice : 0
+          readOnlyPrice: 0
         }
       );
     }
   };
 
-  changeManual =  () => {
+  changeManual = () => {
     this.setState(
       {
-        readOnlyPrice : !this.state.readOnlyPrice,
+        readOnlyPrice: !this.state.readOnlyPrice,
       }
     );
   };
@@ -74,144 +80,166 @@ class MedicalServiceMasterPanel extends FormPanel {
     return shouldValidate;
   }
   render() {
-    const { edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError} = this.props;
+    const { edited, readOnly, isServiceValid, isServiceValidating, serviceValidationError } = this.props;
     return (
       <StyledMedicalServiceMasterPanel>
         <ErrorBoundary>
-          <Grid container className="item">
-            <Grid size={2} className="item">
-              <ValidatedTextInput
-                action={medicalServicesValidationCheck}
-                clearAction={medicalServicesValidationClear}
-                setValidAction={medicalServicesSetValid}
-                itemQueryIdentifier="serviceCode"
-                isValid={isServiceValid}
-                isValidating={isServiceValidating}
-                validationError={serviceValidationError}
-                shouldValidate={this.shouldValidate}
-                codeTakenLabel="medical.codeTaken"
-                onChange={(code) => this.updateAttribute("code", code)}
-                inputProps={{ maxLength: SERVICE_CODE_MAX_LENGTH }}
-                required={true}
-                module="admin"
-                label="medical.service.code"
-                readOnly={readOnly}
-                value={edited ? edited.code : ""}
-              />
+          <Grid container direction="column">
+            <Typography className="item" fontWeight="bold">
+              <FormattedMessage module="medical" id="section.information" />
+            </Typography>
+            <Grid container className="item" size={GRID_RESPONSIVE_FULL}>
+              <Grid className="item">
+                <ValidatedTextInput
+                  action={medicalServicesValidationCheck}
+                  clearAction={medicalServicesValidationClear}
+                  setValidAction={medicalServicesSetValid}
+                  itemQueryIdentifier="serviceCode"
+                  isValid={isServiceValid}
+                  isValidating={isServiceValidating}
+                  validationError={serviceValidationError}
+                  shouldValidate={this.shouldValidate}
+                  codeTakenLabel="medical.codeTaken"
+                  onChange={(code) => this.updateAttribute("code", code)}
+                  inputProps={{ maxLength: SERVICE_CODE_MAX_LENGTH }}
+                  required={true}
+                  module="admin"
+                  label="medical.service.code"
+                  readOnly={readOnly}
+                  value={edited ? edited.code : ""}
+                />
+              </Grid>
+              <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                <TextInput
+                  module="admin"
+                  label="medical.service.name"
+                  required
+                  readOnly={readOnly}
+                  value={edited && edited.name ? edited.name : ""}
+                  onChange={(name) => this.updateAttributes({ name })}
+                />
+              </Grid>
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                <PublishedComponent
+                  pubRef="medical.ServiceTypePPPicker"
+                  withNull={true}
+                  required
+                  readOnly={Boolean(edited.id) || readOnly}
+                  value={edited ? edited.packagetype : ""}
+                  onChange={(p) => {
+                    this.updateAttribute("packagetype", p);
+                    this.showCheckboxManual(p);
+                  }}
+                />
+              </Grid>
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                <PublishedComponent
+                  pubRef="medical.ServiceTypePicker"
+                  withNull={false}
+                  required
+                  readOnly={Boolean(edited.id) || readOnly}
+                  value={edited?.type ? edited.type : " "}
+                  onChange={(p) => this.updateAttribute("type", p)}
+                />
+              </Grid>
             </Grid>
-            <Grid size={3} className="item">
-              <TextInput
-                module="admin"
-                label="medical.service.name"
-                required
-                readOnly={readOnly}
-                value={edited && edited.name ? edited.name : ""}
-                onChange={(name) => this.updateAttributes({ name })}
-              />
+            <Grid container direction="row">
+              <Grid container direction="column" size={GRID_RESPONSIVE_HALF}>
+                <Typography className="item" fontWeight="bold">
+                  <FormattedMessage module="medical" id="section.classification" />
+                </Typography>
+                <Grid container className="item">
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <PublishedComponent
+                      pubRef="medical.ServiceCategoryPicker"
+                      withNull={false}
+                      readOnly={Boolean(edited.id) || readOnly}
+                      value={edited?.category ? edited.category : " "}
+                      onChange={(p) => this.updateAttribute("category", p)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <PublishedComponent
+                      pubRef="medical.ServiceLevelPicker"
+                      withNull={false}
+                      required
+                      readOnly={Boolean(edited.id) || readOnly}
+                      value={edited?.level ? edited.level : " "}
+                      onChange={(p) => this.updateAttribute("level", p)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <PublishedComponent
+                      pubRef="medical.CareTypePicker"
+                      required
+                      withNull={false}
+                      readOnly={Boolean(edited.id) || readOnly}
+                      value={edited?.careType ? edited.careType : " "}
+                      onChange={(p) => this.updateAttribute("careType", p)}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid container direction="column" size={GRID_RESPONSIVE_HALF}>
+                <Typography className="item" fontWeight="bold">
+                  <FormattedMessage module="medical" id="section.coverage" />
+                </Typography>
+                <Grid container className="item">
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <NumberInput
+                      min={0}
+                      module="admin"
+                      label="medical.service.maximumAmount"
+                      name="maximumAmount"
+                      readOnly={readOnly}
+                      value={edited?.maximumAmount ?? ""}
+                      onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
+                    />
+                  </Grid>
+                  {this.showManual && <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+                    <PublishedComponent
+                      pubRef="medical.ManualPricePicker"
+                      readOnly={Boolean(edited.id) || readOnly}
+                      value={edited ? edited.manualPrice : ""}
+                      onChange={(p) => {
+                        this.updateAttribute("manualPrice", p);
+                        this.changeManual();
+                      }}
+                    />
+                  </Grid>
+                  }
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <AmountInput
+                      module="admin"
+                      label={this.props.medicalService.packagetype == SERVICE_TYPE_PP_F ? `edit.services.ceiling` : `medical.service.price`}
+                      required={!this.state.readOnlyPrice}
+                      name="price"
+                      readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
+                      value={edited ? edited.price : this.props.priceTotal}
+                      onChange={(p) => {
+                        this.updateAttribute("price", p);
+                      }
+                      }
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <TextInput
+                      module="admin"
+                      label="medical.service.frequency"
+                      readOnly={Boolean(edited.id) || readOnly}
+                      value={edited ? edited.frequency : ""}
+                      onChange={(p) => this.updateAttribute("frequency", p)}
+                    />
+                  </Grid>
+
+                </Grid>
+              </Grid>
+
             </Grid>
-            <Grid size={3} className="item">
-              <PublishedComponent
-                pubRef="medical.ServiceTypePPPicker"
-                withNull={true}
-                required
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited ? edited.packagetype : ""}
-                onChange={(p) => {
-                  this.updateAttribute("packagetype", p);
-                  this.showCheckboxManual(p);
-                }}
-              />
-            </Grid>
-            <Grid size={3} className="item">
-              <PublishedComponent
-                pubRef="medical.ServiceTypePicker"
-                withNull={false}
-                required
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited?.type ? edited.type : " "}
-                onChange={(p) => this.updateAttribute("type", p)}
-              />
-            </Grid>
-          </Grid>
-          <Grid container className="item">
-            <Grid size={3} className="item">
-              <PublishedComponent
-                pubRef="medical.ServiceCategoryPicker"
-                withNull={false}
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited?.category ? edited.category : " "}
-                onChange={(p) => this.updateAttribute("category", p)}
-              />
-            </Grid>
-            <Grid size={3} className="item">
-              <PublishedComponent
-                pubRef="medical.ServiceLevelPicker"
-                withNull={false}
-                required
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited?.level ? edited.level : " "}
-                onChange={(p) => this.updateAttribute("level", p)}
-              />
-            </Grid>
-            <Grid size={2} className="item">
-              <NumberInput
-                min={0}
-                module="admin"
-                label="medical.service.maximumAmount"
-                name="maximumAmount"
-                readOnly={readOnly}
-                value={edited?.maximumAmount ?? ""}
-                onChange={(maximumAmount) => this.updateAttributes({ maximumAmount })}
-              />
-            </Grid>
-            {this.showManual && <Grid size={2} className="item">
-              <PublishedComponent
-                pubRef="medical.ManualPricePicker"
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited ? edited.manualPrice : ""}
-                onChange={(p) => {
-                  this.updateAttribute("manualPrice", p);
-                  this.changeManual();
-                }}
-              />
-            </Grid>
-            }
-            <Grid size={2} className="item">
-              <AmountInput
-                module="admin"
-                label={this.props.medicalService.packagetype== SERVICE_TYPE_PP_F ? `edit.services.ceiling` : `medical.service.price`}
-                required={!this.state.readOnlyPrice}
-                name="price"
-                readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice }
-                value={edited ? edited.price : this.props.priceTotal}
-                onChange={(p) => {
-                  this.updateAttribute("price", p);
-                }
-                }
-              />
-            </Grid>
-          </Grid>
-          <Grid container className="item">
-            <Grid size={4} className="item">
-              <PublishedComponent
-                pubRef="medical.CareTypePicker"
-                required
-                withNull={false}
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited?.careType ? edited.careType : " "}
-                onChange={(p) => this.updateAttribute("careType", p)}
-              />
-            </Grid>
-            <Grid size={4} className="item">
-              <TextInput
-                module="admin"
-                label="medical.service.frequency"
-                readOnly={Boolean(edited.id) || readOnly}
-                value={edited ? edited.frequency : ""}
-                onChange={(p) => this.updateAttribute("frequency", p)}
-              />
-            </Grid>
-            <Grid size={4} className="item">
+            <Typography className="item" fontWeight="bold">
+              <FormattedMessage module="medical" id="section.eligibility" />
+            </Typography>
+            <Grid size={GRID_RESPONSIVE_FULL} container className="item">
               <PublishedComponent
                 pubRef="medical.PatientCategoryPicker"
                 readOnly={Boolean(edited.id) || readOnly}

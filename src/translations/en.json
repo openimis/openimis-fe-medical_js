@@ -127,5 +127,9 @@
   "medical.gql_mutation_medical_items_delete_perms": "Medical | Mutation Medical Items Delete",
   "medical.gql_mutation_medical_services_add_perms": "Medical | Mutation Medical Services Add",
   "medical.gql_mutation_medical_services_update_perms": "Medical | Mutation Medical Services Update",
-  "medical.gql_mutation_medical_services_delete_perms": "Medical | Mutation Medical Services Delete"
+  "medical.gql_mutation_medical_services_delete_perms": "Medical | Mutation Medical Services Delete",
+  "medical.section.information": "General Information",
+  "medical.section.classification": "Classification",
+  "medical.section.coverage": "Coverage Rules",
+  "medical.section.eligibility": "Eligibility"
 }
