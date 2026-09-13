@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import _ from "lodash"
 
 import { styled } from "@mui/material/styles";
 
@@ -148,8 +149,10 @@ class MedicalItemForm extends Component {
     });
   };
 
-  canSave = () =>
-    this.state.medicalItem &&
+  doesItemChange = () => _.isEqual(this.props.medicalItem, this.state.medicalItem);
+
+  canSave = () => 
+    !this.doesItemChange() && this.state.medicalItem &&
     this.state.medicalItem.code &&
     this.state.medicalItem.code.length <= ITEM_CODE_MAX_LENGTH &&
     this.state.medicalItem.name &&
