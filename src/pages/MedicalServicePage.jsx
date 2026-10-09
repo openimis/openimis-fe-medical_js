@@ -29,7 +29,7 @@ class MedicalServicePage extends Component {
       this.props.createMedicalService(
         this.props.modulesManager,
         medicalService,
-        formatMessageWithValues(this.props.intl, "medical.medicalService", "createMedicalService.mutationLabel"),
+        formatMessageWithValues(this.props.intl, "medical.service", "create.mutationLabel"),
       );
     } else {
       this.props.updateMedicalService(
