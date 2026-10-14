@@ -6,6 +6,7 @@ import {
   dispatchMutationReq,
   dispatchMutationResp,
   dispatchMutationErr,
+  dispatchMutationDefault,
 } from "@openimis/fe-core";
 
 function reducer(
@@ -351,8 +352,12 @@ function reducer(
       return dispatchMutationResp(state, "createService", action);
     case "MEDICAL_SERVICE_UPDATE_RESP":
       return dispatchMutationResp(state, "updateService", action);
+    case "MEDICAL_ITEM_DELETE_RESP":
+      return dispatchMutationResp(state, "deleteItem", action);
+    case "MEDICAL_SERVICE_DELETE_RESP":
+      return dispatchMutationResp(state, "deleteService", action);
     default:
-      return state;
+      return dispatchMutationDefault(state, action);
   }
 }
 
