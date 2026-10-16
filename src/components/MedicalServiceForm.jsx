@@ -60,7 +60,6 @@ class MedicalServiceForm extends Component {
     reset: 0,
     medicalService: this.newMedicalService(),
     newMedicalService: true,
-    confirmedAction: null,
     isSaved: false,
     totalPrice: 0,
     sumItems: 0,
@@ -113,8 +112,6 @@ class MedicalServiceForm extends Component {
           clientMutationId: props.mutation.clientMutationId,
         },
       }));
-    } else if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
-      this.state.confirmedAction();
     }
   }
 
@@ -168,7 +165,6 @@ class MedicalServiceForm extends Component {
       reset: 0,
       medicalService: this.newMedicalService(),
       newMedicalService: true,
-      confirmedAction: null,
     });
   };
 
@@ -228,8 +224,9 @@ class MedicalServiceForm extends Component {
     this.setState({ medicalService, newMedicalService: false });
   };
 
-  onActionToConfirm = (title, message, confirmedAction) => {
-    this.setState({ confirmedAction }, this.props.coreConfirm(title, message));
+  onActionToConfirm = (title, message, onConfirm) => {
+    // The action goes with the question, so only this caller is answered (OP-3190).
+    this.props.coreConfirm(title, message, { onConfirm });
   };
 
   render() {
