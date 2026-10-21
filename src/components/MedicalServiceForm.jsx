@@ -301,7 +301,6 @@ const mapStateToProps = (state) => ({
   submittingMutation: state.medical.submittingMutation,
   mutation: state.medical.mutation,
   medicalService: state.medical.medicalService,
-  confirmed: state.core.confirmed,
   isServiceValid: state.medical?.validationFields?.medicalService?.isValid,
   state,
 });
