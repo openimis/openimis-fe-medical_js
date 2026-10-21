@@ -246,7 +246,6 @@ const mapStateToProps = (state) => ({
   submittingMutation: state.medical.submittingMutation,
   mutation: state.medical.mutation,
   medicalItem: state.medical.medicalItem,
-  confirmed: state.core.confirmed,
   isItemValid: state.medical?.validationFields?.medicalItem?.isValid,
   state,
 });
