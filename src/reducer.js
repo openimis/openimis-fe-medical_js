@@ -9,6 +9,16 @@ import {
   dispatchMutationDefault,
 } from "@openimis/fe-core";
 
+// Lock the searcher rows under mutation (see the searchers' rowLocked) on copies:
+// the rows in state must not be written in place.
+function lockRows(state, key, meta) {
+  if (!meta?.uuids?.length || !state[key]) return state;
+  return {
+    ...state,
+    [key]: state[key].map((r) => (meta.uuids.includes(r.uuid) ? { ...r, clientMutationId: meta.clientMutationId } : r)),
+  };
+}
+
 function reducer(
   state = {
     fetchingMedicalServices: false,
@@ -337,11 +347,11 @@ function reducer(
         medicalItem: null,
       };
     case "MEDICAL_ITEM_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
+      return lockRows(dispatchMutationReq(state, action), "medicalItemsSummaries", action.meta);
     case "MEDICAL_ITEM_MUTATION_ERR":
       return dispatchMutationErr(state, action);
     case "MEDICAL_SERVICE_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
+      return lockRows(dispatchMutationReq(state, action), "medicalServicesSummaries", action.meta);
     case "MEDICAL_SERVICE_MUTATION_ERR":
       return dispatchMutationErr(state, action);
     case "MEDICAL_ITEM_CREATE_RESP":

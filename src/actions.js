@@ -197,14 +197,13 @@ export function updateMedicalItem(mm, medicalItem, clientMutationLabel) {
 
 export function deleteMedicalService(mm, medicalService, clientMutationLabel) {
   const mutation = formatMutation("deleteService", `uuids: ["${medicalService.uuid}"]`, clientMutationLabel);
-  // eslint-disable-next-line no-param-reassign
-  medicalService.clientMutationId = mutation.clientMutationId;
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
     ["MEDICAL_SERVICE_MUTATION_REQ", "MEDICAL_SERVICE_DELETE_RESP", "MEDICAL_SERVICE_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
+      uuids: [medicalService.uuid],
       clientMutationLabel,
       requestedDateTime,
     },
@@ -213,14 +212,13 @@ export function deleteMedicalService(mm, medicalService, clientMutationLabel) {
 
 export function deleteMedicalItem(mm, medicalItem, clientMutationLabel) {
   const mutation = formatMutation("deleteItem", `uuids: ["${medicalItem.uuid}"]`, clientMutationLabel);
-  // eslint-disable-next-line no-param-reassign
-  medicalItem.clientMutationId = mutation.clientMutationId;
   const requestedDateTime = new Date();
   return graphql(
     mutation.payload,
     ["MEDICAL_ITEM_MUTATION_REQ", "MEDICAL_ITEM_DELETE_RESP", "MEDICAL_ITEM_MUTATION_ERR"],
     {
       clientMutationId: mutation.clientMutationId,
+      uuids: [medicalItem.uuid],
       clientMutationLabel,
       requestedDateTime,
     },
