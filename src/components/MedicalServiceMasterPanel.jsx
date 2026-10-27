@@ -124,7 +124,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                   pubRef="medical.ServiceTypePPPicker"
                   withNull={true}
                   required
-                  readOnly={Boolean(edited.id) || readOnly}
+                  readOnly={readOnly}
                   value={edited ? edited.packagetype : ""}
                   onChange={(p) => {
                     this.updateAttribute("packagetype", p);
@@ -137,7 +137,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                   pubRef="medical.ServiceTypePicker"
                   withNull={false}
                   required
-                  readOnly={Boolean(edited.id) || readOnly}
+                  readOnly={Boolean(edited?.uuid) || readOnly}
                   value={edited?.type ? edited.type : " "}
                   onChange={(p) => this.updateAttribute("type", p)}
                 />
@@ -153,7 +153,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                     <PublishedComponent
                       pubRef="medical.ServiceCategoryPicker"
                       withNull={false}
-                      readOnly={Boolean(edited.id) || readOnly}
+                      readOnly={Boolean(edited?.uuid) || readOnly}
                       value={edited?.category ? edited.category : " "}
                       onChange={(p) => this.updateAttribute("category", p)}
                     />
@@ -163,7 +163,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                       pubRef="medical.ServiceLevelPicker"
                       withNull={false}
                       required
-                      readOnly={Boolean(edited.id) || readOnly}
+                      readOnly={Boolean(edited?.uuid) || readOnly}
                       value={edited?.level ? edited.level : " "}
                       onChange={(p) => this.updateAttribute("level", p)}
                     />
@@ -173,7 +173,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                       pubRef="medical.CareTypePicker"
                       required
                       withNull={false}
-                      readOnly={Boolean(edited.id) || readOnly}
+                      readOnly={Boolean(edited?.uuid) || readOnly}
                       value={edited?.careType ? edited.careType : " "}
                       onChange={(p) => this.updateAttribute("careType", p)}
                     />
@@ -199,7 +199,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                   {this.showManual && <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                     <PublishedComponent
                       pubRef="medical.ManualPricePicker"
-                      readOnly={Boolean(edited.id) || readOnly}
+                      readOnly={readOnly}
                       value={edited ? edited.manualPrice : ""}
                       onChange={(p) => {
                         this.updateAttribute("manualPrice", p);
@@ -214,7 +214,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                       label={this.props.medicalService.packagetype == SERVICE_TYPE_PP_F ? `edit.services.ceiling` : `medical.service.price`}
                       required={!this.state.readOnlyPrice}
                       name="price"
-                      readOnly={Boolean(edited.id) || readOnly || this.state.readOnlyPrice}
+                      readOnly={readOnly || this.state.readOnlyPrice}
                       value={edited ? edited.price : this.props.priceTotal}
                       onChange={(p) => {
                         this.updateAttribute("price", p);
@@ -226,7 +226,7 @@ class MedicalServiceMasterPanel extends FormPanel {
                     <TextInput
                       module="admin"
                       label="medical.service.frequency"
-                      readOnly={Boolean(edited.id) || readOnly}
+                      readOnly={readOnly}
                       value={edited ? edited.frequency : ""}
                       onChange={(p) => this.updateAttribute("frequency", p)}
                     />
@@ -242,7 +242,7 @@ class MedicalServiceMasterPanel extends FormPanel {
             <Grid size={GRID_RESPONSIVE_FULL} container className="item">
               <PublishedComponent
                 pubRef="medical.PatientCategoryPicker"
-                readOnly={Boolean(edited.id) || readOnly}
+                readOnly={readOnly}
                 value={edited ? edited.patientCategory : ""}
                 onChange={(p) => this.updateAttribute("patientCategory", p)}
               />
