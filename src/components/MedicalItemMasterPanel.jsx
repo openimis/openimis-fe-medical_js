@@ -82,7 +82,7 @@ class MedicalItemMasterPanel extends FormPanel {
                 pubRef="medical.ItemTypePicker"
                 withNull={true}
                 required
-                readOnly={Boolean(edited.id) || readOnly}
+                readOnly={readOnly}
                 value={edited ? edited.type : ""}
                 onChange={(p) => this.updateAttribute("type", p)}
               />
@@ -92,7 +92,7 @@ class MedicalItemMasterPanel extends FormPanel {
                 pubRef="medical.CareTypePicker"
                 withNull={true}
                 required
-                readOnly={Boolean(edited.id) || readOnly}
+                readOnly={readOnly}
                 value={edited ? edited.careType : ""}
                 onChange={(p) => this.updateAttribute("careType", p)}
               />
@@ -142,7 +142,7 @@ class MedicalItemMasterPanel extends FormPanel {
                     label="medical.item.price"
                     required
                     name="price"
-                    readOnly={Boolean(edited.id) || readOnly}
+                    readOnly={readOnly}
                     value={edited ? edited.price : ""}
                     onChange={(p) => this.updateAttribute("price", p)}
                   />
@@ -151,7 +151,7 @@ class MedicalItemMasterPanel extends FormPanel {
                   <TextInput
                     module="admin"
                     label="medical.item.frequency"
-                    readOnly={Boolean(edited.id) || readOnly}
+                    readOnly={readOnly}
                     value={edited ? edited.frequency : ""}
                     onChange={(p) => this.updateAttribute("frequency", p)}
                   />
@@ -165,7 +165,7 @@ class MedicalItemMasterPanel extends FormPanel {
               <Grid container className="item">
                 <PublishedComponent
                   pubRef="medical.PatientCategoryPicker"
-                  readOnly={Boolean(edited.id) || readOnly}
+                  readOnly={readOnly}
                   value={edited ? edited.patientCategory : ""}
                   onChange={(p) => this.updateAttribute("patientCategory", p)}
                 />
