@@ -39,37 +39,53 @@ vi.mock("../actions", () => ({
 
 import MedicalServiceMasterPanel from "./MedicalServiceMasterPanel";
 
-const CLASSIFICATION = [
+// Every field of the panel, classification included.
+const FIELDS = [
+  "medical.service.code",
+  "medical.service.name",
+  "medical.ServiceTypePPPicker",
   "medical.ServiceTypePicker",
   "medical.ServiceCategoryPicker",
   "medical.ServiceLevelPicker",
   "medical.CareTypePicker",
+  "medical.service.maximumAmount",
+  "medical.ManualPricePicker",
+  "medical.service.price",
+  "medical.service.frequency",
+  "medical.PatientCategoryPicker",
 ];
+
+const SAVED = {
+  uuid: "x",
+  code: "S1",
+  name: "Service",
+  packagetype: "P",
+  manualPrice: true,
+  type: "P",
+  category: "O",
+  level: "S",
+  careType: "B",
+  price: 10,
+  frequency: 1,
+};
 
 const renderPanel = (edited, readOnly = false) =>
   render(<MedicalServiceMasterPanel edited={edited} medicalService={edited} readOnly={readOnly} />);
 
 describe("MedicalServiceMasterPanel", () => {
-  // OP-3291: the full projection fetches uuid and never id
-  it("locks the classification of a saved service", () => {
-    renderPanel({ uuid: "x", code: "S1", packagetype: "S", type: "P", category: "O", level: "S", careType: "B" });
-    CLASSIFICATION.forEach((picker) => expect(screen.getByLabelText(picker)).toHaveAttribute("readonly"));
+  // OP-3291: a saved service stays fully editable; only the readOnly prop locks the panel.
+  it("keeps every field of a saved service editable", () => {
+    renderPanel(SAVED);
+    FIELDS.forEach((label) => expect(screen.getByLabelText(label)).not.toHaveAttribute("readonly"));
   });
 
-  it("keeps the price and frequency of a saved service editable", () => {
-    renderPanel({ uuid: "x", code: "S1", packagetype: "S", type: "P", category: "O", level: "S", careType: "B" });
-    ["medical.service.name", "medical.service.price", "medical.service.frequency"].forEach((label) =>
-      expect(screen.getByLabelText(label)).not.toHaveAttribute("readonly"),
-    );
+  it("keeps every field of a new service editable", () => {
+    renderPanel({ packagetype: "P", manualPrice: true });
+    FIELDS.forEach((label) => expect(screen.getByLabelText(label)).not.toHaveAttribute("readonly"));
   });
 
-  it("lets a new service be classified", () => {
-    renderPanel({});
-    CLASSIFICATION.forEach((picker) => expect(screen.getByLabelText(picker)).not.toHaveAttribute("readonly"));
-  });
-
-  it("locks the classification when the form is read-only", () => {
-    renderPanel({}, true);
-    CLASSIFICATION.forEach((picker) => expect(screen.getByLabelText(picker)).toHaveAttribute("readonly"));
+  it("locks every field when the panel is read-only", () => {
+    renderPanel(SAVED, true);
+    FIELDS.forEach((label) => expect(screen.getByLabelText(label)).toHaveAttribute("readonly"));
   });
 });

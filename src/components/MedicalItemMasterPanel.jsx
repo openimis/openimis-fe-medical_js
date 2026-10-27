@@ -82,7 +82,7 @@ class MedicalItemMasterPanel extends FormPanel {
                 pubRef="medical.ItemTypePicker"
                 withNull={true}
                 required
-                readOnly={Boolean(edited?.uuid) || readOnly}
+                readOnly={readOnly}
                 value={edited ? edited.type : ""}
                 onChange={(p) => this.updateAttribute("type", p)}
               />
@@ -92,7 +92,7 @@ class MedicalItemMasterPanel extends FormPanel {
                 pubRef="medical.CareTypePicker"
                 withNull={true}
                 required
-                readOnly={Boolean(edited?.uuid) || readOnly}
+                readOnly={readOnly}
                 value={edited ? edited.careType : ""}
                 onChange={(p) => this.updateAttribute("careType", p)}
               />

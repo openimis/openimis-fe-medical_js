@@ -38,32 +38,39 @@ vi.mock("../actions", () => ({
 
 import MedicalItemMasterPanel from "./MedicalItemMasterPanel";
 
-const CLASSIFICATION = ["medical.ItemTypePicker", "medical.CareTypePicker"];
+// Every field of the panel, classification included.
+const FIELDS = [
+  "medical.item.code",
+  "medical.item.name",
+  "medical.ItemTypePicker",
+  "medical.CareTypePicker",
+  "medical.item.package",
+  "medical.item.maximumAmount",
+  "medical.item.quantity",
+  "medical.item.price",
+  "medical.item.frequency",
+  "medical.PatientCategoryPicker",
+];
+
+const SAVED = { uuid: "x", code: "I1", name: "Item", type: "D", careType: "B", price: 10, frequency: 1 };
 
 const renderPanel = (edited, readOnly = false) =>
   render(<MedicalItemMasterPanel edited={edited} readOnly={readOnly} />);
 
 describe("MedicalItemMasterPanel", () => {
-  // OP-3291: the full projection fetches uuid and never id
-  it("locks the classification of a saved item", () => {
-    renderPanel({ uuid: "x", code: "I1", type: "D", careType: "B" });
-    CLASSIFICATION.forEach((picker) => expect(screen.getByLabelText(picker)).toHaveAttribute("readonly"));
+  // OP-3291: a saved item stays fully editable; only the readOnly prop locks the panel.
+  it("keeps every field of a saved item editable", () => {
+    renderPanel(SAVED);
+    FIELDS.forEach((label) => expect(screen.getByLabelText(label)).not.toHaveAttribute("readonly"));
   });
 
-  it("keeps the price and frequency of a saved item editable", () => {
-    renderPanel({ uuid: "x", code: "I1", type: "D", careType: "B" });
-    ["medical.item.name", "medical.item.price", "medical.item.frequency"].forEach((label) =>
-      expect(screen.getByLabelText(label)).not.toHaveAttribute("readonly"),
-    );
-  });
-
-  it("lets a new item be classified", () => {
+  it("keeps every field of a new item editable", () => {
     renderPanel({});
-    CLASSIFICATION.forEach((picker) => expect(screen.getByLabelText(picker)).not.toHaveAttribute("readonly"));
+    FIELDS.forEach((label) => expect(screen.getByLabelText(label)).not.toHaveAttribute("readonly"));
   });
 
-  it("locks the classification when the form is read-only", () => {
-    renderPanel({}, true);
-    CLASSIFICATION.forEach((picker) => expect(screen.getByLabelText(picker)).toHaveAttribute("readonly"));
+  it("locks every field when the panel is read-only", () => {
+    renderPanel(SAVED, true);
+    FIELDS.forEach((label) => expect(screen.getByLabelText(label)).toHaveAttribute("readonly"));
   });
 });
