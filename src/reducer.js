@@ -6,7 +6,18 @@ import {
   dispatchMutationReq,
   dispatchMutationResp,
   dispatchMutationErr,
+  dispatchMutationDefault,
 } from "@openimis/fe-core";
+
+// Lock the searcher rows under mutation (see the searchers' rowLocked) on copies:
+// the rows in state must not be written in place.
+function lockRows(state, key, meta) {
+  if (!meta?.uuids?.length || !state[key]) return state;
+  return {
+    ...state,
+    [key]: state[key].map((r) => (meta.uuids.includes(r.uuid) ? { ...r, clientMutationId: meta.clientMutationId } : r)),
+  };
+}
 
 function reducer(
   state = {
@@ -336,11 +347,11 @@ function reducer(
         medicalItem: null,
       };
     case "MEDICAL_ITEM_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
+      return lockRows(dispatchMutationReq(state, action), "medicalItemsSummaries", action.meta);
     case "MEDICAL_ITEM_MUTATION_ERR":
       return dispatchMutationErr(state, action);
     case "MEDICAL_SERVICE_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
+      return lockRows(dispatchMutationReq(state, action), "medicalServicesSummaries", action.meta);
     case "MEDICAL_SERVICE_MUTATION_ERR":
       return dispatchMutationErr(state, action);
     case "MEDICAL_ITEM_CREATE_RESP":
@@ -351,8 +362,12 @@ function reducer(
       return dispatchMutationResp(state, "createService", action);
     case "MEDICAL_SERVICE_UPDATE_RESP":
       return dispatchMutationResp(state, "updateService", action);
+    case "MEDICAL_ITEM_DELETE_RESP":
+      return dispatchMutationResp(state, "deleteItem", action);
+    case "MEDICAL_SERVICE_DELETE_RESP":
+      return dispatchMutationResp(state, "deleteService", action);
     default:
-      return state;
+      return dispatchMutationDefault(state, action);
   }
 }
 

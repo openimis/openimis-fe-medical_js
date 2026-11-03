@@ -82,6 +82,7 @@
   "medical.service.deleteDialog.yes.button": "Yes",
   "medical.service.deleteService.tooltip": "Delete service",
   "medical.service.deleteServiceDialog.message": "Are you sure you want to delete this service?",
+  "medical.service.create.mutationLabel": "Create Medical Service",
   "medical.service.update.mutationLabel": "Update Medical Service",
   "medical.item.MedicalItemOverview.title": "Medical Item details",
   "medical.item.MedicalItemOverview.newTitle": "New Medical Item",

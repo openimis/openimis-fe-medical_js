@@ -100,7 +100,10 @@ class MedicalServiceSearcher extends Component {
         service,
         formatMessage(this.props.intl, "medical.service", "deleteDialog.title"),
       );
-      this.fetch(this.state.params);
+      // No refetch here: with async mutations the response only means "queued",
+      // so re-reading now would bring the row straight back. The row stays
+      // locked on its clientMutationId and Searcher re-reads the page once the
+      // journal reports the mutation succeeded.
     });
   };
 
