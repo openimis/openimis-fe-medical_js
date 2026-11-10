@@ -44,7 +44,7 @@
     "prop-types": "^15.7.2",
     "react-autosuggest": "^10.0.2",
     "redux-api-middleware": "^3.2.1",
-    "vite": "^7.1.2",
+    "vite": "^8.0.16",
     "vite-plugin-svgr": "^4.3.0"
   },
   "files": [
