@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 import { Paper, Box } from "@mui/material";
 import _ from "lodash";
@@ -11,7 +10,7 @@ import {
   NumberInput, 
   AmountInput, 
   Table, 
-  formatMessage 
+  formatMessage, injectIntl 
 } from "@openimis/fe-core";
 
 const StyledMedicalItemChildPanel = styled('div')(({ theme }) => ({
@@ -162,7 +161,9 @@ class MedicalItemChildPanel extends Component {
 
     let itemFormatters = [
       (i, idx) => (
-        <Box minWidth={400}>
+        <Box sx={{
+          minWidth: 400
+        }}>
           <PublishedComponent
             readOnly={!!forReview || readOnly}
             pubRef={picker}

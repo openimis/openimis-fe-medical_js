@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 
 import { styled } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
@@ -19,7 +18,8 @@ import {
   GRID_RESPONSIVE_LARGE,
   GRID_RESPONSIVE_HALF,
   GRID_RESPONSIVE_STANDARD,
-  GRID_RESPONSIVE_SMALL
+  GRID_RESPONSIVE_SMALL,
+  injectIntl
 } from "@openimis/fe-core";
 import { medicalItemsValidationCheck, medicalItemsValidationClear, medicalItemsSetValid } from "../actions";
 import { ITEM_CODE_MAX_LENGTH } from "../constants";
@@ -43,7 +43,9 @@ class MedicalItemMasterPanel extends FormPanel {
     return (
       <StyledMedicalItemMasterPanel>
         <Grid container direction="column" >
-          <Typography className="item" fontWeight="bold">
+          <Typography className="item" sx={{
+            fontWeight: "bold"
+          }}>
             <FormattedMessage module="medical" id="section.information" />
           </Typography>
           <Grid container className="item" size={GRID_RESPONSIVE_FULL}>
@@ -110,7 +112,9 @@ class MedicalItemMasterPanel extends FormPanel {
           </Grid>
           <Grid container direction="row">
             <Grid container className="item" direction="column" size={GRID_RESPONSIVE_HALF}>
-              <Typography className="item" fontWeight="bold">
+              <Typography className="item" sx={{
+                fontWeight: "bold"
+              }}>
                 <FormattedMessage module="medical" id="section.coverage" />
               </Typography>
               <Grid container>
@@ -159,7 +163,9 @@ class MedicalItemMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             <Grid container className="item" direction="column" size={GRID_RESPONSIVE_HALF}>
-              <Typography className="item" fontWeight="bold">
+              <Typography className="item" sx={{
+                fontWeight: "bold"
+              }}>
                 <FormattedMessage module="medical" id="section.eligibility" />
               </Typography>
               <Grid container className="item">
@@ -185,8 +191,6 @@ class MedicalItemMasterPanel extends FormPanel {
 
 
         </Grid>
-
-
 
       </StyledMedicalItemMasterPanel>
     );

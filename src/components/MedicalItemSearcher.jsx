@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
-
 
 import {
   withModulesManager,
@@ -13,6 +11,7 @@ import {
   formatDateFromISO,
   GetIconComponent,
   ActionMenu,
+  injectIntl,
 } from "@openimis/fe-core";
 const TabIcon = GetIconComponent("Tab")
 const DeleteIcon = GetIconComponent("Delete")

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import _debounce from "lodash/debounce";
 
 import { Grid, FormControlLabel, Checkbox } from "@mui/material";
@@ -14,6 +13,7 @@ import {
   ErrorBoundary,
   GRID_RESPONSIVE_STANDARD,
   GRID_RESPONSIVE_SMALL,
+  injectIntl,
 } from "@openimis/fe-core";
 
 const StyledMedicalItemFilter = styled('div')(({ theme }) => ({

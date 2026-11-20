@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 import { styled } from "@mui/material/styles";
-
 
 import {
   coreConfirm,
@@ -19,6 +17,7 @@ import {
   withHistory,
   withModulesManager,
   GetIconComponent,
+  injectIntl,
 } from "@openimis/fe-core";
 import MedicalServiceChildPanel from "./MedicalServiceChildPanel";
 import MedicalItemChildPanel from "./MedicalItemChildPanel";
