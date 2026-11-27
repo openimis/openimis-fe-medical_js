@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { Paper, Box } from "@mui/material";
-import _ from "lodash";
+import isEqual from "lodash/isEqual";
 
 import {
   withModulesManager,
@@ -19,7 +19,7 @@ const StyledMedicalChildPanel = styled("div")(({ theme }) => ({
 }));
 
 // Package types whose content (services or items) is listed with a quantity and a price.
-const PACKAGE_TYPES_WITH_CONTENT = ["P", "F"];
+const PACKAGE_TYPES_WITH_CONTENT = new Set(["P", "F"]);
 const FIXED_PRICE_PACKAGE = "F";
 
 /*
@@ -42,7 +42,7 @@ class MedicalChildPanel extends Component {
   initData = () => {
     const { edited, editedKey } = this.props;
     const data = edited[editedKey] || [];
-    if (!_.isEqual(data[data.length - 1], {})) {
+    if (!isEqual(data[data.length - 1], {})) {
       data.push({});
     }
     return data;
@@ -62,7 +62,7 @@ class MedicalChildPanel extends Component {
       this.setState((state) => ({ data, reset: state.reset + 1 }));
     } else if (
       prevProps.reset !== this.props.reset ||
-      (!!edited[editedKey] && !_.isEqual(prevProps.edited[editedKey], edited[editedKey]))
+      (!!edited[editedKey] && !isEqual(prevProps.edited[editedKey], edited[editedKey]))
     ) {
       this.setState({
         data: this.initData(),
@@ -122,7 +122,7 @@ class MedicalChildPanel extends Component {
       medicalService,
     } = this.props;
     if (!edited) return null;
-    if (!PACKAGE_TYPES_WITH_CONTENT.includes(medicalService.packagetype)) return "";
+    if (!PACKAGE_TYPES_WITH_CONTENT.has(medicalService.packagetype)) return "";
 
     const preHeaders = ["​", "", "", ""];
     const headers = [
