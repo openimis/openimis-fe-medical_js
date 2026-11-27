@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
@@ -12,13 +11,14 @@ import {
   historyPush,
   ErrorBoundary,
   Helmet,
+  injectIntl,
 } from "@openimis/fe-core";
 import MedicalItemForm from "../components/MedicalItemForm";
 import { createMedicalItem, updateMedicalItem } from "../actions";
 import { RIGHT_MEDICALITEMS_ADD, RIGHT_MEDICALITEMS_EDIT } from "../constants";
 
 const StyledMedicalItemPage = styled('div')(({ theme }) => ({
-  ...theme.page ?? {},
+  ...(theme.page ?? {}),
 }));
 
 class MedicalItemPage extends Component {

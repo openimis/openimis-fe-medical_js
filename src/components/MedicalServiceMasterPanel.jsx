@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 
 import { styled } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
@@ -20,7 +19,8 @@ import {
   GRID_RESPONSIVE_HALF,
   GRID_RESPONSIVE_STANDARD,
   GRID_RESPONSIVE_LARGE,
-  FormattedMessage
+  FormattedMessage,
+  injectIntl
 } from "@openimis/fe-core";
 import { medicalServicesValidationCheck, medicalServicesValidationClear, medicalServicesSetValid } from "../actions";
 import { SERVICE_CODE_MAX_LENGTH, SERVICE_TYPE_PP_F, SERVICE_TYPE_PP_S } from "../constants";
@@ -85,7 +85,9 @@ class MedicalServiceMasterPanel extends FormPanel {
       <StyledMedicalServiceMasterPanel>
         <ErrorBoundary>
           <Grid container direction="column">
-            <Typography className="item" fontWeight="bold">
+            <Typography className="item" sx={{
+              fontWeight: "bold"
+            }}>
               <FormattedMessage module="medical" id="section.information" />
             </Typography>
             <Grid container className="item" size={GRID_RESPONSIVE_FULL}>
@@ -145,7 +147,9 @@ class MedicalServiceMasterPanel extends FormPanel {
             </Grid>
             <Grid container direction="row">
               <Grid container direction="column" size={GRID_RESPONSIVE_HALF}>
-                <Typography className="item" fontWeight="bold">
+                <Typography className="item" sx={{
+                  fontWeight: "bold"
+                }}>
                   <FormattedMessage module="medical" id="section.classification" />
                 </Typography>
                 <Grid container className="item">
@@ -181,7 +185,9 @@ class MedicalServiceMasterPanel extends FormPanel {
                 </Grid>
               </Grid>
               <Grid container direction="column" size={GRID_RESPONSIVE_HALF}>
-                <Typography className="item" fontWeight="bold">
+                <Typography className="item" sx={{
+                  fontWeight: "bold"
+                }}>
                   <FormattedMessage module="medical" id="section.coverage" />
                 </Typography>
                 <Grid container className="item">
@@ -236,7 +242,9 @@ class MedicalServiceMasterPanel extends FormPanel {
               </Grid>
 
             </Grid>
-            <Typography className="item" fontWeight="bold">
+            <Typography className="item" sx={{
+              fontWeight: "bold"
+            }}>
               <FormattedMessage module="medical" id="section.eligibility" />
             </Typography>
             <Grid size={GRID_RESPONSIVE_FULL} container className="item">

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { Fab } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { RIGHT_MEDICALITEMS_ADD, ITEMS_MODULE_NAME} from "../constants";
@@ -15,12 +14,13 @@ import {
   withTooltip,
   clearCurrentPaginationPage,
   GetIconComponent,
+  injectIntl,
 } from "@openimis/fe-core";
 import MedicalItemSearcher from "../components/MedicalItemSearcher";
 const AddIcon = GetIconComponent("Add")
 
 const StyledMedicalItemsPage = styled('div')(({ theme }) => ({
-  ...theme.page ?? {},
+  ...(theme.page ?? {}),
   '& .fab': theme.fab ?? {},
 }));
 
