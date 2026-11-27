@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
 import {
@@ -10,6 +9,7 @@ import {
   withHistory,
   withModulesManager,
   GetIconComponent,
+  injectIntl,
 } from "@openimis/fe-core";
 import MedicalServicePage from "./MedicalServicePage";
 const EditIcon = GetIconComponent("Edit")

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
-import { FormattedMessage } from "@openimis/fe-core";
+import { FormattedMessage, injectIntl } from "@openimis/fe-core";
 
 const StyledDeleteMedicalItemOrServiceDialog = styled('div')(({ theme }) => ({
   '& .primaryButton': theme.dialog?.primaryButton ?? {},

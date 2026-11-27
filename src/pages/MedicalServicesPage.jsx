@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { Fab } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { RIGHT_MEDICALSERVICES_ADD, SERVICES_MODULE_NAME } from "../constants";
@@ -14,13 +13,14 @@ import {
   withModulesManager,
   withTooltip,
   clearCurrentPaginationPage,
-  GetIconComponent
+  GetIconComponent,
+  injectIntl
 } from "@openimis/fe-core";
 import MedicalServiceSearcher from "../components/MedicalServiceSearcher";
 const AddIcon = GetIconComponent("Add")
 
 const StyledMedicalServicesPage = styled('div')(({ theme }) => ({
-  ...theme.page ?? {},
+  ...(theme.page ?? {}),
   '& .fab': theme.fab ?? {},
 }));
 

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
-
-import { GetIconComponent, historyPush, withModulesManager, withHistory, ErrorBoundary, Helmet, formatMessageWithValues }
+import { GetIconComponent, historyPush, withModulesManager, withHistory, ErrorBoundary, Helmet, formatMessageWithValues, injectIntl }
   from "@openimis/fe-core";
 import MedicalItemPage from "./MedicalItemPage";
 const EditIcon = GetIconComponent("Edit")

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 
 import { Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 
-import { formatMessage, GRID_RESPONSIVE_STANDARD} from "@openimis/fe-core";
+import { formatMessage, GRID_RESPONSIVE_STANDARD, injectIntl} from "@openimis/fe-core";
 import { PATIENT_CATEGORIES, GENDER_CATEGORIES, AGE_CATEGORIES } from "../constants";
 
 class PatientCategoryPicker extends Component {
